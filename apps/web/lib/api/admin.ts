@@ -49,13 +49,13 @@ export const grantUserTokens = (
   });
 
 export const fetchProviderRegistry = (token: string) =>
-  apiFetch<{ providers: Record<string, Array<{ id: string; label: string; minPlan: string; estCostPer1K: number }> }>(
+  apiFetch<{ providers: Record<string, { id: string; label: string; minPlan: string; estCostPer1K: number }[]> }>(
     "/admin/models/providers",
     { token }
   );
 
 export const fetchFeatureFlags = (token: string) =>
-  apiFetch<{ flags: Array<{ key: string; description?: string; enabled: boolean; rolloutPercent: number }> }>(
+  apiFetch<{ flags: { key: string; description?: string; enabled: boolean; rolloutPercent: number }[] }>(
     "/admin/flags",
     { token }
   );

@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
-    "@tanstack/react-query": "^5.35.7",
     "@stripe/stripe-js": "^2.2.0",
+    "@tanstack/react-query": "^5.35.7",
     "axios": "^1.7.2",
     "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
+    "framer-motion": "^11.18.2",
     "lucide-react": "^0.372.0",
     "next": "14.2.3",
     "next-auth": "^4.24.7",
@@ -23,10 +25,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.2",
-    "stripe": "^14.25.0",
-    "zod": "^3.23.7",
     "recharts": "^2.7.2",
-    "date-fns": "^3.6.0"
+    "stripe": "^14.25.0",
+    "zod": "^3.23.7"
   },
   "devDependencies": {
     "@types/node": "^20.12.11",

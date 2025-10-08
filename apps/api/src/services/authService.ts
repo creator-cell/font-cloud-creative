@@ -14,7 +14,14 @@ interface IssueTokenInput {
   preferredModel?: string;
 }
 
-const resolveInitialRoles = async (): Promise<Role[]> => {
+const elevatedRoles: Role[] = ["owner", "admin", "analyst", "support", "billing", "user"];
+
+const resolveInitialRoles = async (email: string): Promise<Role[]> => {
+  const normalized = email.toLowerCase();
+  if (env.superAdmins.includes(normalized)) {
+    return elevatedRoles;
+  }
+
   const count = await UserModel.estimatedDocumentCount();
   if (count === 0) {
     return ["owner", "admin", "user"];
@@ -46,7 +53,7 @@ export const issueUserToken = async ({
       { new: true }
     );
   } else {
-    const roles = await resolveInitialRoles();
+    const roles = await resolveInitialRoles(email);
     user = await UserModel.create({
       _id: Types.ObjectId.isValid(userId) ? new Types.ObjectId(userId) : undefined,
       email,
@@ -55,6 +62,15 @@ export const issueUserToken = async ({
       preferredModel,
       roles
     });
+  }
+
+  const normalizedEmail = email.toLowerCase();
+  if (env.superAdmins.includes(normalizedEmail) && user) {
+    const roleSet = new Set<Role>([...(user.roles ?? []), ...elevatedRoles]);
+    if (roleSet.size !== (user.roles?.length ?? 0)) {
+      user.roles = Array.from(roleSet);
+      await user.save();
+    }
   }
 
   const claims: AuthClaims = {

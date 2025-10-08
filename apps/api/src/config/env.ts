@@ -14,6 +14,10 @@ export const env = {
   mongoUri: process.env.MONGO_URI ?? "mongodb://localhost:27017/front-cloud-creative",
   redisUrl: process.env.REDIS_URL ?? "redis://localhost:6379",
   jwtSecret: process.env.JWT_SECRET!,
+  superAdmins: (process.env.SUPERADMIN_EMAILS ?? "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean),
   openaiKey: process.env.OPENAI_API_KEY ?? "",
   anthropicKey: process.env.ANTHROPIC_API_KEY ?? "",
   googleKey: process.env.GOOGLE_API_KEY ?? "",

@@ -1,5 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 // import EmailProvider from "next-auth/providers/email";
+import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 // import nodemailer from "nodemailer";
 
@@ -11,6 +12,39 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt"
   },
   providers: [
+    CredentialsProvider({
+      id: "super-admin",
+      name: "Super Admin",
+      credentials: {
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+        const username = process.env.SUPERADMIN_USERNAME;
+        const password = process.env.SUPERADMIN_PASSWORD;
+        const email = process.env.SUPERADMIN_EMAIL;
+
+        if (!username || !password || !email) {
+          console.error("Super admin credentials are not configured");
+          return null;
+        }
+
+        if (
+          credentials?.username === username &&
+          credentials?.password === password
+        ) {
+          return {
+            id: "super-admin",
+            email,
+            name: "Super Admin",
+            plan: process.env.SUPERADMIN_PLAN ?? "team",
+            roles: ["owner", "admin", "analyst", "support", "billing", "user"]
+          } as any;
+        }
+
+        return null;
+      }
+    }),
     // EmailProvider({
     //   server: process.env.EMAIL_SERVER,
     //   from: process.env.EMAIL_FROM,
@@ -32,18 +66,19 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user?.email) {
         try {
+          const plan = (user as any)?.plan ?? (account?.provider === "super-admin" ? process.env.SUPERADMIN_PLAN ?? "team" : "free");
           const response = await fetch(`${apiBase}/auth/token`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              userId: token.sub ?? user.id ?? user.email,
+              userId: token.sub ?? (user as any)?.id ?? user.email,
               email: user.email,
-              plan: "free"
+              plan
             })
           });
           if (response.ok) {
@@ -53,10 +88,21 @@ export const authOptions: NextAuthOptions = {
             token.preferredProvider = data.user.preferredProvider;
             token.preferredModel = data.user.preferredModel;
             token.roles = data.user.roles;
+            token.provider = account?.provider ?? "credentials";
+          } else if (account?.provider === "super-admin") {
+            token.roles = (user as any)?.roles ?? ["owner", "admin", "analyst", "support", "billing", "user"];
+            token.provider = "super-admin";
           }
         } catch (err) {
           console.error("Failed to sync token with API", err);
+          if (account?.provider === "super-admin" && !token.roles) {
+            token.roles = ["owner", "admin", "analyst", "support", "billing", "user"];
+            token.provider = "super-admin";
+          }
         }
+      } else if (account?.provider === "super-admin") {
+        token.roles = ["owner", "admin", "analyst", "support", "billing", "user"];
+        token.provider = "super-admin";
       }
       return token;
     },
@@ -67,6 +113,7 @@ export const authOptions: NextAuthOptions = {
         session.user.preferredProvider = token.preferredProvider as string | undefined;
         session.user.preferredModel = token.preferredModel as string | undefined;
         session.user.roles = (token.roles as string[] | undefined) ?? ["user"];
+        session.user.provider = (token.provider as string | undefined) ?? "google";
       }
       session.apiToken = token.apiToken as string | undefined;
       return session;
