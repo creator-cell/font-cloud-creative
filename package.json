@@ -1,0 +1,16 @@
+{
+  "name": "front-cloud-creative",
+  "private": true,
+  "packageManager": "pnpm@8.15.4",
+  "scripts": {
+    "dev": "pnpm -r dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "format": "pnpm -r format"
+  },
+  "engines": {
+    "node": ">=18.17.0",
+    "pnpm": ">=8.15.0"
+  }
+}

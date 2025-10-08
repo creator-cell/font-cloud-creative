@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+  api:
+    build:
+      context: ./apps/api
+    env_file:
+      - ./apps/api/.env.example
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongo
+      - redis
+  web:
+    build:
+      context: ./apps/web
+    env_file:
+      - ./apps/web/.env.example
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+volumes:
+  mongo-data:
+  redis-data:
