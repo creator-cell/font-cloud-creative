@@ -14,7 +14,16 @@ export const apiFetch = async <T>(path: string, options: FetchOptions = {}): Pro
   });
 
   if (!response.ok) {
-    const body = await response.json().catch(() => ({}));
+    const isJson = response.headers.get("content-type")?.includes("application/json");
+    const body = isJson ? await response.json().catch(() => ({})) : {};
+
+    if (response.status === 401) {
+      const unauthorizedError = new Error(body.error ?? "Unauthorized");
+      (unauthorizedError as Error & { status?: number; redirect?: string }).status = response.status;
+      (unauthorizedError as Error & { status?: number; redirect?: string }).redirect = "/admin-login";
+      throw unauthorizedError;
+    }
+
     const error = new Error(body.error ?? "API request failed");
     (error as Error & { status?: number; details?: unknown }).status = response.status;
     (error as Error & { status?: number; details?: unknown }).details = body;

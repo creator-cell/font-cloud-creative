@@ -107,12 +107,16 @@ export const LandingPage = () => {
             >
               <Globe2 className="mr-1 h-4 w-4" /> {copy.languageToggle}
             </Button>
-            <Button className="rounded-full bg-sky-500 px-5 text-white transition hover:bg-sky-400">
-              {language === "ar" ? "تسجيل الدخول" : "Sign in"}
-            </Button>
-            <Button className="bg-sky-500 px-4 text-white transition hover:bg-sky-400">
-              {copy.heroPrimaryCta}
-            </Button>
+            <Link href="/api/auth/signin?callbackUrl=%2Fdashboard" className="inline-flex">
+              <Button className="rounded-full bg-sky-500 px-5 text-white transition hover:bg-sky-400">
+                {language === "ar" ? "تسجيل الدخول" : "Sign in"}
+              </Button>
+            </Link>
+            <Link href="/api/auth/signin?callbackUrl=%2Fdashboard" className="inline-flex">
+              <Button className="bg-sky-500 px-4 text-white transition hover:bg-sky-400">
+                {copy.heroPrimaryCta}
+              </Button>
+            </Link>
           </div>
         </div>
       </header>
@@ -133,9 +137,11 @@ export const LandingPage = () => {
               <p className="text-base text-slate-600 md:text-lg">{copy.heroDescription}</p>
             </div>
             <div className="flex flex-wrap items-center gap-4">
-              <Button size="lg" className="rounded-full bg-sky-500 px-8 text-white transition hover:-translate-y-1 hover:bg-sky-400">
-                {copy.heroPrimaryCta}
-              </Button>
+              <Link href="/api/auth/signin?callbackUrl=%2Fdashboard" className="inline-flex">
+                <Button size="lg" className="rounded-full bg-sky-500 px-8 text-white transition hover:-translate-y-1 hover:bg-sky-400">
+                  {copy.heroPrimaryCta}
+                </Button>
+              </Link>
               <Button
                 size="lg"
                 className="rounded-full bg-sky-500 px-8 text-white transition hover:-translate-y-1 hover:bg-sky-400"
@@ -329,15 +335,23 @@ export const LandingPage = () => {
                 ))}
               </ul>
             </motion.div>
-            <motion.div className="grid gap-4 rounded-3xl border border-white bg-white p-6 shadow-sm dark:border-transparent dark:bg-white sm:grid-cols-3" {...fadeIn(0.3)}>
-              {statsTiles.map((tile, index) => (
-                <motion.div key={tile.label} className="rounded-2xl border border-sky-100 bg-sky-50 p-4 text-center" {...fadeIn(index * 0.15, 20)}>
-                  <p className="text-xl font-semibold text-sky-600">{tile.value}</p>
-                  <p className="mt-1 text-xs uppercase tracking-wide text-slate-500">{tile.label}</p>
-                </motion.div>
-              ))}
-            </motion.div>
           </motion.div>
+        </motion.section>
+
+        <motion.section
+          className="grid w-full gap-4 rounded-3xl border border-white bg-white p-6 shadow-sm dark:border-transparent dark:bg-white sm:grid-cols-2 lg:grid-cols-3"
+          {...fadeIn(0.2)}
+        >
+          {statsTiles.map((tile, index) => (
+            <motion.div
+              key={tile.label}
+              className="flex flex-col gap-1 rounded-2xl border border-sky-100 bg-sky-50 p-6 text-left"
+              {...fadeIn(index * 0.15, 20)}
+            >
+              <p className="text-2xl font-semibold text-sky-600">{tile.value}</p>
+              <p className="text-xs uppercase tracking-wide text-slate-500">{tile.label}</p>
+            </motion.div>
+          ))}
         </motion.section>
 
         <motion.section className="space-y-10" id="pricing" {...fadeIn(0.1)}>

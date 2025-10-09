@@ -4,20 +4,22 @@ import { KpiCard } from "@/components/admin/kpi-card";
 import { OverviewCharts } from "@/components/admin/overview-charts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { AdminErrorState } from "@/components/admin/admin-error";
 
 const formatNumber = (value: number) => new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(value);
 
 export default async function AdminOverviewPage() {
   const session = await requireServerRole(["owner", "admin", "analyst", "support", "billing"]);
   if (!session.apiToken) {
-    throw new Error("Missing admin token");
+    return <AdminErrorState message="Your session is missing the admin token. Please sign in again." />;
   }
 
-  const [overview, mrr, topUsers] = await Promise.all([
-    fetchAdminOverview(session.apiToken, "30d"),
-    fetchMRR(session.apiToken),
-    fetchTopUsers(session.apiToken, 5)
-  ]);
+  try {
+    const [overview, mrr, topUsers] = await Promise.all([
+      fetchAdminOverview(session.apiToken, "30d"),
+      fetchMRR(session.apiToken),
+      fetchTopUsers(session.apiToken, 5)
+    ]);
 
   const providerData = Object.entries(overview.tokenBurnByProvider).map(([provider, stats]) => ({
     provider,
@@ -32,10 +34,10 @@ export default async function AdminOverviewPage() {
     value: point.signups
   }));
 
-  return (
-    <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-3">
-        <KpiCard title="DAU" value={formatNumber(overview.dau)} subtitle="Daily active users" />
+    return (
+      <div className="space-y-6">
+        <div className="grid gap-4 md:grid-cols-3">
+          <KpiCard title="DAU" value={formatNumber(overview.dau)} subtitle="Daily active users" />
         <KpiCard title="New Signups (30d)" value={formatNumber(overview.newSignups)} />
         <KpiCard title="MRR" value={`₹${formatNumber(mrr.mrr ?? overview.mrr)}`} subtitle="Monthly recurring revenue" />
         <KpiCard title="ARPU" value={`₹${formatNumber(Math.round(overview.arpu))}`} />
@@ -85,5 +87,9 @@ export default async function AdminOverviewPage() {
         </CardContent>
       </Card>
     </div>
-  );
+    );
+  } catch (error) {
+    console.error("Failed to load admin overview", error);
+    return <AdminErrorState message="Unable to load admin dashboard. Please try signing in again." />;
+  }
 }
