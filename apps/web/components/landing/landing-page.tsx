@@ -28,6 +28,7 @@ import {
 import { translations } from "./translations";
 import Header from "../helpers/Header";
 import ChooseUrPlan from "../helpers/ChooseUrPlan";
+import HeroSection from "../helpers/HeroSection";
 
 const contentFilterOrder = ["copy", "product", "social"] as const;
 const speedFeatureIcons: LucideIcon[] = [Clock, Sparkles, Wand2];
@@ -120,7 +121,7 @@ export const LandingPage = () => {
 
   return (
     <div
-      className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-white to-white text-slate-900"
+      className="relative min-h-screen overflow-hidden bg-white text-slate-900"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       {/* <header className="fixed inset-x-0 top-0 z-50 border-b border-sky-100 bg-white/95 backdrop-blur">
@@ -181,11 +182,11 @@ export const LandingPage = () => {
       </header> */}
       <Header />
 
-      <main className="relative mx-auto flex w-full flex-col gap-24 px-6 pb-0 pt-32">
+      <main className="relative mx-auto flex w-full flex-col gap-24 px-6 pb-0 pt-24">
         {/* <ChooseUrPlan /> */}
 
         {/* 1st one */}
-        <motion.section
+        {/* <motion.section
           id="product"
           className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr]"
           {...fadeIn(0.05)}
@@ -292,7 +293,8 @@ export const LandingPage = () => {
               </div>
             </CardContent>
           </motion.div>
-        </motion.section>
+        </motion.section> */}
+        <HeroSection />
         {/* 1st one */}
 
         {/* 2nd one */}
