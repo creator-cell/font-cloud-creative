@@ -31,6 +31,7 @@ import ChooseUrPlan from "../helpers/ChooseUrPlan";
 import HeroSection from "../helpers/HeroSection";
 import WorkDemo from "../helpers/WorkDemo";
 import Features from "../helpers/Features";
+import PlatformOverview from "../helpers/PlatformOverview";
 
 const contentFilterOrder = ["copy", "product", "social"] as const;
 const speedFeatureIcons: LucideIcon[] = [Clock, Sparkles, Wand2];
@@ -392,11 +393,11 @@ export const LandingPage = () => {
             ))}
           </div>
         </motion.section> */}
-         <Features />
+        <Features />
         {/* 4th  */}
 
         {/* 5th */}
-        <motion.section
+        {/* <motion.section
           className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]"
           {...fadeIn(0.1)}
         >
@@ -483,8 +484,9 @@ export const LandingPage = () => {
               </ul>
             </motion.div>
           </motion.div>
-        </motion.section>
-       
+        </motion.section> */}
+        <PlatformOverview />
+
         {/* 5th */}
 
         {/* 6th */}
