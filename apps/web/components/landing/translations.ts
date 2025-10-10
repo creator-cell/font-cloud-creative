@@ -1,3 +1,4 @@
+import { CheckCircle2, Crown, Rocket, UsersRound, Zap } from "lucide-react";
 export const translations = {
   en: {
     nav: [
@@ -127,39 +128,47 @@ export const translations = {
     pricingPlans: [
       {
         id: "free",
-        title: "Free",
-        price: "0",
+        title: "Free", 
+        // price: "0",
         description: "Experiment with AI workflows and collaborate with one teammate.",
         features: ["Up to 10 projects", "Shared prompts & templates", "Watermarked exports"],
         cta: "Start free",
-        popular: false
+        popular: false,
+        logo: Zap,
+        logoProps: { className: "w-11 h-11 text-gray-500 bg-[#f0f0f2] p-2.5 rounded-lg item-center mx-auto" }
       },
       {
         id: "starter",
         title: "Starter",
-        price: "29",
+        price: "$29",
         description: "Solo marketers and consultants needing predictable output.",
         features: ["Unlimited projects", "Multi-model switching", "Brand voice snapshots"],
         cta: "Start 14-day trial",
-        popular: true
+        popular: true,
+        logo: Rocket,
+        logoProps: { className: "w-11 h-11 text-[#2b80ff] bg-[#e8f2ff] p-2.5 rounded-lg item-center mx-auto" }
       },
       {
         id: "pro",
         title: "Pro",
-        price: "79",
+        price: "$79",
         description: "Growing teams aligning campaigns across channels and regions.",
         features: ["Collaborative workspaces", "Workflow automation", "Advanced analytics"],
         cta: "Upgrade now",
-        popular: false
+        popular: false,
+        logo: Crown,
+        logoProps: { className: "w-11 h-11 text-[#ab45ff] bg-[#f7edff] p-2.5 rounded-lg item-center mx-auto" }
       },
       {
         id: "team",
         title: "Team",
-        price: "189",
+        price: "$189",
         description: "Agencies or enterprises needing governance, SSO, and private deployments.",
         features: ["5 seats included", "SSO & SCIM", "Dedicated success partner"],
         cta: "Talk to sales",
-        popular: false
+        popular: false,
+        logo: UsersRound,
+        logoProps: { className: "w-11 h-11 text-[#00bd7e] bg-[#e6faf3] p-2.5 rounded-lg item-center mx-auto" }
       }
     ],
     enterpriseTitle: "Enterprise Solution",
