@@ -26,7 +26,8 @@ import {
   PenLine,
 } from "lucide-react";
 import { translations } from "./translations";
-import ChooseUrPlan from "../utils/ChooseUrPlan";
+import Header from "../helpers/Header";
+import ChooseUrPlan from "../helpers/ChooseUrPlan";
 
 const contentFilterOrder = ["copy", "product", "social"] as const;
 const speedFeatureIcons: LucideIcon[] = [Clock, Sparkles, Wand2];
@@ -122,9 +123,7 @@ export const LandingPage = () => {
       className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-white to-white text-slate-900"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.25),_transparent_60%)]" />
-
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-sky-100 bg-white/95 backdrop-blur">
+      {/* <header className="fixed inset-x-0 top-0 z-50 border-b border-sky-100 bg-white/95 backdrop-blur">
         <div className="mx-auto flex w-full flex-wrap items-center justify-between gap-4 px-6 py-4 text-sm text-slate-600 md:px-10 lg:px-16 xl:px-24">
           <Link
             href="/"
@@ -179,9 +178,10 @@ export const LandingPage = () => {
             </Link>
           </div>
         </div>
-      </header>
+      </header> */}
+      <Header />
 
-      <main className="relative mx-auto flex w-full flex-col gap-24 px-6 pb-0 pt-32 md:px-10 lg:px-16 xl:px-24">
+      <main className="relative mx-auto flex w-full flex-col gap-24 px-6 pb-0 pt-32">
         {/* <ChooseUrPlan /> */}
 
         {/* 1st one */}
