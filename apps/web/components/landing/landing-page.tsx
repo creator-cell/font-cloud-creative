@@ -29,6 +29,7 @@ import { translations } from "./translations";
 import Header from "../helpers/Header";
 import ChooseUrPlan from "../helpers/ChooseUrPlan";
 import HeroSection from "../helpers/HeroSection";
+import WorkDemo from "../helpers/WorkDemo";
 
 const contentFilterOrder = ["copy", "product", "social"] as const;
 const speedFeatureIcons: LucideIcon[] = [Clock, Sparkles, Wand2];
@@ -298,7 +299,7 @@ export const LandingPage = () => {
         {/* 1st one */}
 
         {/* 2nd one */}
-        <motion.section className="space-y-10" id="solutions" {...fadeIn(0.1)}>
+        {/* <motion.section className="space-y-10" id="solutions" {...fadeIn(0.1)}>
           <motion.div className="space-y-3 text-center" {...fadeIn(0.1, 20)}>
             <h2 className="text-3xl font-semibold text-slate-900 md:text-4xl">
               {copy.speedTitle}
@@ -324,7 +325,8 @@ export const LandingPage = () => {
               </motion.div>
             ))}
           </div>
-        </motion.section>
+        </motion.section> */}
+        <WorkDemo />
         {/* 2nd one */}
 
         {/* 3rd */}
