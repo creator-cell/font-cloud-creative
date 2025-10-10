@@ -5,7 +5,7 @@ export const translations = {
       { label: "Product", href: "#product" },
       { label: "Solutions", href: "#solutions" },
       { label: "Pricing", href: "#pricing" },
-      { label: "Resources", href: "#resources" }
+      { label: "Resources", href: "#resources" },
     ],
     languageToggle: "العربية",
     heroEyebrow: "AI Content Operating System",
@@ -19,27 +19,36 @@ export const translations = {
     heroStats: [
       { value: "10k+", label: "Assets shipped" },
       { value: "4.9", label: "Avg. team rating" },
-      { value: "98.8%", label: "Workflow uptime" }
+      { value: "98.8%", label: "Workflow uptime" },
     ],
     providerHeading: "Every elite model in one workspace",
     providerDescription:
       "Blend creativity and governance by routing briefs across OpenAI, Anthropic, Google, and private stacks.",
-    providerLabels: ["OpenAI GPT-4o", "Anthropic Claude", "Google Gemini", "Ollama Local"],
+    providerLabels: [
+      "OpenAI GPT-4o",
+      "Anthropic Claude",
+      "Google Gemini",
+      "Ollama Local",
+    ],
     speedTitle: "From Idea to Content in 30 Seconds",
-    speedSubtitle: "Multi-model Front Cloud Creative automates briefs, drafting, and approvals across every format.",
+    speedSubtitle:
+      "Multi-model Front Cloud Creative automates briefs, drafting, and approvals across every format.",
     speedFeatures: [
       {
         title: "Brief once. Sync everywhere.",
-        description: "Centralize tone, compliance, and objectives so every asset stays brand-perfect."
+        description:
+          "Centralize tone, compliance, and objectives so every asset stays brand-perfect.",
       },
       {
         title: "Generate multi-channel drafts",
-        description: "Spin up landing pages, emails, and social variants simultaneously with unified intelligence."
+        description:
+          "Spin up landing pages, emails, and social variants simultaneously with unified intelligence.",
       },
       {
         title: "Review, approve, launch",
-        description: "Collaborate with comments, assign reviewers, and publish to each channel in one click."
-      }
+        description:
+          "Collaborate with comments, assign reviewers, and publish to each channel in one click.",
+      },
     ],
     orchestrateTitle: "Orchestrate Every Launch",
     orchestrateSubtitle:
@@ -48,39 +57,50 @@ export const translations = {
       {
         badge: "Campaign Control",
         title: "Command center for every rollout",
-        description: "Timeline, assets, and owners in one view. Localize messaging without losing alignment.",
-        bullets: ["Smart briefs & timelines", "Approval routing", "Localization insights"]
+        description:
+          "Timeline, assets, and owners in one view. Localize messaging without losing alignment.",
+        bullets: [
+          "Smart briefs & timelines",
+          "Approval routing",
+          "Localization insights",
+        ],
       },
       {
         badge: "AI Collaboration",
         title: "Train every model on your voice",
-        description: "Combine structured prompts and memory to keep tone consistent across providers.",
-        bullets: ["Reusable style guides", "Compliance guardrails", "Live previews"]
-      }
+        description:
+          "Combine structured prompts and memory to keep tone consistent across providers.",
+        bullets: [
+          "Reusable style guides",
+          "Compliance guardrails",
+          "Live previews",
+        ],
+      },
     ],
     contentTitle: "Generate Any Content Type",
-    contentSubtitle: "Pick a scenario. Front Cloud Creative orchestrates the ideal AI workflow instantly.",
+    contentSubtitle:
+      "Pick a scenario. Front Cloud Creative orchestrates the ideal AI workflow instantly.",
     contentFilters: [
       { id: "copy", label: "Marketing Copy" },
       { id: "product", label: "Product Updates" },
-      { id: "social", label: "Social Campaigns" }
+      { id: "social", label: "Social Campaigns" },
     ],
     contentScenarios: {
       copy: [
         "Launch-ready landing pages",
         "Lifecycle emails optimized for activation",
-        "Executive-ready press releases"
+        "Executive-ready press releases",
       ],
       product: [
         "Release notes for multiple audiences",
         "Knowledge base articles with modular sections",
-        "In-app announcements localized automatically"
+        "In-app announcements localized automatically",
       ],
       social: [
         "Cross-network social calendars",
         "Paid ad variants in every language",
-        "Video scripts aligned to brand story"
-      ]
+        "Video scripts aligned to brand story",
+      ],
     },
     creationTitle: "Everything You Need to Create Amazing Content",
     creationSubtitle:
@@ -88,88 +108,132 @@ export const translations = {
     creationFeatures: [
       {
         title: "Multi-AI Access",
-        description: "Switch between GPT-4o, Claude, Gemini, and private models in seconds."
+        description:
+          "Choose from OpenAI GPT-4, Claude 3.5, Gemini Pro, and local Ollama models for the best results.",
       },
       {
-        title: "Structured Workflows",
-        description: "Automate briefs, drafting, QA, and publishing across teams."
+        title: "Brand Voice",
+        description:
+          "Define your unique brand personality and ensure consistent tone across all generated content.",
       },
       {
-        title: "Brand Lock",
-        description: "Enforce tone, messaging, and compliance with reusable playbooks."
+        title: "Smart Generation",
+        description:
+          "Generate ads, blog posts, and social media carousels optimized for engagement and conversion.",
       },
       {
-        title: "Insights Dashboard",
-        description: "Track content velocity, approvals, and localization performance."
+        title: "Team Collaboration",
+        description:
+          "Work together with your team on projects with shared brand voices and content libraries.",
       },
       {
-        title: "Realtime Collaboration",
-        description: "Comment, assign owners, and co-edit in one workspace."
+        title: "Analytics & Insights",
+        description:
+          "Track performance, usage, and ROI with detailed analytics and reporting.",
       },
       {
-        title: "Private Deployment",
-        description: "Keep sensitive briefs inside secure, air-gapped infrastructure."
-      }
+        title: "API Access",
+        description:
+          "Integrate our AI capabilities directly into your applications with our developer-friendly API.",
+      },
     ],
     newsroomTitle: "Everything you need in one platform",
     newsroomSubtitle:
       "Plan launches, activate campaigns, and publish daily updates without switching tools.",
-    newsroomActions: ["Content Calendar", "Campaign Playbooks", "Asset Library", "QA Checklists"],
+    newsroomActions: [
+      "Content Calendar",
+      "Campaign Playbooks",
+      "Asset Library",
+      "QA Checklists",
+    ],
     newsroomHighlightTitle: "Transform your daily content runtime",
     newsroomHighlightBody:
       "Centralize approvals, generate localized variants, and align your entire team on the same story.",
     statsTiles: [
       { value: "10k+", label: "Teams launched" },
       { value: "4.9", label: "Average rating" },
-      { value: "98.8%", label: "Workflow uptime" }
+      { value: "98.8%", label: "Workflow uptime" },
     ],
     pricingTitle: "Choose Your Plan",
-    pricingSubtitle: "Start free or scale with multi-model orchestration built for modern teams.",
+    pricingSubtitle:
+      "Start free or scale with multi-model orchestration built for modern teams.",
     pricingPlans: [
       {
         id: "free",
-        title: "Free", 
+        title: "Free",
         // price: "0",
-        description: "Experiment with AI workflows and collaborate with one teammate.",
-        features: ["Up to 10 projects", "Shared prompts & templates", "Watermarked exports"],
+        description:
+          "Experiment with AI workflows and collaborate with one teammate.",
+        features: [
+          "Up to 10 projects",
+          "Shared prompts & templates",
+          "Watermarked exports",
+        ],
         cta: "Start free",
         popular: false,
         logo: Zap,
-        logoProps: { className: "w-11 h-11 text-gray-500 bg-[#f0f0f2] p-2.5 rounded-lg item-center mx-auto" }
+        logoProps: {
+          className:
+            "w-11 h-11 text-gray-500 bg-[#f0f0f2] p-2.5 rounded-lg item-center mx-auto",
+        },
       },
       {
         id: "starter",
         title: "Starter",
         price: "$29",
-        description: "Solo marketers and consultants needing predictable output.",
-        features: ["Unlimited projects", "Multi-model switching", "Brand voice snapshots"],
+        description:
+          "Solo marketers and consultants needing predictable output.",
+        features: [
+          "Unlimited projects",
+          "Multi-model switching",
+          "Brand voice snapshots",
+        ],
         cta: "Start 14-day trial",
         popular: true,
         logo: Rocket,
-        logoProps: { className: "w-11 h-11 text-[#2b80ff] bg-[#e8f2ff] p-2.5 rounded-lg item-center mx-auto" }
+        logoProps: {
+          className:
+            "w-11 h-11 text-[#2b80ff] bg-[#e8f2ff] p-2.5 rounded-lg item-center mx-auto",
+        },
       },
       {
         id: "pro",
         title: "Pro",
         price: "$79",
-        description: "Growing teams aligning campaigns across channels and regions.",
-        features: ["Collaborative workspaces", "Workflow automation", "Advanced analytics"],
+        description:
+          "Growing teams aligning campaigns across channels and regions.",
+        features: [
+          "Collaborative workspaces",
+          "Workflow automation",
+          "Advanced analytics",
+        ],
         cta: "Upgrade now",
         popular: false,
         logo: Crown,
-        logoProps: { className: "w-11 h-11 text-[#ab45ff] bg-[#f7edff] p-2.5 rounded-lg item-center mx-auto" }
+        logoProps: {
+          className:
+            "w-11 h-11 text-[#ab45ff] bg-[#f7edff] p-2.5 rounded-lg item-center mx-auto",
+        },
       },
       {
         id: "team",
         title: "Team",
         price: "$189",
-        description: "Agencies or enterprises needing governance, SSO, and private deployments.",
-        features: ["5 seats included", "SSO & SCIM", "Dedicated success partner"],
+        description:
+          "Agencies or enterprises needing governance, SSO, and private deployments.",
+        features: [
+          "5 seats included",
+          "SSO & SCIM",
+          "Dedicated success partner",
+        ],
         cta: "Talk to sales",
         popular: false,
         logo: UsersRound,
-        logoProps: { className: "w-11 h-11 text-[#00bd7e] bg-[#e6faf3] p-2.5 rounded-lg item-center mx-auto" }
-      }
+        logoProps: {
+          className:
+            "w-11 h-11 text-[#00bd7e] bg-[#e6faf3] p-2.5 rounded-lg item-center mx-auto",
+        },
+      },
     ],
     enterpriseTitle: "Enterprise Solution",
     enterpriseSubtitle:
@@ -180,7 +244,8 @@ export const translations = {
       "Join marketing teams orchestrating AI workflows with Front Cloud Creative.",
     finalPrimaryCta: "Start free trial",
     finalSecondaryCta: "Schedule a walkthrough",
-    footerTagline: "AI content platform built for modern marketing organizations.",
+    footerTagline:
+      "AI content platform built for modern marketing organizations.",
     footerLinks: {
       product: {
         heading: "Product",
@@ -188,8 +253,8 @@ export const translations = {
           { label: "Overview", href: "#" },
           { label: "Templates", href: "#" },
           { label: "Integrations", href: "#" },
-          { label: "Security", href: "#" }
-        ]
+          { label: "Security", href: "#" },
+        ],
       },
       resources: {
         heading: "Resources",
@@ -197,8 +262,8 @@ export const translations = {
           { label: "Blog", href: "#" },
           { label: "Webinars", href: "#" },
           { label: "Help Center", href: "#" },
-          { label: "Status", href: "#" }
-        ]
+          { label: "Status", href: "#" },
+        ],
       },
       company: {
         heading: "Company",
@@ -206,20 +271,23 @@ export const translations = {
           { label: "About", href: "#" },
           { label: "Careers", href: "#" },
           { label: "Partners", href: "#" },
-          { label: "Contact", href: "#" }
-        ]
-      }
+          { label: "Contact", href: "#" },
+        ],
+      },
     },
-    footerLegal: "© " + new Date().getFullYear() + " Front Cloud Creative. All rights reserved.",
+    footerLegal:
+      "© " +
+      new Date().getFullYear() +
+      " Front Cloud Creative. All rights reserved.",
     footerBottomCta: "Join the newsletter",
-    footerInputPlaceholder: "Enter your email"
+    footerInputPlaceholder: "Enter your email",
   },
   ar: {
     nav: [
       { label: "المنتج", href: "#product" },
       { label: "الحلول", href: "#solutions" },
       { label: "الأسعار", href: "#pricing" },
-      { label: "المصادر", href: "#resources" }
+      { label: "المصادر", href: "#resources" },
     ],
     languageToggle: "English",
     heroEyebrow: "نظام تشغيل المحتوى بالذكاء الاصطناعي",
@@ -233,28 +301,36 @@ export const translations = {
     heroStats: [
       { value: "+10k", label: "أصول منشورة" },
       { value: "4.9", label: "تقييم الفرق" },
-      { value: "98.8%", label: "جاهزية المسارات" }
+      { value: "98.8%", label: "جاهزية المسارات" },
     ],
     providerHeading: "جميع النماذج الرائدة في مساحة واحدة",
     providerDescription:
       "ادمج الإبداع والحَوْكمة عبر توجيه الموجزات لأفضل نموذج لكل مهمة.",
-    providerLabels: ["OpenAI GPT-4o", "Anthropic Claude", "Google Gemini", "Ollama Local"],
+    providerLabels: [
+      "OpenAI GPT-4o",
+      "Anthropic Claude",
+      "Google Gemini",
+      "Ollama Local",
+    ],
     speedTitle: "من الفكرة إلى المحتوى في 30 ثانية",
     speedSubtitle:
       "يؤتمت Front Cloud Creative متعدد النماذج الموجزات والكتابة والموافقات لكل تنسيق.",
     speedFeatures: [
       {
         title: "موجز واحد. مزامنة كاملة.",
-        description: "اجمع النبرة والالتزام والأهداف ليبقى كل أصل متوافقًا مع العلامة."
+        description:
+          "اجمع النبرة والالتزام والأهداف ليبقى كل أصل متوافقًا مع العلامة.",
       },
       {
         title: "مسودات متعددة القنوات",
-        description: "أنشئ صفحات هبوط ورسائل بريد ومنشورات اجتماعية في وقت واحد."
+        description:
+          "أنشئ صفحات هبوط ورسائل بريد ومنشورات اجتماعية في وقت واحد.",
       },
       {
         title: "راجع واعتمد وأطلق",
-        description: "تعاون بالتعليقات، ووزع المسؤوليات، وانشر لكل قناة بضغطة واحدة."
-      }
+        description:
+          "تعاون بالتعليقات، ووزع المسؤوليات، وانشر لكل قناة بضغطة واحدة.",
+      },
     ],
     orchestrateTitle: "نسّق كل إطلاق",
     orchestrateSubtitle:
@@ -263,39 +339,46 @@ export const translations = {
       {
         badge: "إدارة الحملات",
         title: "مركز قيادة لكل إطلاق",
-        description: "الجدول الزمني والأصول والمسؤولون في واجهة واحدة. خصص الرسائل دون فقدان الاتساق.",
-        bullets: ["موجزات وجداول ذكية", "مسارات اعتماد", "رؤى التوطين"]
+        description:
+          "الجدول الزمني والأصول والمسؤولون في واجهة واحدة. خصص الرسائل دون فقدان الاتساق.",
+        bullets: ["موجزات وجداول ذكية", "مسارات اعتماد", "رؤى التوطين"],
       },
       {
         badge: "تعاون ذكي",
         title: "درّب كل نموذج على صوتك",
-        description: "ادمج الموجهات والذاكرة للحفاظ على النبرة بين مقدمي الخدمة.",
-        bullets: ["أدلة صوت قابلة لإعادة الاستخدام", "حواجز امتثال", "معاينات مباشرة"]
-      }
+        description:
+          "ادمج الموجهات والذاكرة للحفاظ على النبرة بين مقدمي الخدمة.",
+        bullets: [
+          "أدلة صوت قابلة لإعادة الاستخدام",
+          "حواجز امتثال",
+          "معاينات مباشرة",
+        ],
+      },
     ],
     contentTitle: "أنشئ أي نوع من المحتوى",
-    contentSubtitle: "اختر سيناريو وسيقترح Front Cloud Creative أنسب مسار ذكاء تلقائيًا.",
+    contentSubtitle:
+      "اختر سيناريو وسيقترح Front Cloud Creative أنسب مسار ذكاء تلقائيًا.",
     contentFilters: [
       { id: "copy", label: "نسخ تسويقية" },
       { id: "product", label: "تحديثات المنتج" },
-      { id: "social", label: "حملات اجتماعية" }
+      { id: "social", label: "حملات اجتماعية" },
     ],
     contentScenarios: {
       copy: [
         "صفحات هبوط جاهزة للإطلاق",
         "رسائل بريد مرحلية موجهة للتفعيل",
-        "بيانات صحفية بنبرة تنفيذية"
+        "بيانات صحفية بنبرة تنفيذية",
       ],
       product: [
         "ملاحظات إصدار تلائم جماهير مختلفة",
         "مقالات قاعدة المعرفة بوحدات مرنة",
-        "إشعارات داخل التطبيق مترجمة تلقائيًا"
+        "إشعارات داخل التطبيق مترجمة تلقائيًا",
       ],
       social: [
         "جداول اجتماعية متعددة الشبكات",
         "إعلانات مدفوعة بلغات متعددة",
-        "نصوص فيديو متسقة مع قصة العلامة"
-      ]
+        "نصوص فيديو متسقة مع قصة العلامة",
+      ],
     },
     creationTitle: "كل ما تحتاجه لإنشاء محتوى مذهل",
     creationSubtitle:
@@ -303,60 +386,77 @@ export const translations = {
     creationFeatures: [
       {
         title: "وصول إلى نماذج متعددة",
-        description: "بدّل بين GPT-4o وClaude وGemini والنماذج الخاصة في ثوانٍ."
+        description:
+          "بدّل بين GPT-4o وClaude وGemini والنماذج الخاصة في ثوانٍ.",
       },
       {
         title: "مسارات عمل منظمة",
-        description: "أتمتة الموجزات والكتابة وضمان الجودة والنشر عبر الفرق."
+        description: "أتمتة الموجزات والكتابة وضمان الجودة والنشر عبر الفرق.",
       },
       {
         title: "قفل الهوية",
-        description: "فرض النبرة والرسائل والامتثال بقوالب قابلة لإعادة الاستخدام."
+        description:
+          "فرض النبرة والرسائل والامتثال بقوالب قابلة لإعادة الاستخدام.",
       },
       {
         title: "لوحة تحليلات",
-        description: "تتبع سرعة المحتوى والموافقات وأداء التوطين."
+        description: "تتبع سرعة المحتوى والموافقات وأداء التوطين.",
       },
       {
         title: "تعاون لحظي",
-        description: "علّق، وعيّن المسؤولين، وتحرير مشترك في مساحة واحدة."
+        description: "علّق، وعيّن المسؤولين، وتحرير مشترك في مساحة واحدة.",
       },
       {
         title: "استضافة خاصة",
-        description: "حافظ على سرية المشاريع الحساسة داخل بنية آمنة."
-      }
+        description: "حافظ على سرية المشاريع الحساسة داخل بنية آمنة.",
+      },
     ],
     newsroomTitle: "كل ما تحتاجه في منصة واحدة",
-    newsroomSubtitle: "خطط الإطلاقات ونشط الحملات وانشر التحديثات اليومية دون تغيير الأدوات.",
-    newsroomActions: ["تقويم المحتوى", "كتيبات الحملات", "مكتبة الأصول", "قوائم الجودة"],
+    newsroomSubtitle:
+      "خطط الإطلاقات ونشط الحملات وانشر التحديثات اليومية دون تغيير الأدوات.",
+    newsroomActions: [
+      "تقويم المحتوى",
+      "كتيبات الحملات",
+      "مكتبة الأصول",
+      "قوائم الجودة",
+    ],
     newsroomHighlightTitle: "حوّل روتين المحتوى اليومي",
     newsroomHighlightBody:
       "اجمع الموافقات وأنشئ نسخًا محلية ونسّق الفريق كله حول نفس القصة.",
     statsTiles: [
       { value: "+10k", label: "فرق أطلقت الحملات" },
       { value: "4.9", label: "متوسط التقييم" },
-      { value: "98.8%", label: "جاهزية المسارات" }
+      { value: "98.8%", label: "جاهزية المسارات" },
     ],
     pricingTitle: "اختر خطتك",
-    pricingSubtitle: "ابدأ مجانًا أو توسع مع تنسيق نماذج متعدد مصمم للفرق الحديثة.",
+    pricingSubtitle:
+      "ابدأ مجانًا أو توسع مع تنسيق نماذج متعدد مصمم للفرق الحديثة.",
     pricingPlans: [
       {
         id: "free",
         title: "مجاني",
         price: "0",
         description: "جرّب المسارات وتعاون مع زميل واحد.",
-        features: ["حتى 10 مشاريع", "موجهات وقوالب مشتركة", "تصدير بعلامة مائية"],
+        features: [
+          "حتى 10 مشاريع",
+          "موجهات وقوالب مشتركة",
+          "تصدير بعلامة مائية",
+        ],
         cta: "ابدأ مجانًا",
-        popular: false
+        popular: false,
       },
       {
         id: "starter",
         title: "ابدأ",
         price: "29",
         description: "للمسوقين المستقلين الذين يحتاجون لمخرجات ثابتة.",
-        features: ["مشاريع غير محدودة", "تبديل بين النماذج", "بطاقات صوت العلامة"],
+        features: [
+          "مشاريع غير محدودة",
+          "تبديل بين النماذج",
+          "بطاقات صوت العلامة",
+        ],
         cta: "ابدأ فترة تجريبية",
-        popular: true
+        popular: true,
       },
       {
         id: "pro",
@@ -365,24 +465,26 @@ export const translations = {
         description: "لفرق التطوير التي توحّد الحملات عبر القنوات.",
         features: ["مساحات عمل تعاونية", "أتمتة المسارات", "تحليلات متقدمة"],
         cta: "طوّر الخطة",
-        popular: false
+        popular: false,
       },
       {
         id: "team",
         title: "فريق",
         price: "189",
-        description: "للوكالات أو المؤسسات التي تحتاج للحَوْكمة وSSO والاستضافة الخاصة.",
+        description:
+          "للوكالات أو المؤسسات التي تحتاج للحَوْكمة وSSO والاستضافة الخاصة.",
         features: ["يشمل 5 مقاعد", "SSO وSCIM", "شريك نجاح مخصص"],
         cta: "تواصل مع المبيعات",
-        popular: false
-      }
+        popular: false,
+      },
     ],
     enterpriseTitle: "حل المؤسسات",
     enterpriseSubtitle:
       "تحتاج إلى حوكمة مخصصة أو استضافة معزولة أو نماذج خاصة؟ نوفر لك بيئة مخصصة.",
     enterpriseCta: "احجز عرض المؤسسات",
     finalCtaTitle: "جاهز لتحويل إنشاء المحتوى؟",
-    finalCtaSubtitle: "انضم لفرق التسويق التي تنسق مسارات الذكاء مع Front Cloud Creative.",
+    finalCtaSubtitle:
+      "انضم لفرق التسويق التي تنسق مسارات الذكاء مع Front Cloud Creative.",
     finalPrimaryCta: "ابدأ التجربة المجانية",
     finalSecondaryCta: "احجز جلسة تعريف",
     footerTagline: "منصة محتوى ذكية للفرق الحديثة.",
@@ -393,8 +495,8 @@ export const translations = {
           { label: "نظرة عامة", href: "#" },
           { label: "القوالب", href: "#" },
           { label: "التكاملات", href: "#" },
-          { label: "الأمان", href: "#" }
-        ]
+          { label: "الأمان", href: "#" },
+        ],
       },
       resources: {
         heading: "المصادر",
@@ -402,8 +504,8 @@ export const translations = {
           { label: "المدونة", href: "#" },
           { label: "الندوات", href: "#" },
           { label: "مركز المساعدة", href: "#" },
-          { label: "حالة الخدمة", href: "#" }
-        ]
+          { label: "حالة الخدمة", href: "#" },
+        ],
       },
       company: {
         heading: "الشركة",
@@ -411,12 +513,15 @@ export const translations = {
           { label: "من نحن", href: "#" },
           { label: "الوظائف", href: "#" },
           { label: "الشركاء", href: "#" },
-          { label: "تواصل", href: "#" }
-        ]
-      }
+          { label: "تواصل", href: "#" },
+        ],
+      },
     },
-    footerLegal: "© " + new Date().getFullYear() + " Front Cloud Creative. جميع الحقوق محفوظة.",
+    footerLegal:
+      "© " +
+      new Date().getFullYear() +
+      " Front Cloud Creative. جميع الحقوق محفوظة.",
     footerBottomCta: "اشترك في النشرة",
-    footerInputPlaceholder: "أدخل بريدك الإلكتروني"
-  }
+    footerInputPlaceholder: "أدخل بريدك الإلكتروني",
+  },
 } as const;
