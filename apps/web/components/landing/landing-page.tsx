@@ -32,6 +32,7 @@ import HeroSection from "../helpers/HeroSection";
 import WorkDemo from "../helpers/WorkDemo";
 import Features from "../helpers/Features";
 import PlatformOverview from "../helpers/PlatformOverview";
+import TypeContent from "../helpers/TypeContent";
 
 const contentFilterOrder = ["copy", "product", "social"] as const;
 const speedFeatureIcons: LucideIcon[] = [Clock, Sparkles, Wand2];
@@ -490,7 +491,7 @@ export const LandingPage = () => {
         {/* 5th */}
 
         {/* 6th */}
-        <motion.section
+        {/* <motion.section
           className="grid w-full gap-4 rounded-3xl border border-white bg-white p-6 shadow-sm dark:border-transparent dark:bg-white sm:grid-cols-2 lg:grid-cols-3"
           {...fadeIn(0.2)}
         >
@@ -508,7 +509,8 @@ export const LandingPage = () => {
               </p>
             </motion.div>
           ))}
-        </motion.section>
+        </motion.section> */}
+        <TypeContent />
         {/* 6th */}
 
         {/* 7th */}
