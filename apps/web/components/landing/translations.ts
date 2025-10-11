@@ -160,127 +160,111 @@ export const translations = {
     pricingPlans: [
       {
         id: "free",
-        title: "Free",
-        // price: "0",
-        description:
-          "Experiment with AI workflows and collaborate with one teammate.",
-        features: [
-          "Up to 10 projects",
-          "Shared prompts & templates",
-          "Watermarked exports",
-        ],
-        cta: "Start free",
+        title: "Free", 
+        price: "Free",
+        description: "Perfect for getting started",
+        features: ["Basic AI models", "Watermarked outputs", "Up to 5 projects","Community support"],
+        cta: "Get Started",
         popular: false,
         logo: Zap,
-        logoProps: {
-          className:
-            "w-11 h-11 text-gray-500 bg-[#f0f0f2] p-2.5 rounded-lg item-center mx-auto",
-        },
+        logoProps: { className: "w-11 h-11 text-gray-500 bg-[#f0f0f2] p-2.5 rounded-lg item-center mx-auto" },
+        tookens:"15K",
+        Limitations:["Watermarked content"," Basic models only"," Limited projects"]
       },
       {
         id: "starter",
         title: "Starter",
         price: "$29",
-        description:
-          "Solo marketers and consultants needing predictable output.",
-        features: [
-          "Unlimited projects",
-          "Multi-model switching",
-          "Brand voice snapshots",
-        ],
-        cta: "Start 14-day trial",
+        description: "For individual creators",
+        features: ["All AI providers", "No watermarks", "Up to 25 projects","Priority support","Brand voice builder","Usage analytics"],
+        cta: "Upgrade",
         popular: true,
+        priceValid:"/month",
         logo: Rocket,
-        logoProps: {
-          className:
-            "w-11 h-11 text-[#2b80ff] bg-[#e8f2ff] p-2.5 rounded-lg item-center mx-auto",
-        },
+        logoProps: { className: "w-11 h-11 text-[#2b80ff] bg-[#e8f2ff] p-2.5 rounded-lg item-center mx-auto" },
+        tookens:"300K"
       },
       {
         id: "pro",
         title: "Pro",
         price: "$79",
-        description:
-          "Growing teams aligning campaigns across channels and regions.",
-        features: [
-          "Collaborative workspaces",
-          "Workflow automation",
-          "Advanced analytics",
-        ],
-        cta: "Upgrade now",
+        description: "For growing businesses",
+        features: ["Premium models", "Local models (Ollama)", "Up to 100 projects","Custom brand voices","API access","Advanced analytics","Priority support"],
+        cta: "Upgrade",
         popular: false,
+        priceValid:"/month",
         logo: Crown,
-        logoProps: {
-          className:
-            "w-11 h-11 text-[#ab45ff] bg-[#f7edff] p-2.5 rounded-lg item-center mx-auto",
-        },
+        logoProps: { className: "w-11 h-11 text-[#ab45ff] bg-[#f7edff] p-2.5 rounded-lg item-center mx-auto" },
+        tookens:"1,000K ",
+       
       },
       {
         id: "team",
         title: "Team",
-        price: "$189",
-        description:
-          "Agencies or enterprises needing governance, SSO, and private deployments.",
-        features: [
-          "5 seats included",
-          "SSO & SCIM",
-          "Dedicated success partner",
-        ],
-        cta: "Talk to sales",
+        price: "$199",
+        description: "For teams and agencies",
+        features: ["Everything in Pro", "Team Collaboration", "Custom AI models","Unlimited projects","White-label options","Dedicated support","Custom integrations"],
+        cta: "Upgrade",
         popular: false,
+        priceValid:"/month",
         logo: UsersRound,
-        logoProps: {
-          className:
-            "w-11 h-11 text-[#00bd7e] bg-[#e6faf3] p-2.5 rounded-lg item-center mx-auto",
-        },
-      },
+        logoProps: { className: "w-11 h-11 text-[#00bd7e] bg-[#e6faf3] p-2.5 rounded-lg item-center mx-auto" },
+        tookens:"3,000K"
+      }
     ],
     enterpriseTitle: "Enterprise Solution",
     enterpriseSubtitle:
-      "Need custom governance, air-gapped deployments, or bespoke models? Get a dedicated environment.",
-    enterpriseCta: "Book enterprise demo",
+      "Need custom AI models, dedicated infrastructure, or special compliance requirements? We offer tailored enterprise solutions.",
+    enterpriseCta: "Schedule Demo",
+    enterpriseCta2: "Contact Sales",
     finalCtaTitle: "Ready to Transform Your Content Creation?",
     finalCtaSubtitle:
       "Join marketing teams orchestrating AI workflows with Front Cloud Creative.",
     finalPrimaryCta: "Start free trial",
     finalSecondaryCta: "Schedule a walkthrough",
-    footerTagline:
-      "AI content platform built for modern marketing organizations.",
+    footerTagline: "The most powerful AI content platform with access to OpenAI, Anthropic, Google, and Ollama in one subscription.",
     footerLinks: {
       product: {
         heading: "Product",
         links: [
-          { label: "Overview", href: "#" },
-          { label: "Templates", href: "#" },
+          { label: "Features", href: "#" },
+          { label: "Pricing", href: "#" },
+          { label: "Generators", href: "#" },
           { label: "Integrations", href: "#" },
-          { label: "Security", href: "#" },
-        ],
+          { label: "Templates", href: "#" },
+        ]
       },
-      resources: {
-        heading: "Resources",
-        links: [
-          { label: "Blog", href: "#" },
-          { label: "Webinars", href: "#" },
-          { label: "Help Center", href: "#" },
-          { label: "Status", href: "#" },
-        ],
-      },
-      company: {
+       company: {
         heading: "Company",
         links: [
-          { label: "About", href: "#" },
+          { label: "About Us", href: "#" },
           { label: "Careers", href: "#" },
-          { label: "Partners", href: "#" },
-          { label: "Contact", href: "#" },
-        ],
+          { label: "Blog", href: "#" },
+          { label: "Contact", href: "#" }
+        ]
       },
+      Support: {
+        heading: "Support",
+        links: [
+          { label: "Help Center", href: "#" },
+          { label: "Documentation", href: "#" },
+          { label: "Status Page", href: "#" }
+        ]
+      },
+      
+      Legal: {
+        heading: "Legal",
+        links: [
+          { label: "Privacy Policy", href: "#" },
+          { label: "Terms of Service", href: "#" },
+          { label: "Cookie Policy", href: "#" }
+        ]
+      },
+     
     },
-    footerLegal:
-      "© " +
-      new Date().getFullYear() +
-      " Front Cloud Creative. All rights reserved.",
-    footerBottomCta: "Join the newsletter",
-    footerInputPlaceholder: "Enter your email",
+    footerLegal: "© " + new Date().getFullYear() + " Front Cloud Creative. All rights reserved.",
+    footerBottomCta: "Subscribe",
+    footerInputPlaceholder: "Enter your email"
   },
   ar: {
     nav: [
@@ -435,7 +419,7 @@ export const translations = {
       {
         id: "free",
         title: "مجاني",
-        price: "0",
+        price: "Free",
         description: "جرّب المسارات وتعاون مع زميل واحد.",
         features: [
           "حتى 10 مشاريع",

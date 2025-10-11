@@ -26,13 +26,19 @@ import {
   PenLine,
 } from "lucide-react";
 import { translations } from "./translations";
-import Header from "../helpers/Header";
-import ChooseUrPlan from "../helpers/ChooseUrPlan";
+import ChooseUrPlan from "../utils/ChooseUrPlan";
+import EnterpriseSolution from "../utils/EnterpriseSolution";
+import AskedQuestions from "../utils/AskedQuestions";
+import TransformYourContent from "../utils/TransformYourContent";
+import FooterFirstCard from "../utils/FooterFirstCard";
+import LimitedTime from "../utils/LimitedTime";
+import FooterSection from "../utils/FooterSection";
+import TypeContent from "../helpers/TypeContent";
 import HeroSection from "../helpers/HeroSection";
+import Header from "../helpers/Header";
 import WorkDemo from "../helpers/WorkDemo";
 import Features from "../helpers/Features";
 import PlatformOverview from "../helpers/PlatformOverview";
-import TypeContent from "../helpers/TypeContent";
 
 const contentFilterOrder = ["copy", "product", "social"] as const;
 const speedFeatureIcons: LucideIcon[] = [Clock, Sparkles, Wand2];
@@ -297,9 +303,9 @@ export const LandingPage = () => {
               </div>
             </CardContent>
           </motion.div>
-        </motion.section> */}
-        <HeroSection />
+        </motion.section> 
         {/* 1st one */}
+        <HeroSection />
 
         {/* 2nd one */}
         {/* <motion.section className="space-y-10" id="solutions" {...fadeIn(0.1)}>
@@ -515,7 +521,7 @@ export const LandingPage = () => {
 
         {/* 7th */}
         <ChooseUrPlan />
-        <motion.section className="space-y-10" id="pricing" {...fadeIn(0.1)}>
+        {/* <motion.section className="space-y-10" id="pricing" {...fadeIn(0.1)}>
           <motion.div className="space-y-3 text-center" {...fadeIn(0.1, 20)}>
             <h2 className="text-3xl font-semibold text-slate-900 md:text-4xl">
               {copy.pricingTitle}
@@ -571,11 +577,12 @@ export const LandingPage = () => {
               </motion.div>
             ))}
           </div>
-        </motion.section>
+        </motion.section> */}
         {/* 7th */}
 
         {/* 8th */}
-        <motion.div {...fadeIn(0.1)}>
+        <EnterpriseSolution />
+        {/* <motion.div {...fadeIn(0.1)}>
           <Card className="rounded-3xl border border-transparent bg-gradient-to-br from-sky-100 via-white to-sky-50 p-8 text-center text-slate-900 shadow-xl dark:border-transparent dark:bg-gradient-to-br dark:from-sky-300/60 dark:via-white dark:to-sky-200/60 dark:text-slate-900">
             <CardHeader className="space-y-3">
               <CardTitle className="text-3xl font-semibold text-black md:text-4xl">
@@ -594,11 +601,16 @@ export const LandingPage = () => {
               </Button>
             </CardContent>
           </Card>
-        </motion.div>
+        </motion.div> */}
         {/* 8th */}
 
+        {/* 9th extra  */}
+        <AskedQuestions />
+        {/* 9th extra  */}
+
         {/* 9th */}
-        <motion.section
+        <TransformYourContent />
+        {/* <motion.section
           id="contact"
           className="rounded-3xl border border-sky-100 bg-gradient-to-br from-sky-100 via-white to-sky-50 p-8 text-center text-slate-700 shadow-xl dark:border-transparent dark:bg-gradient-to-br dark:from-sky-300/60 dark:via-white dark:to-sky-200/60"
           {...fadeIn(0.1)}
@@ -623,11 +635,15 @@ export const LandingPage = () => {
               {copy.finalSecondaryCta}
             </Button>
           </div>
-        </motion.section>
+        </motion.section> */}
         {/* 9th */}
 
-        {/* 10th */}
-        <footer className="-mx-6 space-y-10 border-t border-sky-100 bg-white px-6 py-8 text-sm text-slate-600 shadow-inner md:-mx-10 md:px-10 lg:-mx-16 lg:px-16 xl:-mx-24 xl:px-24">
+        {/* 10th extra */}
+        <FooterFirstCard />
+        <LimitedTime />
+        {/* 10th extra  */}
+        <FooterSection />
+        {/* <footer className="-mx-6 space-y-10 border-t border-sky-100 bg-white px-6 py-8 text-sm text-slate-600 shadow-inner md:-mx-10 md:px-10 lg:-mx-16 lg:px-16 xl:-mx-24 xl:px-24">
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div className="max-w-sm space-y-3">
               <Link
@@ -681,7 +697,7 @@ export const LandingPage = () => {
               </Button>
             </div>
           </div>
-        </footer>
+        </footer> */}
         {/* 10th */}
       </main>
     </div>
