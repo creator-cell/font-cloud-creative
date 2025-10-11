@@ -39,6 +39,7 @@ import Header from "../helpers/Header";
 import WorkDemo from "../helpers/WorkDemo";
 import Features from "../helpers/Features";
 import PlatformOverview from "../helpers/PlatformOverview";
+import DemoSection from "../utils/DemoSection";
 
 const contentFilterOrder = ["copy", "product", "social"] as const;
 const speedFeatureIcons: LucideIcon[] = [Clock, Sparkles, Wand2];
@@ -339,7 +340,8 @@ export const LandingPage = () => {
         {/* 2nd one */}
 
         {/* 3rd */}
-        <motion.section className="grid gap-6 lg:grid-cols-2" {...fadeIn(0.1)}>
+        <DemoSection/>
+        {/* <motion.section className="grid gap-6 lg:grid-cols-2" {...fadeIn(0.1)}>
           {orchestrateCards.map(
             ({ badge, title, description, bullets, Icon }, index) => (
               <motion.div key={title} {...fadeIn(index * 0.2)}>
@@ -369,7 +371,7 @@ export const LandingPage = () => {
               </motion.div>
             )
           )}
-        </motion.section>
+        </motion.section> */}
         {/* 3rd */}
 
         {/* 4th  */}
