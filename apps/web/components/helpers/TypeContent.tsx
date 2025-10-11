@@ -59,18 +59,18 @@ const TypeContent = () => {
   };
 
   return (
-    <section className="py-20 bg-[#F9FBFD] text-center">
+    <section className="pb-20 bg-[#F9FBFD] text-center">
       <motion.div {...fadeIn(0)}>
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+        <h2 className="text-2xl md:text-4xl font-bold text-gray-900">
           Generate Any Type of Content
         </h2>
-        <p className="mt-4 text-gray-500 text-base md:text-lg max-w-3xl mx-auto">
+        <p className="mt-4 text-gray-500 text-[17px] md:text-lg">
           Our AI models are trained to create high-converting content across all
           major formats
         </p>
       </motion.div>
 
-      <div className="mt-14 grid gap-8 md:grid-cols-2 xl:grid-cols-3  px-4">
+      <div className="mt-14 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
         {cards.map((card, index) => {
           const { text, bg, border } = getColor(card.color);
           const Icon = card.Icon as LucideIcon;

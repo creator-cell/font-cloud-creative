@@ -59,32 +59,32 @@ const WorkDemo = () => {
   ];
 
   return (
-    <motion.section className="space-y-12 py-16 bg-white" id="workflow-demo">
+    <motion.section className="space-y-6 pb-8 bg-white" id="workflow-demo">
       <motion.div
         className="text-center"
         {...fadeIn(0.05, 10)}
         viewport={{ once: true }}
       >
-        <span className="inline-flex items-center text-xs font-medium border p-1 rounded-xl">
+        <span className="inline-flex items-center text-xs font-medium border border-gray-300 p-1 rounded-xl">
           <Sparkles className="w-4 h-4 mr-1" />
           Live Workflow Demo
         </span>
       </motion.div>
 
       <motion.div className="space-y-4 text-center" {...fadeIn(0.1, 20)}>
-        <h1 className="text-5xl font-extrabold tracking-tight text-slate-900">
+        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900">
           From Idea to Content in{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-500">
             30 Seconds
           </span>
         </h1>
-        <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+        <p className="text-base md:text-lg text-slate-600">
           Watch how Front Cloud Creative transforms your brief into professional
           content across multiple formats
         </p>
       </motion.div>
 
-      <div className="relative grid gap-6 md:grid-cols-3 px-4">
+      <div className="relative grid gap-6 md:grid-cols-3">
         <div className="absolute inset-0 z-0 opacity-20">
           <div
             className="absolute -bottom-20 left-[45%] w-96 h-96 bg-sky-200 rounded-full mix-blend-multiply filter blur-xl animate-blob"
@@ -125,7 +125,7 @@ const WorkDemo = () => {
               </div>
 
               {index === 2 && (
-                <div className="absolute -top-2 right-16 p-4 rounded-xl bg-green-100/70 border border-green-300 shadow-lg translate-x-1/2 -translate-y-1/2">
+                <div className="absolute -top-2 right-16 p-4 rounded-xl bg-green-100/70 border border-green-300 shadow-lg translate-x-1/2 -translate-y-1/2 hidden md:block">
                   <div className="flex items-center text-emerald-600">
                     <Check className="w-5 h-5 mr-1" />
                     <span className="text-sm font-semibold whitespace-nowrap">

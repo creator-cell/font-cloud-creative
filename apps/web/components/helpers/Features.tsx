@@ -126,14 +126,14 @@ const Features = () => {
   return (
     <motion.section className="space-y-10" id="resources" {...fadeIn(0.1)}>
       <motion.div className="space-y-3 text-center" {...fadeIn(0.1, 20)}>
-        <span className="inline-flex items-center text-xs font-medium border p-1 rounded-lg">
+        <span className="inline-flex items-center text-xs font-medium border border-slate-300 p-1 rounded-lg">
           <Sparkles className="w-4 h-4 mr-1" />
           Features
         </span>
-        <h2 className="text-5xl font-bold text-slate-900">
+        <h2 className="text-[28px] md:text-5xl font-bold text-slate-900">
           {copy.creationTitle}
         </h2>
-        <p className="text-base text-slate-600 md:text-lg">
+        <p className="text-lg text-slate-600 md:text-lg">
           {copy.creationSubtitle}
         </p>
       </motion.div>

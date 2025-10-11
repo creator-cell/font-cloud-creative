@@ -56,10 +56,7 @@ const PlatformOverview = () => {
   });
 
   return (
-    <motion.section
-      className="py-16 md:py-24 max-w-7xl mx-auto px-4"
-      {...fadeIn(0.1)}
-    >
+    <motion.section className="py-16 md:py-24 " {...fadeIn(0.1)}>
       <div className="grid lg:grid-cols-2 gap-12 items-center">
         <div className="space-y-6">
           <motion.div {...fadeIn(0.1, 20)}>
@@ -67,7 +64,7 @@ const PlatformOverview = () => {
               {copy.platformTag}
             </span>
 
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900">
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
               {copy.platformTitle}
             </h2>
 
@@ -101,7 +98,7 @@ const PlatformOverview = () => {
         >
           <div className="aspect-[4/3] w-full bg-slate-100 flex items-center justify-center">
             <img
-              src="#"
+              src="/group.jpg"
               alt="Office team working in an open-plan office."
               className="w-full h-full object-cover rounded-2xl"
               onError={(e) => {
