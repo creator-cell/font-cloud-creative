@@ -41,22 +41,22 @@ const ChooseUrPlan = () => {
   return (
     <motion.section id="pricing" className="space-y-10" {...fadeIn(0.1)}>
       <motion.div className="space-y-3 text-center" {...fadeIn(0.1, 20)}>
-        <div className="flex justify-center items-center border w-20 h-auto py-0.5 px-2 mx-auto rounded-xl">
+        <div
+          className="inline-flex justify-center items-center border py-0.5
+         px-2 mx-auto rounded-md border-slate-300 gap-1"
+        >
           <Zap className="w-3 h-auto mr-1" />
-          <span className="text-sm font-medium">Pricing</span>
+          <span className="text-xs font-medium">Pricing</span>
         </div>
-        <h2 className="text-3xl font-semibold text-slate-900 md:text-4xl">
+        <h2 className="text-3xl font-bold text-slate-900 md:text-5xl">
           {copy.pricingTitle}
         </h2>
-        <p className="text-base text-slate-600 md:text-lg">
+        <p className="text-base text-[#787F8F] md:text-xl">
           {copy.pricingSubtitle}
         </p>
       </motion.div>
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {pricingPlans.map((plan, index) => {
-          console.log("Plan Data:", plan);
-          console.log("Is Popular:", plan.popular);
-
           return (
             <motion.div key={plan.id} {...fadeIn(index * 0.2)}>
               <Card
@@ -77,14 +77,14 @@ const ChooseUrPlan = () => {
                     {plan.logo && <plan.logo {...(plan.logoProps || {})} />}
                   </span>
                   <CardTitle className="flex flex-col items-center justify-center text-inherit text-xl text-black dark:text-black relative">
-                    <span className="mb-2 mt-2">{plan.title}</span>
-                    <span className="flex items-center gap-2">
+                    <span className="my-2 font-normal">{plan.title}</span>
+                    <div className="flex items-center gap-2">
                       {plan.popular && (
-                        <span className="rounded-full border border-sky-300 bg-gradient-to-r from-[#09a0eb] to-[#0773f7] px-2 py-0.5 text-sm text-white absolute -top-[6rem] left-[3.5rem]">
+                        <span className="absolute -top-24 left-1/2 -translate-x-1/2 rounded-full border border-sky-300 bg-gradient-to-r from-[#09a0eb] to-[#0773f7] px-2 py-0.5 text-sm text-white">
                           {language === "ar" ? "الأكثر طلبًا" : "Most Popular"}
                         </span>
                       )}
-                    </span>
+                    </div>
                     <div>
                       <span className="text-3xl text-black mr-1">
                         {plan.price}
@@ -97,7 +97,7 @@ const ChooseUrPlan = () => {
                   <p className="text-sm text-[#65758c] text-center">
                     {plan.description}
                   </p>
-                  <div className="items-center mx-auto border px-3 py-1 rounded-full text-xs font-semibold">
+                  <div className="items-center mx-auto border border-slate-300 px-3 py-0.5 rounded-lg text-xs font-semibold text-[#0A0A0A]">
                     <span className="mr-1">{plan.tookens}</span>
                     <span> tokens/month</span>
                   </div>
@@ -116,8 +116,8 @@ const ChooseUrPlan = () => {
                   ))}
 
                   {plan.Limitations && (
-                    <motion.div className="flex flex-col items-start gap-2 mt-3 border-t ">
-                      <span className="font-semibold text-gray-700 mt-3 text-xs">
+                    <motion.div className="flex flex-col items-start gap-2 mt-3 border-t border-slate-300">
+                      <span className="font-semibold text-gray-500 mt-3 text-xs">
                         Limitations:
                       </span>
                       <div className="flex flex-col gap-1 ">
@@ -138,7 +138,7 @@ const ChooseUrPlan = () => {
                     className={`w-full rounded-full border mt-4 ${
                       plan.popular
                         ? "bg-gradient-to-r from-[#09a0eb] to-[#0773f7] border-none text-white hover:from-[#0773f7] hover:to-[#09a0eb] !mb-14"
-                        : "bg-white text-black border hover:bg-sky-200 hover:text-[#0b60af] "
+                        : "bg-white text-black border border-slate-300 hover:bg-sky-200 hover:text-[#0b60af] "
                     }`}
                     style={{ marginTop: "1.5rem" }}
                   >
