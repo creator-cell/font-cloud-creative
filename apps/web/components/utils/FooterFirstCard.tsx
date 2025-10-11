@@ -35,11 +35,7 @@ const FooterFirstCard = () => {
   ];
 
   return (
-    <motion.section
-      {...fadeIn(0.1)}
-      className="py-5 "
-      // bg-gradient-to-r from-sky-200 to-sky-400 
-    >
+    <motion.section {...fadeIn(0.1)} className="py-5 ">
       <div className="grid gap-6 md:grid-cols-3 max-w-7xl mx-auto text-center">
         {stats.map((stat, index) => (
           <motion.div
@@ -57,7 +53,6 @@ const FooterFirstCard = () => {
           </motion.div>
         ))}
       </div>
-     
     </motion.section>
   );
 };
