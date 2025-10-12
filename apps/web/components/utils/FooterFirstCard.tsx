@@ -35,13 +35,8 @@ const FooterFirstCard = ({ copy }: any) => {
   ];
 
   const statsTiles2 = (copy.statsTiles2 || []).map(
-    (tile: { title: string; description: string; icon?: any; Icon?: any }) => ({
-      ...tile,
-      icon: tile.icon || tile.Icon,
-    })
+    (tile: { value: string; label: string }) => tile
   );
-
-  // console.log(statsTiles2,"askdhb")
 
   return (
     <motion.section {...fadeIn(0.1)}>

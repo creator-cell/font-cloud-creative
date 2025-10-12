@@ -223,6 +223,7 @@ export const translations = {
         color: "purple",
       },
     ],
+
     pricingHead: "Pricing",
     pricingTitle: "Choose Your Plan",
     pricingSubtitle:
@@ -907,6 +908,24 @@ export const translations = {
       "الوصول إلى جميع مزودي الذكاء الاصطناعي",
       "يمكن الإلغاء في أي وقت",
     ],
+    statsTiles2: [
+      {
+        title: "المستخدمون النشطون",
+        description: "10,000+",
+        Icon: UsersRound,
+      },
+      {
+        title: "المحتوى الذي تم إنشاؤه",
+        description: "1M+",
+        Icon: Sparkles,
+      },
+      {
+        title: "رضا المستخدمين",
+        description: "95%",
+        Icon: TrendingUp,
+      },
+    ],
+
     finalPrimaryCta: "ابدأ الإنشاء اليوم",
     finalSecondaryCta: "جدولة عرض توضيحي",
     finalSecondaryCtaPercentage: "95%",

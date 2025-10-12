@@ -1151,7 +1151,27 @@ export const LandingPage = () => {
           </div>
         </motion.section>
 
-        {/* <FooterFirstCard copy={copy} /> */}
+        <motion.section {...fadeIn(0.1)}>
+          <div className="grid gap-6 md:grid-cols-3 text-center">
+            {statsTiles2.map((stat, index) => (
+              <motion.div
+                key={index}
+                className="rounded-xl bg-white shadow-md py-5 px-8 hover:shadow-lg transition-shadow duration-300"
+                whileHover={{ scale: 1.03 }}
+              >
+                <div className="flex flex-col items-center space-y-4 mt-1">
+                  <div className="bg-sky-100 rounded-full text-sky-500">
+                    {stat.icon}
+                  </div>
+                  <div className="text-3xl font-bold text-gray-900">
+                    {stat.description}
+                  </div>
+                  <div className="text-gray-600">{stat.title}</div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
 
         <motion.section {...fadeIn(0.1)}>
           <motion.div className="flex flex-col items-center text-center">
