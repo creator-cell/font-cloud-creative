@@ -15,7 +15,7 @@ import { CardTitle } from "../ui/card";
 import { CardHeader } from "../ui/card";
 import { Card } from "../ui/card";
 
-const EnterpriseSolution = () => {
+const EnterpriseSolution = ({ copy }: any) => {
   const [language, setLanguage] = useState<"en" | "ar">("en");
   const fadeIn = (delay = 0, offset = 40) => ({
     initial: { opacity: 0, y: -offset },
@@ -23,7 +23,7 @@ const EnterpriseSolution = () => {
     transition: { duration: 0.6, ease: "easeOut", delay },
     viewport: { once: false, amount: 0.3 },
   });
-  const copy = useMemo(() => translations[language], [language]);
+  // const copy = useMemo(() => translations[language], [language]);
 
   return (
     <motion.div {...fadeIn(0.1)}>

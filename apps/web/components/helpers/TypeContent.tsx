@@ -25,7 +25,7 @@ const cards = [
   },
 ];
 
-const TypeContent = () => {
+const TypeContent = ({ copy }: any) => {
   const fadeIn = (delay = 0, y = 20) => ({
     initial: { opacity: 0, y },
     whileInView: { opacity: 1, y: 0 },
@@ -62,11 +62,10 @@ const TypeContent = () => {
     <section className="pb-20 bg-[#F9FBFD] text-center">
       <motion.div {...fadeIn(0)}>
         <h2 className="text-2xl md:text-4xl font-bold text-gray-900">
-          Generate Any Type of Content
+          {copy.TypeTitle}
         </h2>
         <p className="mt-4 text-gray-500 text-[17px] md:text-lg">
-          Our AI models are trained to create high-converting content across all
-          major formats
+          {copy.TypeDescription}
         </p>
       </motion.div>
 

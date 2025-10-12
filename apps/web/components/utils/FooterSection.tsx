@@ -9,9 +9,9 @@ import { translations } from "../landing/translations";
 
 type ContentFilter = "copy" | "product" | "social";
 
-const FooterSection = () => {
+const FooterSection = ({ copy }: any) => {
   const [language, setLanguage] = useState<"en" | "ar">("en");
-  const copy = useMemo(() => translations[language], [language]);
+  // const copy = useMemo(() => translations[language], [language]);
 
   const socials = [
     { icon: Twitter, href: "/" },
@@ -65,25 +65,27 @@ const FooterSection = () => {
 
         {/* Footer Links */}
         <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-8 md:gap-[5rem] text-start md:text-left md:mx-0">
-          {Object.values(copy.footerLinks).map((group) => (
-            <div key={group.heading} className="space-y-3">
-              <p className="text-base font-semibold text-slate-900">
-                {group.heading}
-              </p>
-              <ul className="space-y-3 text-sm text-slate-500">
-                {group.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="transition hover:text-black"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {Object.values(copy.footerLinks).map((group) => {
+            return (
+              <div key={group.heading} className="space-y-3">
+                <p className="text-base font-semibold text-slate-900">
+                  {group.heading}
+                </p>
+                <ul className="space-y-3 text-sm text-slate-500">
+                  {group.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="transition hover:text-black"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
         </div>
       </div>
 

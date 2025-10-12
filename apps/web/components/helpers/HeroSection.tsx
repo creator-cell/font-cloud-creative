@@ -13,7 +13,11 @@ import {
 
 const HeroSection = () => {
   return (
-    <section className="relative w-full text-gray-900 ">
+    <motion.section
+      className="relative w-full text-gray-900"
+      id="product"
+      {...fadeIn(0.05)}
+    >
       <div className="absolute inset-0 z-0 opacity-20">
         <div
           className="absolute bottom-0 right-1/2 w-96 h-96 bg-sky-200 rounded-full mix-blend-multiply filter blur-xl animate-blob"
@@ -25,8 +29,10 @@ const HeroSection = () => {
         ></div>
       </div>
 
-      {/* Announcement Bar */}
-      <div className="relative z-10 w-full flex justify-center pt-8 sm:pt-6 pb-6 sm:pb-8">
+      <motion.div
+        className="relative z-10 w-full flex justify-center pt-8 sm:pt-6 pb-6 sm:pb-8"
+        {...fadeIn()}
+      >
         <div className="inline-flex justify-center items-center gap-2 sm:gap-4 border border-blue-200 bg-[#F3FAFE] rounded-lg px-3 py-2 sm:px-4 text-xs text-blue-700 font-medium shadow-md whitespace-nowrap">
           <svg
             className="h-3 w-3 text-[#0EA5E9] flex-shrink-0"
@@ -42,7 +48,7 @@ const HeroSection = () => {
             />
           </svg>
           <p className="text-[12px] sm:text-sm text-black whitespace-nowrap">
-            New:GPT-4 Turbo & Claude 3.5 Sonnet Now Available
+            {copy.heroEyebrow}
           </p>
           <svg
             className="h-3 w-3 text-black flex-shrink-0"
@@ -58,118 +64,118 @@ const HeroSection = () => {
             />
           </svg>
         </div>
-      </div>
+      </motion.div>
 
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* Left Column - Content */}
         <div className="lg:text-left">
           <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6 mt-12 md:mt-0">
-            Create Content with <br />
-            <span className="text-[#1D8FFF] inline-block">Multi-AI Power</span>
+            {copy.heroTitlePrimary} <br />
+            <span className="text-[#1D8FFF] inline-block">
+              {copy.heroTitleHighlight}
+            </span>
           </h1>
           <p className="text-lg sm:text-2xl text-gray-600 mb-8 sm:mb-10">
-            One subscription gives you access to OpenAI, Anthropic, Google, and
-            Ollama. Generate ads, blogs, and social media content that converts.
+            {copy.heroDescription}
           </p>
 
-          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-            <button className="flex items-center justify-center w-full sm:w-auto px-6 py-3.5 text-white font-semibold rounded-lg shadow-md transition-colors bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-600 hover:to-blue-700">
-              <Zap className="h-5 w-5 mr-2" /> Start Free Trial
-            </button>
+            <Link
+              href={"/api/auth/signin?callbackUrl=%2Fdashboard"}
+              target="_main"
+              className="flex items-center justify-center w-full sm:w-auto px-6 py-3.5 text-white font-semibold rounded-lg shadow-md transition-colors bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+            >
+              <Zap className="h-5 w-5 mr-2" /> {copy.heroPrimaryCta}
+            </Link>
 
             <button className="flex items-center justify-center w-full sm:w-auto px-8 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
-              <Play className="h-5 w-5 mr-2" /> Watch Demo
+              <Play className="h-5 w-5 mr-2" /> {copy.heroSecondaryCta}
             </button>
           </div>
 
-          {/* Features */}
           <div className="flex flex-wrap justify-start lg:justify-start gap-x-8 gap-y-4 text-gray-600 mb-12">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-blue-500" />
-              <span className="text-sm">15,000 free tokens monthly</span>
+              <span className="text-sm">{copy.heroToken}</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-blue-500" />
-              <span className="text-sm">No credit card required</span>
+              <span className="text-sm">{copy.heroCard}</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-blue-500" />
-              <span className="text-sm">Cancel anytime</span>
+              <span className="text-sm">{copy.heroCancel}</span>
             </div>
           </div>
 
-          {/* Stats */}
           <div className="flex justify-between gap-12 border-t border-gray-200 pt-8">
             <div className="flex justify-between items-center w-full">
-              <div className="flex flex-col items-start">
-                <div className="flex items-center space-x-2">
-                  <Users className="h-5 w-5 text-blue-500" />
-                  <p className="text-3xl font-bold text-gray-900">10K+</p>
-                </div>
-                <p className="text-sm text-gray-500 mt-0.5 ml-7">
-                  Active Users
-                </p>
-              </div>
-
-              <div className="flex flex-col items-start">
-                <div className="flex items-center space-x-2">
-                  <Star className="h-5 w-5 text-blue-500" />
-                  <p className="text-3xl font-bold text-gray-900">4.9</p>
-                </div>
-                <p className="text-sm text-gray-500 mt-0.5 ml-7">Rating</p>
-              </div>
-
-              <div className="flex flex-col items-start">
-                <div className="flex items-center space-x-2">
-                  <ArrowUpRight className="h-5 w-5 text-blue-500 transform rotate-45" />
-                  <p className="text-3xl font-bold text-gray-900">99.9%</p>
-                </div>
-                <p className="text-sm text-gray-500 mt-0.5 ml-7">Uptime</p>
-              </div>
+              {heroStats.map((stat, index) => (
+                <motion.div
+                  className="flex flex-col items-start"
+                  {...fadeIn(index * 0.15, 30)}
+                >
+                  <div className="flex items-center space-x-2">
+                    <Users className="h-5 w-5 text-blue-500" />
+                    <p className="text-3xl font-bold text-gray-900">
+                      {stat.value}
+                    </p>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-0.5 ml-7">
+                    {stat.label}
+                  </p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
 
         {/* Right Column - Cards */}
-        <div className="space-y-6">
+        <motion.div className="space-y-6" {...fadeIn(0.2)}>
           <div>
             <h3 className="flex items-center text-lg font-semibold text-gray-800 mb-6 justify-start lg:justify-start">
-              <Brain className="h-5 w-5 mr-2 text-[#0EA5E9]" /> Powered by
-              Leading AI Providers
+              <Brain className="h-5 w-5 mr-2 text-[#0EA5E9]" />{" "}
+              {copy.providerHeading}
             </h3>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
                 <div className="flex items-center justify-center h-10 w-10 rounded-md bg-[#00BC7D] p-2">
                   <Bot size={20} className="text-white" />
                 </div>
-                <span className="font-medium text-gray-700">OpenAI</span>
+                <span className="font-medium text-gray-700">
+                  {copy.providerOpenAI}
+                </span>
               </div>
               <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
                 <div className="flex items-center justify-center h-10 w-10 rounded-md bg-[#FF6900] p-2">
                   <Brain size={20} className="text-white" />
                 </div>
-                <span className="font-medium text-gray-700">Anthropic</span>
+                <span className="font-medium text-gray-700">
+                  {copy.providerAnthropic}
+                </span>
               </div>
               <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
                 <div className="flex items-center justify-center h-10 w-10 rounded-md bg-[#2B7FFF] p-2">
                   <Search size={20} className="text-white" />
                 </div>
-                <span className="font-medium text-gray-700">Google</span>
+                <span className="font-medium text-gray-700">
+                  {copy.providerGoogle}
+                </span>
               </div>
               <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
                 <div className="flex items-center justify-center h-10 w-10 rounded-md bg-[#AD46FF] p-2">
                   <Zap size={20} className="text-white" />
                 </div>
-                <span className="font-medium text-gray-700">Ollama</span>
+                <span className="font-medium text-gray-700">
+                  {copy.providerOllama}
+                </span>
               </div>
             </div>
           </div>
 
           <div>
             <h3 className="flex items-center text-lg font-semibold text-gray-800 mb-6 justify-start lg:justify-start">
-              <Star className="h-5 w-5 mr-2 text-blue-500" /> Create Any Content
-              Type
+              <Star className="h-5 w-5 mr-2 text-blue-500" />{" "}
+              {copy.providerCreate}
             </h3>
             <div className="grid gap-4">
               <div className="flex items-center justify-between p-1.5 bg-white border border-gray-200 rounded-xl shadow-sm hover:border-blue-300 transition-colors cursor-pointer">
@@ -192,7 +198,9 @@ const HeroSection = () => {
                       <path d="m14 10 2 2-2 2" />
                     </svg>
                   </div>
-                  <span className="font-medium text-gray-700">Ad Copy</span>
+                  <span className="font-medium text-gray-700">
+                    {copy.providerAd}
+                  </span>
                 </div>
                 <ArrowRight className="h-4 w-4 text-gray-400" />
               </div>
@@ -216,7 +224,7 @@ const HeroSection = () => {
                     </svg>
                   </div>
                   <span className="font-medium text-gray-700">
-                    Social Posts
+                    {copy.providerSocial}
                   </span>
                 </div>
                 <ArrowRight className="h-4 w-4 text-gray-400" />
@@ -241,15 +249,17 @@ const HeroSection = () => {
                       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                     </svg>
                   </div>
-                  <span className="font-medium text-gray-700">Blog Posts</span>
+                  <span className="font-medium text-gray-700">
+                    {copy.providerBlog}
+                  </span>
                 </div>
                 <ArrowRight className="h-4 w-4 text-gray-400" />
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

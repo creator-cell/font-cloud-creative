@@ -11,7 +11,13 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   @apply bg-sky-50 text-sky-950 transition-colors duration-300;
 }
 
@@ -22,8 +28,6 @@ html.dark body {
 main {
   @apply min-h-screen;
 }
-
-
 
 @layer base {
   :root {
@@ -80,8 +84,6 @@ main {
     --chart-5: 340 75% 55%;
   }
 }
-
-
 
 @layer base {
   * {

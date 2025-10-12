@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { translations } from "../landing/translations";
 
-const AskedQuestions = () => {
+const AskedQuestions = ({ copy }: any) => {
   const [language, setLanguage] = useState<"en" | "ar">("en");
   const fadeIn = (delay = 0, offset = 40) => ({
     initial: { opacity: 0, y: -offset },
@@ -12,52 +12,48 @@ const AskedQuestions = () => {
     transition: { duration: 0.6, ease: "easeOut", delay },
     viewport: { once: false, amount: 0.3 },
   });
-  const copy = useMemo(() => translations[language], [language]);
+  // const copy = useMemo(() => translations[language], [language]);
 
   return (
     <motion.div {...fadeIn(0.1)} className=" cursor-default">
       <h2 className="text-center text-2xl font-semibold text-[#0A0A0A]">
-        Frequently Asked Questions
+        {copy.FAQTitle}
       </h2>
 
       <div className="mx-auto mt-8 max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-5">
         <div className="flex flex-col gap-2">
           <h3 className="font-semibold text-[#0A0A0A]">
-            Can I switch plans anytime?
+            {copy.FAQLeftOneTitle}
           </h3>
           <p className="text-sm text-slate-600 leading-relaxed">
-            Yes, you can upgrade or downgrade your plan at any time. Changes
-            take effect immediately.
+            {copy.FAQLeftRightDesc}
           </p>
         </div>
 
         <div className="flex flex-col gap-2">
           <h3 className="font-semibold text-[#0A0A0A]">
-            What happens to unused tokens?
+            {copy.FAQLeftTwoTitle}
           </h3>
           <p className="text-sm text-slate-600 leading-relaxed">
-            Tokens reset monthly and don't roll over. We recommend choosing a
-            plan that fits your usage.
+            {copy.FAQLeftRightDesc2}
           </p>
         </div>
 
         <div className="flex flex-col gap-2">
           <h3 className="font-semibold text-[#0A0A0A]">
-            Do you offer refunds?
+            {copy.FAQLeftThreeTitle}
           </h3>
           <p className="text-sm text-slate-600 leading-relaxed">
-            Yes, we offer a 30-day money-back guarantee for all paid plans, no
-            questions asked.
+            {copy.FAQLeftRightDesc3}
           </p>
         </div>
 
         <div className="flex flex-col gap-2">
           <h3 className="font-semibold text-[#0A0A0A]">
-            Is there an API available?
+            {copy.FAQLeftFourTitle}
           </h3>
           <p className="text-sm text-slate-600 leading-relaxed">
-            API access is available on Pro and Team plans with full
-            documentation and support.
+            {copy.FAQLeftRightDesc4}
           </p>
         </div>
       </div>

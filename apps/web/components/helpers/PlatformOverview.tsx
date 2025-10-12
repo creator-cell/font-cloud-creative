@@ -44,9 +44,9 @@ const translations = {
   },
 };
 
-const PlatformOverview = () => {
+const PlatformOverview = ({ copy }: any) => {
   const [language, setLanguage] = useState<"en" | "ar">("en");
-  const copy = useMemo(() => translations[language], [language]);
+  const copy2 = useMemo(() => translations[language], [language]);
 
   const fadeIn = (delay = 0, offset = 40) => ({
     initial: { opacity: 0, y: -offset },
@@ -61,11 +61,12 @@ const PlatformOverview = () => {
         <div className="space-y-6">
           <motion.div {...fadeIn(0.1, 20)}>
             <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-slate-700 bg-[#F0F9FF] rounded-full">
-              {copy.platformTag}
+              {/* {copy.platformTag} */}
+              {copy.newsOverview}
             </span>
 
             <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
-              {copy.platformTitle}
+              {copy.newsroomTitle}
             </h2>
 
             <p className="mt-4 text-lg text-slate-600">
@@ -74,7 +75,7 @@ const PlatformOverview = () => {
           </motion.div>
 
           <div className="grid grid-cols-2 gap-4 pt-4">
-            {copy.platformFeatures.map((feature, index) => {
+            {copy2.platformFeatures.map((feature, index) => {
               const FeatureIcon = feature.Icon as LucideIcon;
               return (
                 <motion.div

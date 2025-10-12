@@ -15,7 +15,7 @@ import { CardTitle } from "../ui/card";
 import { CardHeader } from "../ui/card";
 import { Card } from "../ui/card";
 
-const ChooseUrPlan = () => {
+const ChooseUrPlan = ({ copy }) => {
   const [language, setLanguage] = useState<"en" | "ar">("en");
   const fadeIn = (delay = 0, offset = 40) => ({
     initial: { opacity: 0, y: -offset },
@@ -23,7 +23,7 @@ const ChooseUrPlan = () => {
     transition: { duration: 0.6, ease: "easeOut", delay },
     viewport: { once: false, amount: 0.3 },
   });
-  const copy = useMemo(() => translations[language], [language]);
+  // const copy = useMemo(() => translations[language], [language]);
   const pricingPlans = (copy.pricingPlans || []).map(
     (plan: {
       id: string;
@@ -46,7 +46,7 @@ const ChooseUrPlan = () => {
          px-2 mx-auto rounded-md border-slate-300 gap-1"
         >
           <Zap className="w-3 h-auto mr-1" />
-          <span className="text-xs font-medium">Pricing</span>
+          <span className="text-xs font-medium">{copy.pricingHead}</span>
         </div>
         <h2 className="text-3xl font-bold text-slate-900 md:text-5xl">
           {copy.pricingTitle}
@@ -57,6 +57,7 @@ const ChooseUrPlan = () => {
       </motion.div>
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {pricingPlans.map((plan, index) => {
+          console.log("plan");
           return (
             <motion.div key={plan.id} {...fadeIn(index * 0.2)}>
               <Card
@@ -99,7 +100,7 @@ const ChooseUrPlan = () => {
                   </p>
                   <div className="items-center mx-auto border border-slate-300 px-3 py-0.5 rounded-lg text-xs font-semibold text-[#0A0A0A]">
                     <span className="mr-1">{plan.tookens}</span>
-                    <span> tokens/month</span>
+                    <span> {plan.month}</span>
                   </div>
                 </CardHeader>
 
@@ -115,10 +116,10 @@ const ChooseUrPlan = () => {
                     </motion.div>
                   ))}
 
-                  {plan.Limitations && (
+                  {plan.boundary && (
                     <motion.div className="flex flex-col items-start gap-2 mt-3 border-t border-slate-300">
                       <span className="font-semibold text-gray-500 mt-3 text-xs">
-                        Limitations:
+                        {plan.boundary}
                       </span>
                       <div className="flex flex-col gap-1 ">
                         {plan.Limitations.map((limit, i) => (

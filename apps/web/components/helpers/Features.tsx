@@ -53,69 +53,15 @@ const contentFilterIcons: Record<ContentFilter, LucideIcon> = {
   social: Share2,
 };
 
-const Features = () => {
+const Features = ({ copy }: any) => {
   const [language, setLanguage] = useState<"en" | "ar">("en");
-  const [activeContentFilter, setActiveContentFilter] =
-    useState<ContentFilter>("copy");
-
-  const copy = useMemo(() => translations[language], [language]);
-  // Explicitly typed all parameters and destructured properties to resolve TypeScript errors
-  const navItems = (copy.nav || []).map(
-    (item: { label: string; href: string }) => item
-  );
-  const heroStats = (copy.heroStats || []).map(
-    (stat: { value: string; label: string }) => stat
-  );
-  const providers = (copy.providerLabels || []).map((label: string) => label);
-  const speedFeatures = (copy.speedFeatures || []).map(
-    (feature: { title: string; description: string }, index: number) => ({
-      ...feature,
-      Icon: speedFeatureIcons[index] ?? Sparkles,
-    })
-  );
-  const orchestrateCards = (copy.orchestrateCards || []).map(
-    (
-      card: {
-        badge: string;
-        title: string;
-        description: string;
-        bullets: string[];
-      },
-      index: number
-    ) => ({
-      ...card,
-      Icon: orchestrateIcons[index] ?? LayoutGrid,
-    })
-  );
   const creationFeatures = (copy.creationFeatures || []).map(
     (feature: { title: string; description: string }, index: number) => ({
       ...feature,
       Icon: creationFeatureIcons[index] ?? Sparkles,
     })
   );
-  const contentFilters = (copy.contentFilters || []).map(
-    (filter: { id: ContentFilter; label: string }) => filter
-  );
-  const activeScenario = (
-    copy.contentScenarios?.[activeContentFilter] || []
-  ).map((item: string) => item);
-  const newsroomActions = (copy.newsroomActions || []).map(
-    (action: string) => action
-  );
-  const statsTiles = (copy.statsTiles || []).map(
-    (tile: { value: string; label: string }) => tile
-  );
-  const pricingPlans = (copy.pricingPlans || []).map(
-    (plan: {
-      id: string;
-      title: string;
-      price: string;
-      description: string;
-      features: string[];
-      cta: string;
-      popular: boolean;
-    }) => plan
-  );
+
   const fadeIn = (delay = 0, offset = 40) => ({
     initial: { opacity: 0, y: -offset },
     whileInView: { opacity: 1, y: 0 },
@@ -128,7 +74,7 @@ const Features = () => {
       <motion.div className="space-y-3 text-center" {...fadeIn(0.1, 20)}>
         <span className="inline-flex items-center text-xs font-medium border border-slate-300 p-1 rounded-lg">
           <Sparkles className="w-4 h-4 mr-1" />
-          Features
+          {copy.creationFeature}
         </span>
         <h2 className="text-[28px] md:text-5xl font-bold text-slate-900">
           {copy.creationTitle}

@@ -4,6 +4,7 @@ import {
   Wand2,
   MessageSquare,
   CheckCircle2,
+  LucideIcon,
 } from "lucide-react";
 import React from "react";
 import { motion } from "framer-motion";
@@ -19,7 +20,7 @@ const fadeIn = (delay = 0, offset = 40) => ({
   viewport: { once: true, amount: 0.3 },
 });
 
-const WorkDemo = () => {
+const WorkDemo = ({ copy }: any) => {
   const workflowSteps = [
     {
       title: "1. Describe Your Needs",
@@ -57,9 +58,21 @@ const WorkDemo = () => {
       },
     },
   ];
+  const speedFeatureIcons: LucideIcon[] = [MessageSquare, Sparkles, Wand2];
+
+  const speedFeatures = (copy.speedFeatures || []).map(
+    (feature: { title: string; description: string }, index: number) => ({
+      ...feature,
+      Icon: speedFeatureIcons[index] ?? Sparkles,
+    })
+  );
 
   return (
-    <motion.section className="space-y-6 pb-8 bg-white" id="workflow-demo">
+    <motion.section
+      className="space-y-6 pb-8 bg-white"
+      id="solutions"
+      {...fadeIn(0.1)}
+    >
       <motion.div
         className="text-center"
         {...fadeIn(0.05, 10)}
@@ -67,20 +80,19 @@ const WorkDemo = () => {
       >
         <span className="inline-flex items-center text-xs font-medium border border-gray-300 p-1 rounded-xl">
           <Sparkles className="w-4 h-4 mr-1" />
-          Live Workflow Demo
+          {copy.speedDemo}
         </span>
       </motion.div>
 
       <motion.div className="space-y-4 text-center" {...fadeIn(0.1, 20)}>
         <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900">
-          From Idea to Content in{" "}
+          {copy.speedTitle}{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-500">
-            30 Seconds
+            {copy.speedTitleSecond}
           </span>
         </h1>
         <p className="text-base md:text-lg text-slate-600">
-          Watch how Front Cloud Creative transforms your brief into professional
-          content across multiple formats
+          {copy.speedSubtitle}
         </p>
       </motion.div>
 
@@ -92,7 +104,7 @@ const WorkDemo = () => {
           ></div>
         </div>
 
-        {workflowSteps.map(
+        {speedFeatures.map(
           ({ title, description, Icon, iconColor, style }, index) => (
             <motion.div
               key={title}
@@ -102,7 +114,7 @@ const WorkDemo = () => {
                 boxShadow:
                   "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)",
               }}
-              {...fadeIn(index * 0.15, 20)}
+              {...fadeIn(index * 0.2)}
             >
               <div>
                 <div className="flex items-center space-x-3 mb-4">
@@ -129,11 +141,11 @@ const WorkDemo = () => {
                   <div className="flex items-center text-emerald-600">
                     <Check className="w-5 h-5 mr-1" />
                     <span className="text-sm font-semibold whitespace-nowrap">
-                      Content Generated
+                      {copy.speedContent}
                     </span>
                   </div>
                   <p className="text-xs text-emerald-500 mt-0.5 whitespace-nowrap">
-                    Ready in 12.4s
+                    {copy.speedReady}
                   </p>
                 </div>
               )}
