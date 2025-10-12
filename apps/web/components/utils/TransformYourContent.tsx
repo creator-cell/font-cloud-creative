@@ -77,6 +77,7 @@ const TransformYourContent = () => {
                 <span className="text-gray-500 text-xs">Generated</span>
               </div>
             </div>
+            
           </div>
         </div>
       </div>
