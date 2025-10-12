@@ -15,26 +15,24 @@ const AskedQuestions = () => {
   const copy = useMemo(() => translations[language], [language]);
 
   return (
-    <motion.div {...fadeIn(0.1)} className="py-10 cursor-default">
-      <h2 className="text-center text-2xl font-semibold text-slate-900">
+    <motion.div {...fadeIn(0.1)} className=" cursor-default">
+      <h2 className="text-center text-2xl font-semibold text-[#0A0A0A]">
         Frequently Asked Questions
       </h2>
 
       <div className="mx-auto mt-8 max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-5">
-        {/* Question 1 */}
         <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-slate-900">
+          <h3 className="font-semibold text-[#0A0A0A]">
             Can I switch plans anytime?
           </h3>
           <p className="text-sm text-slate-600 leading-relaxed">
-            Yes, you can upgrade or downgrade your plan at any time. Changes take
-            effect immediately.
+            Yes, you can upgrade or downgrade your plan at any time. Changes
+            take effect immediately.
           </p>
         </div>
 
-        {/* Question 2 */}
         <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-slate-900">
+          <h3 className="font-semibold text-[#0A0A0A]">
             What happens to unused tokens?
           </h3>
           <p className="text-sm text-slate-600 leading-relaxed">
@@ -43,23 +41,23 @@ const AskedQuestions = () => {
           </p>
         </div>
 
-        {/* Question 3 */}
         <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-slate-900">Do you offer refunds?</h3>
+          <h3 className="font-semibold text-[#0A0A0A]">
+            Do you offer refunds?
+          </h3>
           <p className="text-sm text-slate-600 leading-relaxed">
             Yes, we offer a 30-day money-back guarantee for all paid plans, no
             questions asked.
           </p>
         </div>
 
-        {/* Question 4 */}
         <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-slate-900">
+          <h3 className="font-semibold text-[#0A0A0A]">
             Is there an API available?
           </h3>
           <p className="text-sm text-slate-600 leading-relaxed">
-            API access is available on Pro and Team plans with full documentation
-            and support.
+            API access is available on Pro and Team plans with full
+            documentation and support.
           </p>
         </div>
       </div>
