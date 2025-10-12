@@ -35,8 +35,8 @@ const FooterFirstCard = () => {
   ];
 
   return (
-    <motion.section {...fadeIn(0.1)} className="py-5 ">
-      <div className="grid gap-6 md:grid-cols-3 max-w-7xl mx-auto text-center">
+    <motion.section {...fadeIn(0.1)}>
+      <div className="grid gap-6 md:grid-cols-3 text-center">
         {stats.map((stat, index) => (
           <motion.div
             key={index}
