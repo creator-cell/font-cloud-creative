@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Twitter,
-  Linkedin,
-  Github,
-  Mail,
-  Globe,
-} from "lucide-react";
+import { Twitter, Linkedin, Github, Mail, Globe } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -41,20 +35,22 @@ const FooterSection = () => {
         <div className="max-w-sm space-y-3 text-center md:text-left">
           <Link
             href="/"
-            className="flex justify-center md:justify-start items-center gap-3 text-lg font-semibold text-slate-900"
+            className="flex justify-start items-center text-lg font-semibold text-slate-900"
           >
             <Image
               src="/logo.svg"
               alt="Front Cloud logo"
               width={36}
-              height={28}
-              className="h-9 w-auto"
+              height={36}
+              className="shrink-0"
             />
             Front Cloud Creative
           </Link>
-          <p className="text-base text-slate-500 mt-2">{copy.footerTagline}</p>
+          <p className="text-base text-slate-500 mt-2 text-start">
+            {copy.footerTagline}
+          </p>
 
-          <div className="flex justify-center md:justify-start items-center gap-5 !mt-7">
+          <div className="flex justify-start items-center gap-5 !mt-7">
             {socials.map(({ icon: Icon, href }) => (
               <Link
                 key={href}
@@ -68,7 +64,7 @@ const FooterSection = () => {
         </div>
 
         {/* Footer Links */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 md:gap-[5rem] text-center md:text-left mx-auto md:mx-0">
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-8 md:gap-[5rem] text-start md:text-left md:mx-0">
           {Object.values(copy.footerLinks).map((group) => (
             <div key={group.heading} className="space-y-3">
               <p className="text-base font-semibold text-slate-900">
@@ -93,7 +89,7 @@ const FooterSection = () => {
 
       {/* Bottom Links */}
       <div className="flex flex-col gap-4 border-t border-sky-100 pt-6 text-xs sm:text-sm text-[#65758c] md:flex-row md:items-center md:justify-between">
-        <p className="text-center md:text-left">{copy.footerLegal}</p>
+        <p className="text-center text-sm md:text-left">{copy.footerLegal}</p>
         <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 cursor-pointer">
           {footerExtras.map(({ label, icon: Icon, href }) => (
             <Link
@@ -109,25 +105,23 @@ const FooterSection = () => {
       </div>
 
       {/* Input Section */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#f5fbff] p-6 sm:p-8 rounded-xl border text-center sm:text-left">
-        <div className="w-full sm:w-auto">
-          <h1 className="text-black font-semibold text-base">
-            Stay updated
-          </h1>
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#F3FAFE] border border-sky-100 p-6 sm:p-8 rounded-xl text-center sm:text-left">
+        <div className="flex flex-col justify-start items-start">
+          <h1 className="text-black font-semibold text-base">Stay updated</h1>
           <p className="text-sm mt-1">
             Get the latest updates about new features and AI improvements.
           </p>
         </div>
 
-        <div className="w-full sm:w-auto flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-3">
+        <div className="w-full sm:w-auto flex flex-row justify-center sm:justify-end items-center gap-3">
           <input
             type="email"
             placeholder={copy.footerInputPlaceholder}
-            className="rounded-lg border border-[#e1e8f0] bg-white px-4 py-2 text-sm text-slate-700 focus:border-sky-400 focus:outline-none w-full sm:w-64"
+            className="rounded-lg border border-[#e1e8f0] bg-white px-4 py-2 text-sm text-slate-700 focus:border-sky-400 focus:outline-none h-10"
           />
-          <Button className="rounded-full bg-sky-500 px-5 text-white hover:bg-sky-400 w-full sm:w-auto">
+          <button className="rounded-lg bg-sky-500 px-5 text-white hover:bg-sky-400 py-2.5 font-semibold flex items-center justify-center">
             {copy.footerBottomCta}
-          </Button>
+          </button>
         </div>
       </div>
     </footer>
