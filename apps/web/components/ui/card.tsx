@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 
 export const Card = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
+  <div  
     className={clsx(
       "rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-colors dark:border-slate-800",
       className
