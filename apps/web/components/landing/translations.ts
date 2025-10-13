@@ -36,9 +36,9 @@ export const translations = {
 
     heroTertiaryCta: "Contact sales",
     heroStats: [
-      { value: "10k+", label: "Assets shipped" },
-      { value: "4.9", label: "Avg. team rating" },
-      { value: "98.8%", label: "Workflow uptime" },
+      { value: "10K+", label: "Active Users" },
+      { value: "4.9", label: "Rating" },
+      { value: "98.8%", label: "Update Time" },
     ],
     providerHeading: "Powered by Leading AI Providers",
     providerCreate: "Create Any Content Type",
@@ -519,7 +519,7 @@ export const translations = {
 
     heroTertiaryCta: "تواصل مع المبيعات",
     heroStats: [
-      { value: "+10k", label: "أصول منشورة" },
+      { value: "+10K", label: "أصول منشورة" },
       { value: "4.9", label: "تقييم الفرق" },
       { value: "98.8%", label: "جاهزية المسارات" },
     ],

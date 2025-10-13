@@ -41,6 +41,9 @@ import {
   Mail,
   Globe,
   Dot,
+  MessageSquare,
+  SquareCode,
+  BookOpen,
 } from "lucide-react";
 import { translations } from "./translations";
 import ChooseUrPlan from "../utils/ChooseUrPlan";
@@ -277,11 +280,12 @@ export const LandingPage = () => {
             {...fadeIn()}
           >
             <div className="inline-flex justify-center items-center gap-2 sm:gap-1 border border-blue-200 bg-[#F3FAFE] rounded-md px-3 py-1 sm:px-3 text-xs text-blue-700 font-medium  whitespace-nowrap ">
-              
-              <Sparkles className="h-3 w-3 text-[#0EA5E9] flex-shrink-0"
+              <Sparkles
+                className="h-3 w-3 text-[#0EA5E9] flex-shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor"/>
+                stroke="currentColor"
+              />
               <p className="text-[12px] sm:text-[10px] text-black whitespace-nowrap font-semibold">
                 {copy.heroEyebrow}
               </p>
@@ -301,15 +305,15 @@ export const LandingPage = () => {
             </div>
           </motion.div>
 
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="lg:text-left">
-              <h1 className="text-4xl md:text-[4rem] font-bold leading-tight mb-6 mt-12 md:mt-0">
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 lg:gap-12 gap-8 items-center">
+            <div className="lg:text-left bg-red-500k">
+              <h1 className="text-4xl md:text-[4.5rem] font-bold leading-tight mb-6 mt-12 md:mt-0">
                 {copy.heroTitlePrimary} <br />
-                <span className="text-[#1D8FFF] inline-block">
+                <span className="text-[#1D8FFF] inline-block md:text-[4rem]">
                   {copy.heroTitleHighlight}
                 </span>
               </h1>
-              <p className="text-xl sm:text-xl text-gray-600 mb-8 sm:mb-10">
+              <p className="text-xl sm:text-xl text-muted-foreground mb-8 sm:mb-10">
                 {copy.heroDescription}
               </p>
 
@@ -317,13 +321,14 @@ export const LandingPage = () => {
                 <Link
                   href={"/api/auth/signin?callbackUrl=%2Fdashboard"}
                   target="_main"
-                  className="flex items-center justify-center w-full sm:w-auto px-6 py-3.5 text-white font-semibold rounded-lg shadow-md transition-colors bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+                  className="flex items-center justify-center w-full sm:w-auto px-4 py-3.5 text-white font-medium rounded-lg shadow-md transition-colors bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-sm"
                 >
-                  <Zap className="h-5 w-5 mr-2" /> {copy.heroPrimaryCta}
+                  <Zap className="h-4 w-4 mr-2" /> {copy.heroPrimaryCta}
+                  <ArrowRight className="h-4 w-4 ml-2" />
                 </Link>
 
-                <button className="flex items-center justify-center w-full sm:w-auto px-8 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
-                  <Play className="h-5 w-5 mr-2" /> {copy.heroSecondaryCta}
+                <button className="flex items-center justify-center w-full sm:w-auto px-4 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-sky-100 transition-colors text-sm">
+                  <Play className="h-4 w-4 mr-2" /> {copy.heroSecondaryCta}
                 </button>
               </div>
 
@@ -367,13 +372,13 @@ export const LandingPage = () => {
             {/* Right Column - Cards */}
             <motion.div className="space-y-6" {...fadeIn(0.2)}>
               <div>
-                <h3 className="flex items-center text-lg font-semibold text-gray-800 mb-6 justify-start lg:justify-start">
+                <h3 className="flex items-center text-base font-medium text-gray-800 mb-6 justify-start lg:justify-start">
                   <Brain className="h-5 w-5 mr-2 text-[#0EA5E9]" />{" "}
                   {copy.providerHeading}
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
-                    <div className="flex items-center justify-center h-10 w-10 rounded-md bg-[#00BC7D] p-2">
+                    <div className="flex items-center justify-center rounded-lg bg-[#00bc7d] p-2">
                       <Bot size={20} className="text-white" />
                     </div>
                     <span className="font-medium text-gray-700">
@@ -381,7 +386,7 @@ export const LandingPage = () => {
                     </span>
                   </div>
                   <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
-                    <div className="flex items-center justify-center h-10 w-10 rounded-md bg-[#FF6900] p-2">
+                    <div className="flex items-center justify-center  rounded-md bg-[#ff6a00] p-2">
                       <Brain size={20} className="text-white" />
                     </div>
                     <span className="font-medium text-gray-700">
@@ -389,7 +394,7 @@ export const LandingPage = () => {
                     </span>
                   </div>
                   <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
-                    <div className="flex items-center justify-center h-10 w-10 rounded-md bg-[#2B7FFF] p-2">
+                    <div className="flex items-center justify-center  rounded-md bg-[#2b80ff] p-2">
                       <Search size={20} className="text-white" />
                     </div>
                     <span className="font-medium text-gray-700">
@@ -397,7 +402,7 @@ export const LandingPage = () => {
                     </span>
                   </div>
                   <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
-                    <div className="flex items-center justify-center h-10 w-10 rounded-md bg-[#AD46FF] p-2">
+                    <div className="flex items-center justify-center  rounded-md bg-[#ab45ff] p-2">
                       <Zap size={20} className="text-white" />
                     </div>
                     <span className="font-medium text-gray-700">
@@ -408,32 +413,17 @@ export const LandingPage = () => {
               </div>
 
               <div>
-                <h3 className="flex items-center text-lg font-semibold text-gray-800 mb-6 justify-start lg:justify-start">
-                  <Star className="h-5 w-5 mr-2 text-blue-500" />{" "}
+                <h3 className="flex items-center text-base font-medium text-gray-800 mb-6 justify-start lg:justify-start">
+                  <Sparkles className="h-5 w-5 mr-2 text-blue-500" />{" "}
                   {copy.providerCreate}
                 </h3>
                 <div className="grid gap-4">
                   <div className="flex items-center justify-between p-1.5 bg-white border border-gray-200 rounded-xl shadow-sm hover:border-blue-300 transition-colors cursor-pointer">
                     <div className="flex items-center gap-3">
                       <div className="flex items-center justify-center h-10 w-10 rounded-full bg-blue-50 text-blue-600">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="lucide lucide-square-code"
-                        >
-                          <rect width="18" height="18" x="3" y="3" rx="2" />
-                          <path d="m10 14-2-2 2-2" />
-                          <path d="m14 10 2 2-2 2" />
-                        </svg>
+                        <SquareCode />
                       </div>
-                      <span className="font-medium text-gray-700">
+                      <span className="font-semibold text-gray-700">
                         {copy.providerAd}
                       </span>
                     </div>
@@ -443,22 +433,9 @@ export const LandingPage = () => {
                   <div className="flex items-center justify-between p-1.5 bg-white border border-gray-200 rounded-xl shadow-sm hover:border-blue-300 transition-colors cursor-pointer">
                     <div className="flex items-center gap-3">
                       <div className="flex items-center justify-center h-10 w-10 rounded-full bg-green-50 p-2 text-green-600">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="lucide lucide-message-square"
-                        >
-                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V3a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                        </svg>
+                        <MessageSquare />
                       </div>
-                      <span className="font-medium text-gray-700">
+                      <span className="font-semibold text-gray-700">
                         {copy.providerSocial}
                       </span>
                     </div>
@@ -468,23 +445,9 @@ export const LandingPage = () => {
                   <div className="flex items-center justify-between p-1.5 bg-white border border-gray-200 rounded-xl shadow-sm hover:border-blue-300 transition-colors cursor-pointer">
                     <div className="flex items-center gap-3">
                       <div className="flex items-center justify-center h-10 w-10 rounded-full bg-purple-50 p-2 text-purple-600">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="lucide lucide-book-open"
-                        >
-                          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                        </svg>
+                        <BookOpen />
                       </div>
-                      <span className="font-medium text-gray-700">
+                      <span className="font-semibold text-gray-700">
                         {copy.providerBlog}
                       </span>
                     </div>
