@@ -193,7 +193,7 @@ export const LandingPage = () => {
 
   return (
     <div
-      className="relative min-h-screen overflow-hidden bg-white text-slate-900"
+      className="relative min-h-screen overflow-hidden bg-white text-slate-900 "
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       {/* <header className="fixed inset-x-0 top-0 z-50 border-b border-sky-100 bg-white/95 backdrop-blur">
@@ -255,7 +255,7 @@ export const LandingPage = () => {
       {/* <Header /> */}
       <Header language={language} setLanguage={setLanguage} copy={copy} />
 
-      <main className="relative mx-auto flex w-full flex-col gap-24 px-8 pb-0 pt-24 2xl:max-w-screen-2xl 2xl:mx-auto">
+      <main className="relative mx-auto flex w-full flex-col gap-24 px-7 pb-0 pt-20 xl:px-24 2xl:max-w-screen-2xl 2xl:mx-auto">
         <motion.section
           className="relative w-full text-gray-900"
           id="product"
@@ -273,24 +273,16 @@ export const LandingPage = () => {
           </div>
 
           <motion.div
-            className="relative z-10 w-full flex justify-center pt-8 sm:pt-6 pb-6 sm:pb-8"
+            className="relative z-10 w-full flex justify-center pt-8 sm:pt-0 pb-6 sm:pb-8"
             {...fadeIn()}
           >
-            <div className="inline-flex justify-center items-center gap-2 sm:gap-4 border border-blue-200 bg-[#F3FAFE] rounded-lg px-3 py-2 sm:px-4 text-xs text-blue-700 font-medium shadow-md whitespace-nowrap">
-              <svg
-                className="h-3 w-3 text-[#0EA5E9] flex-shrink-0"
+            <div className="inline-flex justify-center items-center gap-2 sm:gap-1 border border-blue-200 bg-[#F3FAFE] rounded-md px-3 py-1 sm:px-3 text-xs text-blue-700 font-medium  whitespace-nowrap ">
+              
+              <Sparkles className="h-3 w-3 text-[#0EA5E9] flex-shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M11.049 2.115a.524.524 0 01.902 0l1.64 3.32a.524.524 0 00.395.286l3.665.532a.524.524 0 01.29.896l-2.653 2.586a.524.524 0 00-.15.462l.628 3.654a.524.524 0 01-.76.554l-3.275-1.722a.524.524 0 00-.486 0l-3.275 1.722a.524.524 0 01-.76-.554l.628-3.654a.524.524 0 00-.15-.462L3.896 7.231a.524.524 0 01.29-.896l3.665-.532a.524.524 0 00.395-.286l1.64-3.32z"
-                />
-              </svg>
-              <p className="text-[12px] sm:text-sm text-black whitespace-nowrap">
+                stroke="currentColor"/>
+              <p className="text-[12px] sm:text-[10px] text-black whitespace-nowrap font-semibold">
                 {copy.heroEyebrow}
               </p>
               <svg
@@ -311,13 +303,13 @@ export const LandingPage = () => {
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="lg:text-left">
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6 mt-12 md:mt-0">
+              <h1 className="text-4xl md:text-[4rem] font-bold leading-tight mb-6 mt-12 md:mt-0">
                 {copy.heroTitlePrimary} <br />
                 <span className="text-[#1D8FFF] inline-block">
                   {copy.heroTitleHighlight}
                 </span>
               </h1>
-              <p className="text-lg sm:text-2xl text-gray-600 mb-8 sm:mb-10">
+              <p className="text-xl sm:text-xl text-gray-600 mb-8 sm:mb-10">
                 {copy.heroDescription}
               </p>
 

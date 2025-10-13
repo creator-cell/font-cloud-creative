@@ -27,7 +27,7 @@ export const translations = {
     heroTitlePrimary: "Create Content with",
     heroTitleHighlight: "Multi-AI Power",
     heroDescription:
-      "Orchestrate OpenAI, Anthropic, Google, and private stacks. Generate ads, blogs, and updates ready to ship in minutes.",
+      "One subscription gives you access to OpenAI, Anthropic, Google, and Ollama. Generate ads, blogs, and social media content that converts.",
     heroPrimaryCta: "Start free trial",
     heroSecondaryCta: "Watch demo",
     heroToken: "15,000 free tokens monthly",
