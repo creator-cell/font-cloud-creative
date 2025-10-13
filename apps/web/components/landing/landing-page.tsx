@@ -63,6 +63,7 @@ import WorkDemo from "../helpers/WorkDemo";
 import Features from "../helpers/Features";
 import PlatformOverview from "../helpers/PlatformOverview";
 import DemoSection from "../utils/DemoSection";
+import { ThemeToggle } from "../theme-toggle";
 
 const contentFilterOrder = ["copy", "product", "social"] as const;
 const speedFeatureIcons: LucideIcon[] = [MessageSquare, Brain, Sparkles];
@@ -209,7 +210,7 @@ export const LandingPage = () => {
 
   return (
     <div
-      className="relative min-h-screen overflow-hidden bg-white text-slate-900 "
+      className="relative min-h-screen overflow-hidden bg-white text-slate-900 dark:bg-[#0f1729]"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       {/* <header className="fixed inset-x-0 top-0 z-50 border-b border-sky-100 bg-white/95 backdrop-blur">
@@ -293,18 +294,18 @@ export const LandingPage = () => {
             className="relative z-10 w-full flex justify-center pt-8 sm:pt-0 pb-6 sm:pb-8"
             {...fadeIn()}
           >
-            <div className="inline-flex justify-center items-center gap-2 sm:gap-1 border border-blue-200 bg-[#F3FAFE] rounded-md px-3 py-1 sm:px-3 text-xs text-blue-700 font-medium  whitespace-nowrap ">
+            <div className="inline-flex justify-center items-center gap-2 sm:gap-1 border border-blue-200 bg-[#F3FAFE] rounded-md px-3 py-1 sm:px-3 text-xs text-blue-700 font-medium  whitespace-nowrap dark:bg-[#111e33] dark:border-[#183e5c]">
               <Sparkles
                 className="h-3 w-3 text-[#0EA5E9] flex-shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               />
-              <p className="text-[12px] sm:text-[10px] text-black whitespace-nowrap font-semibold">
+              <p className="text-[12px] sm:text-[10px] text-black whitespace-nowrap font-semibold dark:text-[#f2f6fa]">
                 {copy.heroEyebrow}
               </p>
               <svg
-                className="h-3 w-3 text-black flex-shrink-0"
+                className="h-3 w-3 text-black flex-shrink-0 dark:text-[#f2f6fa]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -321,7 +322,7 @@ export const LandingPage = () => {
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 lg:gap-12 gap-8 items-center">
             <div className="lg:text-left bg-red-500k">
-              <h1 className="text-4xl md:text-[4.5rem] font-bold leading-tight mb-6 mt-4 md:mt-0">
+              <h1 className="text-4xl md:text-[4.5rem] font-bold leading-tight mb-6 mt-4 md:mt-0 dark:text-[#f2f6fa]">
                 {copy.heroTitlePrimary} <br />
                 <span className="text-[#1D8FFF] inline-block md:text-[4rem]">
                   {copy.heroTitleHighlight}
@@ -386,40 +387,40 @@ export const LandingPage = () => {
             {/* Right Column - Cards */}
             <motion.div className="space-y-6" {...fadeIn(0.2)}>
               <div>
-                <h3 className="flex items-center text-base font-medium text-gray-800 mb-6 justify-start lg:justify-start">
+                <h3 className="flex items-center text-base font-medium text-gray-800 mb-6 justify-start lg:justify-start dark:text-[#f0f5fa]">
                   <Brain className="h-5 w-5 mr-2 text-[#0EA5E9]" />{" "}
                   {copy.providerHeading}
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
+                  <div className="flex items-center gap-3 p-4 bg-white border rounded-xl shadow-sm dark:bg-[#162033] dark:hover:border-[#324154]">
                     <div className="flex items-center justify-center rounded-lg bg-[#00bc7d] p-2">
                       <Bot size={20} className="text-white" />
                     </div>
-                    <span className="font-medium text-gray-700">
+                    <span className="font-medium text-gray-700 dark:text-[#e4e7eb]">
                       {copy.providerOpenAI}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
+                  <div className="flex items-center gap-3 p-4 bg-white border  rounded-xl shadow-sm dark:bg-[#162033] dark:hover:border-[#324154]">
                     <div className="flex items-center justify-center  rounded-md bg-[#ff6a00] p-2">
-                      <Brain size={20} className="text-white" />
+                      <Brain size={20} className="text-white " />
                     </div>
-                    <span className="font-medium text-gray-700">
+                    <span className="font-medium text-gray-700 dark:text-[#e4e7eb]">
                       {copy.providerAnthropic}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
+                  <div className="flex items-center gap-3 p-4 bg-white border  rounded-xl shadow-sm dark:bg-[#162033] dark:hover:border-[#324154]">
                     <div className="flex items-center justify-center  rounded-md bg-[#2b80ff] p-2">
                       <Search size={20} className="text-white" />
                     </div>
-                    <span className="font-medium text-gray-700">
+                    <span className="font-medium text-gray-700 dark:text-[#e4e7eb]">
                       {copy.providerGoogle}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
+                  <div className="flex items-center gap-3 p-4 bg-white border  rounded-xl shadow-sm dark:bg-[#162033] dark:hover:border-[#324154]">
                     <div className="flex items-center justify-center  rounded-md bg-[#ab45ff] p-2">
                       <Zap size={20} className="text-white" />
                     </div>
-                    <span className="font-medium text-gray-700">
+                    <span className="font-medium text-gray-700 dark:text-[#e4e7eb]">
                       {copy.providerOllama}
                     </span>
                   </div>
@@ -427,41 +428,41 @@ export const LandingPage = () => {
               </div>
 
               <div>
-                <h3 className="flex items-center text-base font-medium text-gray-800 mb-6 justify-start lg:justify-start">
+                <h3 className="flex items-center text-base font-medium text-gray-800 mb-6 justify-start lg:justify-start dark:text-[#f0f5fa]">
                   <Sparkles className="h-5 w-5 mr-2 text-blue-500" />{" "}
                   {copy.providerCreate}
                 </h3>
                 <div className="grid gap-4">
-                  <div className="flex items-center justify-between p-1.5 bg-white border border-gray-200 rounded-xl shadow-sm hover:border-blue-300 transition-colors cursor-pointer">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-blue-50 text-blue-600">
+                  <div className="flex items-center justify-between p-1.5 bg-white border  rounded-xl shadow-sm hover:border-blue-300 transition-colors cursor-pointer dark:bg-[#162033] dark:hover:border-[#324154]">
+                    <div className="flex items-center gap-3 ">
+                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-blue-50 text-blue-600 dark:bg-[#1a3047]">
                         <SquareCode />
                       </div>
-                      <span className="font-semibold text-gray-700">
+                      <span className="font-semibold text-gray-700 dark:text-[#f2f6fa]">
                         {copy.providerAd}
                       </span>
                     </div>
                     <ArrowRight className="h-4 w-4 text-gray-400" />
                   </div>
 
-                  <div className="flex items-center justify-between p-1.5 bg-white border border-gray-200 rounded-xl shadow-sm hover:border-blue-300 transition-colors cursor-pointer">
+                  <div className="flex items-center justify-between p-1.5 bg-white border  rounded-xl shadow-sm hover:border-blue-300 transition-colors cursor-pointer dark:bg-[#162033] dark:hover:border-[#324154]">
                     <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-green-50 p-2 text-green-600">
+                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-green-50 p-2 text-green-600 dark:bg-[#1a3047]">
                         <MessageSquare />
                       </div>
-                      <span className="font-semibold text-gray-700">
+                      <span className="font-semibold text-gray-700 dark:text-[#f2f6fa]">
                         {copy.providerSocial}
                       </span>
                     </div>
                     <ArrowRight className="h-4 w-4 text-gray-400" />
                   </div>
 
-                  <div className="flex items-center justify-between p-1.5 bg-white border border-gray-200 rounded-xl shadow-sm hover:border-blue-300 transition-colors cursor-pointer">
+                  <div className="flex items-center justify-between p-1.5 bg-white border  rounded-xl shadow-sm hover:border-blue-300 transition-colors cursor-pointer dark:bg-[#162033] dark:hover:border-[#324154]">
                     <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-purple-50 p-2 text-purple-600">
+                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-purple-50 p-2 text-purple-600 dark:bg-[#1a3047]">
                         <BookOpen />
                       </div>
-                      <span className="font-semibold text-gray-700">
+                      <span className="font-semibold text-gray-700 dark:text-[#f2f6fa]">
                         {copy.providerBlog}
                       </span>
                     </div>
