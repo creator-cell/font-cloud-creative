@@ -17,13 +17,14 @@ import {
   Workflow,
   Zap,
 } from "lucide-react";
+
 export const translations = {
   en: {
     nav: [
-      { label: "Product", href: "#product" },
-      { label: "Solutions", href: "#solutions" },
+      { label: "Features", href: "#features" },
       { label: "Pricing", href: "#pricing" },
-      { label: "Resources", href: "#resources" },
+      { label: "About", href: "#about" },
+      { label: "Contact", href: "#contact" },
     ],
     languageToggle: "العربية",
     heroEyebrow: "New:GPT-4 Turbo & Claude 3.5 Sonnet Now Available",
@@ -502,10 +503,10 @@ export const translations = {
   footerLast: "footerExtras",
   ar: {
     nav: [
-      { label: "المنتج", href: "#product" },
-      { label: "الحلول", href: "#solutions" },
+      { label: "المميزات", href: "#features" },
       { label: "الأسعار", href: "#pricing" },
-      { label: "المصادر", href: "#resources" },
+      { label: "عن", href: "#about" },
+      { label: "اتصل بنا", href: "#contact" },
     ],
     languageToggle: "English",
     heroEyebrow: "جديد: GPT-4 Turbo و Claude 3.5 Sonnet متاح الآن",

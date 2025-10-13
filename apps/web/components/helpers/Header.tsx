@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sun, Moon, Laptop, Zap, Globe } from "lucide-react";
+import { Sun, Moon, Laptop, Zap, Globe, MenuIcon, X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -21,6 +21,7 @@ interface HeaderProps {
 
 const Header = ({ language, setLanguage, copy }: HeaderProps) => {
   const [theme, setTheme] = useState<"light" | "dark" | "system">("light");
+  const [mobileOpen, setMobileOpen] = useState(false);
   const navItems = copy?.nav || [
     { label: language === "ar" ? "الميزات" : "Features", href: "#features" },
     { label: language === "ar" ? "الأسعار" : "Pricing", href: "#pricing" },
@@ -30,12 +31,12 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 border-b border-gray-200 backdrop-blur-md 2xl:max-w-screen-2xl 2xl:mx-auto  ${
+      className={`fixed inset-x-0 top-0 z-50 border-b  border-gray-200 backdrop-blur-md 2xl:max-w-screen-2xl 2xl:mx-auto  ${
         language === "ar" ? "direction-rtl" : ""
       }`}
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-      {/* md:max-w-[1160px]  md:mx-auto  */}
+      
       <div className="mx-auto flex w-full items-center justify-between px-6  md:px-8 xl:px-16 py-2 2xl:max-w-screen-2xl 2xl:mx-auto">
         {/* Logo */}
         <Link
@@ -118,7 +119,105 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
             </button>
           </Link>
         </div>
+        {/* Mobile menu button */}
+        <button
+          className="md:hidden flex items-center p-2 hover:bg-sky-100 "
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          {mobileOpen ? <X size={16} /> : <MenuIcon size={16} />}
+        </button>
       </div>
+
+      {/* ✅ Mobile Menu */}
+      {mobileOpen && (
+        <nav className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 px-4 sm:px-6">
+          <ul className="flex flex-col gap-1 px-2 space-y-1 pt-2 pb-3 text-sm text-[#778599] font-medium">
+            {navItems.map((item) => (
+              <li key={item.label}>
+                <Link
+                  href={item.href}
+                  className="block w-full px-3 py-2 text-sm font-medium transition hover:text-[#0A0A0A]"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+            {/*  */}
+          <div className="border-b border-[#e1e8f0] "></div>
+            {/* theme */}
+            <div>
+              <li className="flex items-center justify-between px-2 space-y-1 pt-2 pb-2 text-sm  font-medium">
+                <div className="text-black">Theme</div>
+                <div>
+                  <Select value={theme} onValueChange={setTheme}>
+                    <SelectTrigger className="w-auto min-w-[2.5rem] border-0 bg-[#f7fafc] rounded-md px-2 flex items-center justify-center gap-10">
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        {theme === "light" && (
+                          <Sun className="h-4 w-4 text-[#0A0A0A]" />
+                        )}
+                        {theme === "dark" && (
+                          <Moon className="h-4 w-4 text-[#0A0A0A]" />
+                        )}
+                        {theme === "system" && (
+                          <Laptop className="h-4 w-4 text-[#0A0A0A]" />
+                        )}
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent className="bg-white text-black">
+                      <SelectItem value="light">Light</SelectItem>
+                      <SelectItem value="dark">Dark</SelectItem>
+                      <SelectItem value="system">System</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </li>
+
+              <li className="flex items-center justify-between px-2 space-y-1 pt-2  text-sm  font-medium">
+                <div className="text-black">Language</div>
+                <div>
+                  <Select
+                    value={language}
+                    onValueChange={(val: "en" | "ar") => setLanguage(val)}
+                  >
+                    <SelectTrigger className="w-auto min-w-[2.5rem] border-0 bg-[#f7fafc] rounded-md px-2  flex items-center justify-center gap-10">
+                      <Globe className="h-4 w-4 text-slate-700" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="ar">العربية</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </li>
+            </div>
+            {/* auth prop */}
+
+            <li>
+              <Link
+                href="/api/auth/signin?callbackUrl=%2Fdashboard"
+                className="block w-full pb-1  font-medium text-sm text-center text-black"
+                onClick={() => setMobileOpen(false)}
+              >
+                {language === "ar" ? "تسجيل الدخول" : "Sign In"}
+              </Link>
+            </li>
+
+            <li className="flex justify-center pb-1.5">
+              <Link
+                href="/api/auth/signin?callbackUrl=%2Fdashboard"
+                onClick={() => setMobileOpen(false)}
+              >
+                <button className="w-[320px] rounded-lg bg-sky-500 text-white hover:bg-sky-400 px-1.5 py-1.5 font-semibold text-sm mt-1">
+                  {language === "ar" ? "ابدأ الآن" : "Get Started"}
+                </button>
+              </Link>
+            </li>
+
+            {/*  */}
+          </ul>
+        </nav>
+      )}
     </header>
   );
 };

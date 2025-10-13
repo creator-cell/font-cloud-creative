@@ -755,7 +755,7 @@ export const LandingPage = () => {
           id="resources"
           {...fadeIn(0.1)}
         >
-          <motion.div className="space-y-3 text-center" {...fadeIn(0.1, 20)}>
+          <motion.div className="space-y-3 text-center " id="features" {...fadeIn(0.1, 20)}>
             <span className="inline-flex items-center text-xs font-medium border border-[#e1e8f0] py-1 px-3 rounded-lg">
               <Sparkles className="w-3 h-3 mr-1" />
               {copy.creationFeature}
