@@ -36,7 +36,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       {/* md:max-w-[1160px]  md:mx-auto  */}
-      <div className="mx-auto flex w-full items-center justify-between xl:px-36  px-12 py-2.5">
+      <div className="mx-auto flex w-full items-center justify-between px-6  md:px-8 xl:px-16 py-2 2xl:max-w-screen-2xl 2xl:mx-auto">
         {/* Logo */}
         <Link
           href="/"

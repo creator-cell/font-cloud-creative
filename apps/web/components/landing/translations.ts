@@ -3,15 +3,18 @@ import {
   CheckCircle2,
   Clock,
   Crown,
+  Globe,
   Globe2,
   MessageSquare,
   RefreshCw,
   Rocket,
+  Shield,
   ShieldCheck,
   Sparkles,
   Target,
   TrendingUp,
   UsersRound,
+  Workflow,
   Zap,
 } from "lucide-react";
 export const translations = {
@@ -38,7 +41,7 @@ export const translations = {
     heroStats: [
       { value: "10K+", label: "Active Users" },
       { value: "4.9", label: "Rating" },
-      { value: "98.8%", label: "Update Time" },
+      { value: "98.8%", label: "Uptime" },
     ],
     providerHeading: "Powered by Leading AI Providers",
     providerCreate: "Create Any Content Type",
@@ -150,7 +153,7 @@ export const translations = {
     creationTitle: "Everything You Need to Create Amazing Content",
     creationFeature: "Features",
     creationSubtitle:
-      "From brand guardrails to analytics, orchestrate sophisticated AI workflows without losing control.",
+      "From idea to publication, our AI-powered platform handles every step of your content creation workflow.",
     creationFeatures: [
       {
         title: "Multi-AI Access",
@@ -186,14 +189,14 @@ export const translations = {
     newsOverview: "Platform Overview",
     newsroomTitle: "Everything you need in one platform",
     newsroomSubtitle:
-      "Plan launches, activate campaigns, and publish daily updates without switching tools.",
+      "From content creation to team collaboration, our platform provides all the tools you need to scale your content marketing efforts with AI.",
     newsroomActions: [
-      { label: "Enterprise Security", Icon: ShieldCheck },
+      { label: "Enterprise Security", Icon: Shield },
+      { label: "Multi-language Support", Icon: Globe },
       { label: "Fast Generation", Icon: Zap },
-      { label: "Automated Workflows", Icon: RefreshCw },
-      { label: "Multi-language Support", Icon: Globe2 },
       { label: "Conversion Optimized", Icon: Target },
-      { label: "Real-time Processing", Icon: Clock },
+      { label: "Automated Workflows", Icon: Workflow },
+      { label: "Real-time Processing", Icon: Zap },
     ],
     newsroomHighlightTitle: "Transform your daily content runtime",
     newsroomHighlightBody:
@@ -675,14 +678,15 @@ export const translations = {
 
     newsroomTitle: "كل ما تحتاجه في منصة واحدة",
     newsroomSubtitle:
-      "خطط الإطلاقات ونشط الحملات وانشر التحديثات اليومية دون تغيير الأدوات.",
+      "من إنشاء المحتوى إلى التعاون بين الفرق، منصتنا توفر جميع الأدوات التي تحتاجها لتوسيع جهود التسويق بالمحتوى باستخدام الذكاء الاصطناعي.",
+
     newsroomActions: [
-      { label: "أمان المؤسسات", Icon: ShieldCheck },
+      { label: "أمان على مستوى المؤسسات", Icon: Shield },
+      { label: "دعم متعدد اللغات", Icon: Globe },
       { label: "إنشاء سريع", Icon: Zap },
-      { label: "سير عمل آلي", Icon: RefreshCw },
-      { label: "دعم متعدد اللغات", Icon: Globe2 },
-      { label: "محسّن للتحويل", Icon: Target },
-      { label: "المعالجة في الوقت الحقيقي", Icon: Clock },
+      { label: "تحسين معدلات التحويل", Icon: Target },
+      { label: "أتمتة سير العمل", Icon: Workflow },
+      { label: "معالجة فورية", Icon: Zap },
     ],
 
     newsroomHighlightTitle: "حوّل روتين المحتوى اليومي",
