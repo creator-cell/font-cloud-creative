@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sun, Moon, Laptop, Globe } from "lucide-react";
+import { Sun, Moon, Laptop, Globe, X, MenuIcon } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Image from "next/image";
-import type { Dispatch, SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { useTheme } from "../theme-provider";
 
 interface HeaderProps {
@@ -22,6 +22,7 @@ interface HeaderProps {
 
 const Header = ({ language, setLanguage, copy }: HeaderProps) => {
   const { theme, setTheme } = useTheme();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const navItems = copy?.nav || [
     { label: language === "ar" ? "الميزات" : "Features", href: "#features" },
@@ -126,7 +127,116 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
             </button>
           </Link>
         </div>
+        <button
+          className="md:hidden flex items-center p-2 hover:bg-[#1e293b] rounded-md"
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          {mobileOpen ? (
+            <X size={16} className="dark:text-white text-black" />
+          ) : (
+            <MenuIcon size={16} className="text-black dark:text-white" />
+          )}
+        </button>
       </div>
+
+      {mobileOpen && (
+        <nav className="md:hidden bg-white dark:bg-gray-900 border-t dark:border-[#324154] border-gray-200 px-4 sm:px-6">
+          <ul className="flex flex-col gap-1 px-2 space-y-1 pt-2 pb-3 text-sm text-[#778599] font-medium">
+            {navItems.map((item) => (
+              <li key={item.label}>
+                <Link
+                  href={item.href}
+                  className="block w-full px-3 py-2 text-sm font-medium transition hover:text-[#0A0A0A] dark:text-[#93a2b8]"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+            {/*  */}
+            <div className="border-b border-[#e1e8f0] dark:border-[#324154]"></div>
+            {/* theme */}
+            <div>
+              <li className="flex items-center justify-between px-2 space-y-1 pt-2 pb-2 text-sm  font-medium">
+                <div className=" dark:text-[#d3d8d2] text-black">Theme</div>
+                <div>
+                  <Select value={theme} onValueChange={setTheme}>
+                    <SelectTrigger className="w-auto min-w-[2.5rem] border-0 bg-[#f7fafc] dark:bg-[#1a2438] rounded-md px-2 flex items-center justify-center gap-10">
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        {theme === "light" && (
+                          <Sun className="h-4 w-4 text-[#0A0A0A]" />
+                        )}
+                        {theme === "dark" && (
+                          <Moon className="h-4 w-4 text-[#0A0A0A]" />
+                        )}
+                        {/* {theme === "system" && (
+                          <Laptop className="h-4 w-4 text-[#0A0A0A]" />
+                        )} */}
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent className="bg-white text-black dark:bg-[#192438] dark:text-white">
+                      <SelectItem value="light">
+                        <div className="flex items-center justify-center gap-1 text-[#d3d8d2]">
+                          <Sun className="h-4 w-4" />
+                          Light
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="dark">
+                        <div className="flex items-center justify-center gap-1">
+                          <Moon className="h-4 w-4" />
+                          Dark
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </li>
+
+              <li className="flex items-center justify-between px-2 space-y-1 pt-2  text-sm  font-medium">
+                <div className="text-black dark:text-[#d3d8d2]">Language</div>
+                <div>
+                  <Select
+                    value={language}
+                    onValueChange={(val: "en" | "ar") => setLanguage(val)}
+                  >
+                    <SelectTrigger className="w-auto min-w-[2.5rem] border-0 bg-[#f7fafc] dark:bg-[#1a2438] rounded-md px-2  flex items-center justify-center gap-10">
+                      <Globe className="h-4 w-4 text-slate-700" />
+                    </SelectTrigger>
+                    <SelectContent className="dark:bg-[#192438] dark:text-white">
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="ar">العربية</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </li>
+            </div>
+            {/* auth prop */}
+
+            <li>
+              <Link
+                href="/api/auth/signin?callbackUrl=%2Fdashboard"
+                className="block w-full pb-1  font-medium text-sm text-center text-black dark:text-[#f2f6fa]"
+                onClick={() => setMobileOpen(false)}
+              >
+                {language === "ar" ? "تسجيل الدخول" : "Sign In"}
+              </Link>
+            </li>
+
+            <li className="flex justify-center pb-1.5">
+              <Link
+                href="/api/auth/signin?callbackUrl=%2Fdashboard"
+                onClick={() => setMobileOpen(false)}
+              >
+                <button className="w-[320px] rounded-lg bg-sky-500 text-white hover:bg-sky-400 px-1.5 py-1.5 font-semibold text-sm mt-1">
+                  {language === "ar" ? "ابدأ الآن" : "Get Started"}
+                </button>
+              </Link>
+            </li>
+
+            {/*  */}
+          </ul>
+        </nav>
+      )}
     </header>
   );
 };
