@@ -27,7 +27,7 @@ export const translations = {
     heroTitlePrimary: "Create Content with",
     heroTitleHighlight: "Multi-AI Power",
     heroDescription:
-      "Orchestrate OpenAI, Anthropic, Google, and private stacks. Generate ads, blogs, and updates ready to ship in minutes.",
+      "One subscription gives you access to OpenAI, Anthropic, Google, and Ollama. Generate ads, blogs, and social media content that converts.",
     heroPrimaryCta: "Start free trial",
     heroSecondaryCta: "Watch demo",
     heroToken: "15,000 free tokens monthly",
@@ -36,9 +36,9 @@ export const translations = {
 
     heroTertiaryCta: "Contact sales",
     heroStats: [
-      { value: "10k+", label: "Assets shipped" },
-      { value: "4.9", label: "Avg. team rating" },
-      { value: "98.8%", label: "Workflow uptime" },
+      { value: "10K+", label: "Active Users" },
+      { value: "4.9", label: "Rating" },
+      { value: "98.8%", label: "Update Time" },
     ],
     providerHeading: "Powered by Leading AI Providers",
     providerCreate: "Create Any Content Type",
@@ -223,6 +223,7 @@ export const translations = {
         color: "purple",
       },
     ],
+
     pricingHead: "Pricing",
     pricingTitle: "Choose Your Plan",
     pricingSubtitle:
@@ -518,7 +519,7 @@ export const translations = {
 
     heroTertiaryCta: "تواصل مع المبيعات",
     heroStats: [
-      { value: "+10k", label: "أصول منشورة" },
+      { value: "+10K", label: "أصول منشورة" },
       { value: "4.9", label: "تقييم الفرق" },
       { value: "98.8%", label: "جاهزية المسارات" },
     ],
@@ -907,6 +908,24 @@ export const translations = {
       "الوصول إلى جميع مزودي الذكاء الاصطناعي",
       "يمكن الإلغاء في أي وقت",
     ],
+    statsTiles2: [
+      {
+        title: "المستخدمون النشطون",
+        description: "10,000+",
+        Icon: UsersRound,
+      },
+      {
+        title: "المحتوى الذي تم إنشاؤه",
+        description: "1M+",
+        Icon: Sparkles,
+      },
+      {
+        title: "رضا المستخدمين",
+        description: "95%",
+        Icon: TrendingUp,
+      },
+    ],
+
     finalPrimaryCta: "ابدأ الإنشاء اليوم",
     finalSecondaryCta: "جدولة عرض توضيحي",
     finalSecondaryCtaPercentage: "95%",

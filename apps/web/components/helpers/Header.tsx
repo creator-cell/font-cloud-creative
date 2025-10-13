@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState, type Dispatch, type SetStateAction } from "react";
+import Image from "next/image";
 
 interface HeaderProps {
   language: "en" | "ar";
@@ -29,28 +30,34 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 border-b border-gray-200 backdrop-blur-md 2xl:max-w-screen-2xl 2xl:mx-auto ${
+      className={`fixed inset-x-0 top-0 z-50 border-b border-gray-200 backdrop-blur-md 2xl:max-w-screen-2xl 2xl:mx-auto  ${
         language === "ar" ? "direction-rtl" : ""
       }`}
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-      <div className="mx-auto flex w-full items-center justify-between px-6 py-4">
+      {/* md:max-w-[1160px]  md:mx-auto  */}
+      <div className="mx-auto flex w-full items-center justify-between xl:px-36  px-12 py-2.5">
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-3 text-base font-semibold text-slate-900"
+          className="flex items-center gap-1.5 text-base font-semibold text-slate-900"
         >
-          <div className="flex items-center justify-center rounded-lg bg-sky-500 p-1.5">
-            <Zap className="h-5 w-5 text-white" />
+          <div className="flex items-center justify-center rounded-lg">
+            {/* <Zap className="h-5 w-5 text-white" /> */}
+            <Image src={"/logo2.png"} alt="Logo" height={40} width={40} />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="text-[#0A0A0A]">Front Cloud</span>
-            <span className="text-xs text-[#64748B]">Creative</span>
+            <span className="text-[#0A0A0A] text-sm font-semibold">
+              Front Cloud
+            </span>
+            <span className="text-[0.70rem] text-[#64748B] font-normal">
+              Creative
+            </span>
           </div>
         </Link>
 
         {/* Nav */}
-        <nav className="hidden md:flex items-center gap-6 text-sm text-[#64748B] font-semibold">
+        <nav className="hidden md:flex items-center gap-6 text-xs text-[#64748B] font-semibold">
           {navItems.map((item) => (
             <Link
               key={item.label}
@@ -66,7 +73,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
         <div className="md:flex items-center gap-3 hidden">
           {/* Language Selector */}
           <Select value={theme} onValueChange={setTheme}>
-            <SelectTrigger className="w-auto min-w-[2.5rem] border-0 bg-gray-100 rounded-md px-2 py-1 flex items-center justify-center gap-1">
+            <SelectTrigger className="w-auto min-w-[2.5rem] border-0 bg-[#f7fafc] rounded-md px-2 flex items-center justify-center gap-2">
               <div className="flex items-center gap-1 flex-shrink-0">
                 {theme === "light" && (
                   <Sun className="h-4 w-4 text-[#0A0A0A]" />
@@ -89,7 +96,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
             value={language}
             onValueChange={(val: "en" | "ar") => setLanguage(val)}
           >
-            <SelectTrigger className="w-auto min-w-[2.5rem] border-0 bg-gray-100 rounded-md px-2 py-1 flex items-center justify-center gap-1">
+            <SelectTrigger className="w-auto min-w-[2.5rem] border-0 bg-[#f7fafc] rounded-md px-2  flex items-center justify-center gap-2">
               <Globe className="h-4 w-4 text-slate-700" />
             </SelectTrigger>
             <SelectContent>
@@ -101,14 +108,14 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
           {/* Auth Buttons */}
           <Link
             href="/api/auth/signin?callbackUrl=%2Fdashboard"
-            className="ml-1 text-sm font-medium"
+            className="ml-1 text-xs font-medium"
           >
             {language === "ar" ? "تسجيل الدخول" : "Sign In"}
           </Link>
           <Link href="/api/auth/signin?callbackUrl=%2Fdashboard">
-            <Button className="rounded-lg bg-sky-500 text-white hover:bg-sky-400">
+            <button className="rounded-lg bg-sky-500 text-white hover:bg-sky-400 px-2.5 py-1.5 font-semibold text-sm">
               {language === "ar" ? "ابدأ الآن" : "Get Started"}
-            </Button>
+            </button>
           </Link>
         </div>
       </div>
