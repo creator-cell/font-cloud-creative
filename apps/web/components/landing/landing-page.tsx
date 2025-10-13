@@ -44,6 +44,9 @@ import {
   MessageSquare,
   SquareCode,
   BookOpen,
+  UsersRound,
+  BarChart,
+  Code,
 } from "lucide-react";
 import { translations } from "./translations";
 import ChooseUrPlan from "../utils/ChooseUrPlan";
@@ -62,16 +65,26 @@ import PlatformOverview from "../helpers/PlatformOverview";
 import DemoSection from "../utils/DemoSection";
 
 const contentFilterOrder = ["copy", "product", "social"] as const;
-const speedFeatureIcons: LucideIcon[] = [Clock, Sparkles, Wand2];
+const speedFeatureIcons: LucideIcon[] = [MessageSquare, Brain, Sparkles];
 const orchestrateIcons: LucideIcon[] = [LayoutGrid, Target];
 const creationFeatureIcons: LucideIcon[] = [
-  Bot,
-  LayoutGrid,
-  ShieldCheck,
-  LineChart,
-  MessageCircle,
-  Server,
+  Brain,
+  MessageSquare,
+  Sparkles,
+  UsersRound,
+  BarChart,
+  Code,
 ];
+
+const creationFeatureColors = [
+  "bg-[#ebf3ff] text-[#2b80ff]",
+  "bg-[#f7edff] text-[#ab45ff]",
+  "bg-[#e6faf3] text-[#00bc7d]",
+  "bg-[#fff0e6] text-[#ff6a00]",
+  "bg-[#ffebf5] text-[#f5339b]",
+  "bg-[#e6f8fc] text-[#00b7db]",
+];
+
 type ContentFilter = (typeof contentFilterOrder)[number];
 
 const contentFilterIcons: Record<ContentFilter, LucideIcon> = {
@@ -135,7 +148,7 @@ export const LandingPage = () => {
     (tile: { value: string; label: string }) => tile
   );
   const statsTiles2 = (copy.statsTiles2 || []).map(
-    (tile: { value: string; label: string }) => tile
+    (tile: { value: string; label: string; icon: string }) => tile
   );
 
   const pricingPlans = (copy.pricingPlans || []).map(
@@ -152,7 +165,7 @@ export const LandingPage = () => {
   const fadeIn = (delay = 0, offset = 40) => ({
     initial: { opacity: 0, y: -offset },
     whileInView: { opacity: 1, y: 0 },
-    transition: { duration: 0.6, ease: "easeOut", delay },
+    transition: { duration: 0.4, ease: "easeOut", delay },
     viewport: { once: false, amount: 0.3 },
   });
 
@@ -258,7 +271,8 @@ export const LandingPage = () => {
       {/* <Header /> */}
       <Header language={language} setLanguage={setLanguage} copy={copy} />
 
-      <main className="relative mx-auto flex w-full flex-col gap-24 px-7 pb-0 pt-20 xl:px-24 2xl:max-w-screen-2xl 2xl:mx-auto">
+      <main className=" flex w-full flex-col gap-24 px-7 pb-0 pt-16 md:pt-20 xl:px-16 2xl:max-w-screen-2xl 2xl:mx-auto">
+        {/* Done  */}
         <motion.section
           className="relative w-full text-gray-900"
           id="product"
@@ -307,7 +321,7 @@ export const LandingPage = () => {
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 lg:gap-12 gap-8 items-center">
             <div className="lg:text-left bg-red-500k">
-              <h1 className="text-4xl md:text-[4.5rem] font-bold leading-tight mb-6 mt-12 md:mt-0">
+              <h1 className="text-4xl md:text-[4.5rem] font-bold leading-tight mb-6 mt-4 md:mt-0">
                 {copy.heroTitlePrimary} <br />
                 <span className="text-[#1D8FFF] inline-block md:text-[4rem]">
                   {copy.heroTitleHighlight}
@@ -459,6 +473,7 @@ export const LandingPage = () => {
           </div>
         </motion.section>
 
+        {/* Done  */}
         <motion.section
           className="space-y-6 pb-8 bg-white"
           id="solutions"
@@ -469,20 +484,20 @@ export const LandingPage = () => {
             {...fadeIn(0.05, 10)}
             viewport={{ once: true }}
           >
-            <span className="inline-flex items-center text-xs font-medium border border-gray-300 p-1 rounded-xl">
-              <Sparkles className="w-4 h-4 mr-1" />
+            <span className="inline-flex items-center text-xs font-medium border border-[#e1e8f0] px-1 rounded-md py-0.5">
+              <Sparkles className="w-3 h-3 mr-1" />
               {copy.speedDemo}
             </span>
           </motion.div>
 
           <motion.div className="space-y-4 text-center" {...fadeIn(0.1, 20)}>
-            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900">
               {copy.speedTitle}{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-500 text-3xl sm:text-4xl lg:text-5xl">
                 {copy.speedTitleSecond}
               </span>
             </h1>
-            <p className="text-base md:text-lg text-slate-600">
+            <p className="text-base md:text-lg max-w-3xl mx-auto text-muted-foreground">
               {copy.speedSubtitle}
             </p>
           </motion.div>
@@ -508,29 +523,31 @@ export const LandingPage = () => {
                   {...fadeIn(index * 0.2)}
                 >
                   <div>
-                    <div className="flex items-center space-x-3 mb-4">
+                    <div className="flex items-start space-x-3 mb-4">
                       <div
-                        className={`p-2 rounded-full bg-white border ${
+                        className={`p-2.5 rounded-md ${
                           iconColor === "text-sky-600"
-                            ? "border-sky-300"
+                            ? "bg-[#e6f6fc] "
                             : iconColor === "text-emerald-600"
-                              ? "border-emerald-300"
-                              : "border-indigo-300"
+                              ? "bg-[#e6faf3] "
+                              : "bg-[#f1ebff] "
                         }`}
                       >
                         <Icon className={`w-6 h-6 ${iconColor}`} />
                       </div>
-                      <CardTitle className="text-xl font-bold text-slate-900">
-                        {title}
-                      </CardTitle>
+                      <div className="flex flex-col">
+                        <CardTitle className="text-base font-semibold text-slate-900">
+                          {title}
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground">
+                          {description}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-base text-slate-600 mt-2">
-                      {description}
-                    </p>
                   </div>
 
                   {index === 2 && (
-                    <div className="absolute -top-2 right-16 p-4 rounded-xl bg-green-100/70 border border-green-300 shadow-lg translate-x-1/2 -translate-y-1/2 hidden md:block">
+                    <div className="absolute -top-1 right-16 p-4 rounded-xl bg-[#ebfcf4] border border-green-300 shadow-lg translate-x-1/2 -translate-y-1/2 hidden md:block">
                       <div className="flex items-center text-emerald-600">
                         <Check className="w-5 h-5 mr-1" />
                         <span className="text-sm font-semibold whitespace-nowrap">
@@ -553,8 +570,13 @@ export const LandingPage = () => {
             <div className="bg-white rounded-xl border border-gray-200 shadow-2xl p-4">
               <div className="flex justify-between items-center mb-6">
                 <div className="flex gap-2 items-center">
-                  <div className="flex items-center justify-center rounded-lg bg-sky-500 p-1.5">
-                    <Zap className="h-5 w-5 text-white" />
+                  <div className="flex items-center justify-center rounded-lg p-1.5">
+                    <Image
+                      src={"/logo2.png"}
+                      alt="Logo"
+                      width={36}
+                      height={36}
+                    />
                   </div>
                   <div className="flex flex-col leading-tight">
                     <span className="text-[#0A0A0A] text-sm font-semibold">
@@ -566,11 +588,11 @@ export const LandingPage = () => {
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="bg-blue-50 text-sky-900 px-3 py-1 rounded-full text-xs font-medium">
+                  <span className="bg-blue-50 text-sky-900 px-3 py-0.5 rounded-full text-xs font-medium">
                     {copy.data.header.demoLabel}
                   </span>
                   <div className="flex items-center">
-                    <span className="w-2.5 h-2.5 bg-green-500 rounded-full mr-1"></span>
+                    <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
                     <span className="text-sky-900 text-sm font-medium">
                       {copy.data.header.status}
                     </span>
@@ -692,6 +714,35 @@ export const LandingPage = () => {
                       }{" "}
                       <ArrowRight className="ml-1 w-3 h-3 font-bold text-white" />
                     </Button>
+                    <div className="border-b mt-6"></div>
+                    <div className="flex items-center gap-1 justify-between mt-5">
+                      <div className="text-xs text-[#65758c] font-medium text-center px-1 items-center">
+                        {copy.data.rightPanel.generatedContent.tokensUsed}
+                      </div>
+                      <div className="text-xs text-[#65758c] font-medium text-center px-1 items-center">
+                        {copy.data.rightPanel.generatedContent.generatedIn}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 mt-4">
+                    <Button className="w-full bg-[#059ced] hover:bg-[#006ae0] text-white text-xs font-medium py-2.5 rounded-md mt-2">
+                      <ArrowRight className="ml-1 w-3 h-3 font-bold text-white" />
+                      {/* Try It Yourself */}
+                      {copy.data.rightPanel.actions.tryYourself}
+                    </Button>
+
+                    <Button
+                      className="w-[14rem] bg-white hover:bg-sky-100  text-sm font-medium py-2
+                    rounded-md mt-2 text-black border border-[#e1e8f0]"
+                    >
+                      <div className="flex items-center gap-1">
+                        <div>
+                          <Globe2 className="w-4 h-4" />
+                        </div>
+                        {copy.data.rightPanel.actions.watchDemo}
+                        {/* Watch Full Demo */}
+                      </div>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -699,16 +750,20 @@ export const LandingPage = () => {
           </motion.section>
         </div>
 
-        <motion.section className="space-y-10" id="resources" {...fadeIn(0.1)}>
+        <motion.section
+          className="space-y-10 bg-[#fafdff]"
+          id="resources"
+          {...fadeIn(0.1)}
+        >
           <motion.div className="space-y-3 text-center" {...fadeIn(0.1, 20)}>
-            <span className="inline-flex items-center text-xs font-medium border border-slate-300 p-1 rounded-lg">
-              <Sparkles className="w-4 h-4 mr-1" />
+            <span className="inline-flex items-center text-xs font-medium border border-[#e1e8f0] py-1 px-3 rounded-lg">
+              <Sparkles className="w-3 h-3 mr-1" />
               {copy.creationFeature}
             </span>
-            <h2 className="text-[28px] md:text-5xl font-bold text-slate-900">
+            <h2 className="text-[28px] sm:text-4xl  lg:text-5xl font-bold">
               {copy.creationTitle}
             </h2>
-            <p className="text-lg text-slate-600 md:text-lg">
+            <p className="text-xl text-muted-foreground md:text-lg max-w-3xl mx-auto">
               {copy.creationSubtitle}
             </p>
           </motion.div>
@@ -724,7 +779,11 @@ export const LandingPage = () => {
                 }}
                 {...fadeIn(index * 0.15)}
               >
-                <span className="flex h-12 w-12 items-center justify-center rounded-md bg-[#EAF2FF] text-sky-600">
+                <span
+                  className={`flex h-12 w-12 items-center justify-center rounded-md ${
+                    creationFeatureColors[index % creationFeatureColors.length]
+                  }`}
+                >
                   <Icon className="h-5 w-5" />
                 </span>
                 <h3 className="mt-4 text-xl font-normal text-slate-900">
@@ -738,7 +797,7 @@ export const LandingPage = () => {
           </div>
         </motion.section>
 
-        <motion.section className="py-16 md:py-24 " {...fadeIn(0.1)}>
+        <motion.section {...fadeIn(0.1)}>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <motion.div {...fadeIn(0.1, 20)}>
@@ -750,8 +809,8 @@ export const LandingPage = () => {
                   {copy.newsroomTitle}
                 </h2>
 
-                <p className="mt-4 text-lg text-slate-600">
-                  {copy.platformSubtitle}
+                <p className="mt-4 text-lg text-[#65758c] leading-relaxed">
+                  {copy.newsroomSubtitle}
                 </p>
               </motion.div>
 
@@ -797,11 +856,11 @@ export const LandingPage = () => {
         </motion.section>
 
         <motion.section
-          className="pb-20 bg-[#F9FBFD] text-center"
+          className="pb-20 bg-[#fafdff] text-center"
           {...fadeIn(0.2)}
         >
           <motion.div>
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
               {copy.TypeTitle}
             </h2>
             <p className="mt-4 text-gray-500 text-[17px] md:text-lg">
@@ -826,10 +885,10 @@ export const LandingPage = () => {
                     <Icon className={`h-8 w-8 ${text}`} />
                   </div>
 
-                  <h3 className="text-lg md:text-xl font-semibold text-gray-900">
+                  <h3 className="text-lg md:text-lg font-semibold text-gray-900">
                     {card.title}
                   </h3>
-                  <p className="mt-3 text-gray-600 text-sm md:text-base leading-relaxed">
+                  <p className="mt-3 text-muted-foreground text-xs leading-relaxed">
                     {card.description}
                   </p>
                 </motion.div>
@@ -856,7 +915,6 @@ export const LandingPage = () => {
           </motion.div>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {pricingPlans.map((plan, index) => {
-              console.log("plan");
               return (
                 <motion.div key={plan.id} {...fadeIn(index * 0.2)}>
                   <Card
@@ -966,7 +1024,7 @@ export const LandingPage = () => {
               <CardTitle className="text-2xl text-black font-bold mt-3">
                 {copy.enterpriseTitle}
               </CardTitle>
-              <p className="text-base text-[slate-900] dark:text-[#65758c]">
+              <p className="text-base text-[slate-900] dark:text-[#65758c] max-w-[42rem] mx-auto">
                 {copy.enterpriseSubtitle}
               </p>
             </CardHeader>
@@ -1106,25 +1164,27 @@ export const LandingPage = () => {
           </div>
         </motion.section>
 
-        <motion.section {...fadeIn(0.1)}>
+        <motion.section {...fadeIn(0.1)} className="bg-[#f5fbff]">
           <div className="grid gap-6 md:grid-cols-3 text-center">
-            {statsTiles2.map((stat, index) => (
-              <motion.div
-                key={index}
-                className="rounded-xl bg-white shadow-md py-5 px-8 hover:shadow-lg transition-shadow duration-300"
-                whileHover={{ scale: 1.03 }}
-              >
-                <div className="flex flex-col items-center space-y-4 mt-1">
-                  <div className="bg-sky-100 rounded-full text-sky-500">
-                    {stat.icon}
+            {statsTiles2.map((stat, index) => {
+              return (
+                <motion.div
+                  key={index}
+                  className="rounded-xl bg-white shadow-md py-5 px-8 hover:shadow-lg transition-shadow duration-300"
+                  whileHover={{ scale: 1.03 }}
+                >
+                  <div className="flex flex-col items-center space-y-4 mt-1">
+                    <div className="bg-sky-100 rounded-full text-sky-500 p-3">
+                      <stat.Icon className="w-6 h-6" />
+                    </div>
+                    <div className="text-3xl font-bold text-gray-900">
+                      {stat.description}
+                    </div>
+                    <div className="text-gray-600">{stat.title}</div>
                   </div>
-                  <div className="text-3xl font-bold text-gray-900">
-                    {stat.description}
-                  </div>
-                  <div className="text-gray-600">{stat.title}</div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </div>
         </motion.section>
 
@@ -1136,7 +1196,9 @@ export const LandingPage = () => {
                 {copy.LimitedTime}
               </h3>
             </div>
-            <p className="text-[#65758c] mt-6">{copy.LimitedDes}</p>
+            <p className="text-[#65758c] mt-6 max-w-[42rem] mx-auto">
+              {copy.LimitedDes}
+            </p>
           </motion.div>
         </motion.section>
 
