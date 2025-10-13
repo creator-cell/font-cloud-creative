@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState, type Dispatch, type SetStateAction } from "react";
+import Image from "next/image";
 
 interface HeaderProps {
   language: "en" | "ar";
@@ -29,23 +30,28 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 border-b border-gray-200 backdrop-blur-md 2xl:max-w-screen-2xl 2xl:mx-auto ${
+      className={`fixed inset-x-0 top-0 z-50 border-b border-gray-200 backdrop-blur-md lg:max-w-screen-xl lg:mx-auto 2xl:max-w-screen-2xl 2xl:mx-auto ${
         language === "ar" ? "direction-rtl" : ""
       }`}
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-      <div className="mx-auto flex w-full items-center justify-between px-6 py-4">
+      <div className="mx-auto flex w-full items-center justify-between px-6 py-3">
         {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-3 text-base font-semibold text-slate-900"
         >
-          <div className="flex items-center justify-center rounded-lg bg-sky-500 p-1.5">
-            <Zap className="h-5 w-5 text-white" />
+          <div className="flex items-center justify-center rounded-lg">
+            {/* <Zap className="h-5 w-5 text-white" /> */}
+            <Image src={"/logo2.png"} alt="Logo" height={40} width={40} />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="text-[#0A0A0A]">Front Cloud</span>
-            <span className="text-xs text-[#64748B]">Creative</span>
+            <span className="text-[#0A0A0A] text-sm font-semibold">
+              Front Cloud
+            </span>
+            <span className="text-[0.70rem] text-[#64748B] font-normal">
+              Creative
+            </span>
           </div>
         </Link>
 
@@ -106,9 +112,9 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
             {language === "ar" ? "تسجيل الدخول" : "Sign In"}
           </Link>
           <Link href="/api/auth/signin?callbackUrl=%2Fdashboard">
-            <Button className="rounded-lg bg-sky-500 text-white hover:bg-sky-400">
+            <button className="rounded-lg bg-sky-500 text-white hover:bg-sky-400 px-2.5 py-1.5 font-semibold text-sm">
               {language === "ar" ? "ابدأ الآن" : "Get Started"}
-            </Button>
+            </button>
           </Link>
         </div>
       </div>
