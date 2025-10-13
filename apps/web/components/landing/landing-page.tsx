@@ -47,6 +47,7 @@ import {
   UsersRound,
   BarChart,
   Code,
+  CircleCheck,
 } from "lucide-react";
 import { translations } from "./translations";
 import ChooseUrPlan from "../utils/ChooseUrPlan";
@@ -78,12 +79,12 @@ const creationFeatureIcons: LucideIcon[] = [
 ];
 
 const creationFeatureColors = [
-  "bg-[#ebf3ff] text-[#2b80ff]",
-  "bg-[#f7edff] text-[#ab45ff]",
-  "bg-[#e6faf3] text-[#00bc7d]",
-  "bg-[#fff0e6] text-[#ff6a00]",
-  "bg-[#ffebf5] text-[#f5339b]",
-  "bg-[#e6f8fc] text-[#00b7db]",
+  "bg-[#ebf3ff] text-[#2b80ff] dark:bg-[#1F324F] dark:text-[#5c9dff]",
+  "bg-[#f7edff] text-[#ab45ff] dark:bg-[#2C2C4F] dark:text-[#d38cff]",
+  "bg-[#e6faf3] text-[#00bc7d] dark:bg-[#1B3842] dark:text-[#38e1a4]",
+  "bg-[#fff0e6] text-[#ff6a00] dark:bg-[#352F35] dark:text-[#ffa057]",
+  "bg-[#ffebf5] text-[#f5339b] dark:bg-[#342A45] dark:text-[#ff70c0]",
+  "bg-[#e6f8fc] text-[#00b7db] dark:bg-[#1B374B] dark:text-[#3fd4ef]",
 ];
 
 type ContentFilter = (typeof contentFilterOrder)[number];
@@ -281,11 +282,11 @@ export const LandingPage = () => {
         >
           <div className="absolute inset-0 z-0 opacity-20">
             <div
-              className="absolute bottom-0 right-1/2 w-96 h-96 bg-sky-200 rounded-full mix-blend-multiply filter blur-xl animate-blob"
+              className="absolute bottom-0 right-1/2 w-96 h-96 bg-sky-200 dark:bg-[#14263D] rounded-full mix-blend-multiply filter blur-xl animate-blob"
               style={{ animationDelay: "-2s" }}
             ></div>
             <div
-              className="absolute bottom-20 left-20 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl animate-blob"
+              className="absolute bottom-20 left-20 w-80 h-80 bg-blue-200 dark:bg-[#14263D] rounded-full mix-blend-multiply filter blur-xl animate-blob"
               style={{ animationDelay: "-4s" }}
             ></div>
           </div>
@@ -328,7 +329,7 @@ export const LandingPage = () => {
                   {copy.heroTitleHighlight}
                 </span>
               </h1>
-              <p className="text-xl sm:text-xl text-muted-foreground mb-8 sm:mb-10">
+              <p className="text-xl sm:text-xl text-muted-foreground mb-8 sm:mb-10 dark:text-[#93a2b8]">
                 {copy.heroDescription}
               </p>
 
@@ -342,7 +343,7 @@ export const LandingPage = () => {
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Link>
 
-                <button className="flex items-center justify-center w-full sm:w-auto px-4 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-sky-100 transition-colors text-sm">
+                <button className="flex items-center justify-center w-full sm:w-auto px-4 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-sky-100 transition-colors text-sm dark:bg-[#1a2438] dark:text-[#f2f6fa]">
                   <Play className="h-4 w-4 mr-2" /> {copy.heroSecondaryCta}
                 </button>
               </div>
@@ -350,15 +351,21 @@ export const LandingPage = () => {
               <div className="flex flex-wrap justify-start lg:justify-start gap-x-8 gap-y-4 text-gray-600 mb-12">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-blue-500" />
-                  <span className="text-sm">{copy.heroToken}</span>
+                  <span className="text-sm dark:text-[#93a2b8]">
+                    {copy.heroToken}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-blue-500 " />
+                  <span className="text-sm dark:text-[#93a2b8]">
+                    {copy.heroCard}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-blue-500" />
-                  <span className="text-sm">{copy.heroCard}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-blue-500" />
-                  <span className="text-sm">{copy.heroCancel}</span>
+                  <span className="text-sm dark:text-[#93a2b8]">
+                    {copy.heroCancel}
+                  </span>
                 </div>
               </div>
 
@@ -371,11 +378,11 @@ export const LandingPage = () => {
                     >
                       <div className="flex items-center space-x-2">
                         <Users className="h-5 w-5 text-blue-500" />
-                        <p className="text-3xl font-bold text-gray-900">
+                        <p className="text-3xl font-bold text-gray-900 dark:text-[#f2f6fa]">
                           {stat.value}
                         </p>
                       </div>
-                      <p className="text-sm text-gray-500 mt-0.5 ml-7">
+                      <p className="text-sm text-gray-500 mt-0.5 ml-7 dark:text-[#93a2b8]">
                         {stat.label}
                       </p>
                     </motion.div>
@@ -473,10 +480,9 @@ export const LandingPage = () => {
             </motion.div>
           </div>
         </motion.section>
-
         {/* Done  */}
         <motion.section
-          className="space-y-6 pb-8 bg-white"
+          className="space-y-6 pb-8 bg-white dark:bg-[#0F1729]"
           id="solutions"
           {...fadeIn(0.1)}
         >
@@ -485,20 +491,20 @@ export const LandingPage = () => {
             {...fadeIn(0.05, 10)}
             viewport={{ once: true }}
           >
-            <span className="inline-flex items-center text-xs font-medium border border-[#e1e8f0] px-1 rounded-md py-0.5">
+            <span className="inline-flex items-center text-xs font-medium border border-[#e1e8f0] px-1 rounded-md py-0.5 dark:bg-[#0f1a2b] dark:text-[#f2f6fa] dark:border-[#324154]">
               <Sparkles className="w-3 h-3 mr-1" />
               {copy.speedDemo}
             </span>
           </motion.div>
 
           <motion.div className="space-y-4 text-center" {...fadeIn(0.1, 20)}>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 dark:text-[#f2f6fa]">
               {copy.speedTitle}{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-500 text-3xl sm:text-4xl lg:text-5xl">
                 {copy.speedTitleSecond}
               </span>
             </h1>
-            <p className="text-base md:text-lg max-w-3xl mx-auto text-muted-foreground">
+            <p className="text-base md:text-lg max-w-3xl mx-auto text-muted-foreground dark:text-[#93a2b8]">
               {copy.speedSubtitle}
             </p>
           </motion.div>
@@ -506,7 +512,7 @@ export const LandingPage = () => {
           <div className="relative grid gap-6 md:grid-cols-3">
             <div className="absolute inset-0 z-0 opacity-20">
               <div
-                className="absolute -bottom-20 left-[45%] w-96 h-96 bg-sky-200 rounded-full mix-blend-multiply filter blur-xl animate-blob"
+                className="absolute -bottom-20 left-[45%] w-96 h-96 bg-sky-200 dark:bg-sky-500 rounded-full mix-blend-multiply filter blur-xl animate-blob"
                 style={{ animationDelay: "-2s" }}
               ></div>
             </div>
@@ -515,7 +521,7 @@ export const LandingPage = () => {
               ({ title, description, Icon, iconColor, style }, index) => (
                 <motion.div
                   key={title}
-                  className="relative rounded-2xl p-4 h-full flex flex-col justify-between"
+                  className="relative rounded-2xl p-4 h-full flex flex-col justify-between dark:bg-[#162033] dark:border-[#1c3d57]"
                   style={{
                     ...style,
                     boxShadow:
@@ -528,19 +534,19 @@ export const LandingPage = () => {
                       <div
                         className={`p-2.5 rounded-md ${
                           iconColor === "text-sky-600"
-                            ? "bg-[#e6f6fc] "
+                            ? "bg-[#e6f6fc] dark:bg-[#1a3047]"
                             : iconColor === "text-emerald-600"
-                              ? "bg-[#e6faf3] "
-                              : "bg-[#f1ebff] "
+                              ? "bg-[#e6faf3] dark:bg-[#15313b]"
+                              : "bg-[#f1ebff] dark:bg-[#252948]"
                         }`}
                       >
                         <Icon className={`w-6 h-6 ${iconColor}`} />
                       </div>
                       <div className="flex flex-col">
-                        <CardTitle className="text-base font-semibold text-slate-900">
+                        <CardTitle className="text-base font-semibold text-slate-900 dark:text-[#e4e9ed]">
                           {title}
                         </CardTitle>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground dark:text-[#657387]">
                           {description}
                         </p>
                       </div>
@@ -548,14 +554,14 @@ export const LandingPage = () => {
                   </div>
 
                   {index === 2 && (
-                    <div className="absolute -top-1 right-16 p-4 rounded-xl bg-[#ebfcf4] border border-green-300 shadow-lg translate-x-1/2 -translate-y-1/2 hidden md:block">
+                    <div className="absolute -top-1 right-16 p-4 rounded-xl bg-[#ebfcf4] border border-green-300 shadow-lg translate-x-1/2 -translate-y-1/2 hidden md:block dark:bg-[#002b21]">
                       <div className="flex items-center text-emerald-600">
-                        <Check className="w-5 h-5 mr-1" />
-                        <span className="text-sm font-semibold whitespace-nowrap">
+                        <CircleCheck className="w-5 h-5 mr-1 dark:text-[#009966]" />
+                        <span className="text-sm font-semibold whitespace-nowrap dark:text-[#009966]">
                           {copy.speedContent}
                         </span>
                       </div>
-                      <p className="text-xs text-emerald-500 mt-0.5 whitespace-nowrap">
+                      <p className="text-xs ml-6 text-emerald-500 mt-0.5 whitespace-nowrap dark:text-[#009966]">
                         {copy.speedReady}
                       </p>
                     </div>
@@ -565,11 +571,10 @@ export const LandingPage = () => {
             )}
           </div>
         </motion.section>
-
         <div>
           <motion.section>
-            <div className="bg-white rounded-xl border border-gray-200 shadow-2xl p-4">
-              <div className="flex justify-between items-center mb-6">
+            <div className="bg-white rounded-xl border border-gray-200 shadow-2xl p-4 dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b] dark:border-[#2a21445e]">
+              <div className="flex justify-between items-center mb-6 ">
                 <div className="flex gap-2 items-center">
                   <div className="flex items-center justify-center rounded-lg p-1.5">
                     <Image
@@ -580,43 +585,43 @@ export const LandingPage = () => {
                     />
                   </div>
                   <div className="flex flex-col leading-tight">
-                    <span className="text-[#0A0A0A] text-sm font-semibold">
+                    <span className="text-[#0A0A0A] text-sm font-semibold dark:text-[#f2f6fa]">
                       {copy.data.header.platformName}
                     </span>
-                    <span className="text-xs text-[#64748B] ">
+                    <span className="text-xs text-[#64748B] dark:text-[#93a2b8]">
                       {copy.data.header.platformDescription}
                     </span>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="bg-blue-50 text-sky-900 px-3 py-0.5 rounded-full text-xs font-medium">
+                  <span className="bg-blue-50 text-sky-900 px-3 py-0.5 rounded-full text-xs font-medium dark:text-[#e1e8f0] dark:bg-[#1e293b]">
                     {copy.data.header.demoLabel}
                   </span>
                   <div className="flex items-center">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-                    <span className="text-sky-900 text-sm font-medium">
+                    <span className="w-2 h-2 bg-green-500 rounded-full mr-1 dark:text-[#00bd72]"></span>
+                    <span className="text-sky-900 text-sm font-medium dark:text-[#93a2b8]">
                       {copy.data.header.status}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row border-t border-[#e1e8f0]">
-                <div className="w-full md:w-[38%] border-b md:border-b-0 border-gray-200 pr-6 py-6 space-y-5 bg-white">
+              <div className="flex flex-col sm:flex-row border-t dark:border-[#324154] border-[#e1e8f0] ">
+                <div className="w-full md:w-[38%] border-b md:border-b-0 border-gray-200 pr-6 py-6 space-y-5 bg-white dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b]">
                   <div className="relative">
-                    <h3 className="text-sm font-semibold text-black mb-3">
+                    <h3 className="text-sm font-semibold text-black mb-3 dark:text-[#f2f6fa]">
                       {copy.data.leftPanel.contentBrief.title}
                     </h3>
-                    <div className="border border-gray-200 rounded-lg bg-[#fafbfc] p-3 text-sm text-gray-800 leading-relaxed pb-14">
+                    <div className="border border-gray-200 rounded-lg bg-[#fafbfc] p-3 text-sm text-gray-800 leading-relaxed pb-14 dark:bg-[#1e293b] dark:text-[#f2f6fa] dark:border-[#2e3b4f]">
                       {copy.data.leftPanel.contentBrief.example}
                     </div>
-                    <div className="absolute -bottom-6 -left-12 bg-[#f0f6ff] rounded-lg px-2 py-3 md:flex items-center gap-2 shadow-lg border border-[#bfdcff] hidden">
-                      <TrendingUp className="w-4 h-4 text-[#1c5ffc]" />
+                    <div className="absolute -bottom-6 -left-12 bg-[#f0f6ff] dark:bg-[#172657] dark:border-[#1a3cb8] rounded-lg px-2 py-3 md:flex items-center gap-2 shadow-lg border border-[#bfdcff] hidden">
+                      <TrendingUp className="w-4 h-4 text-[#1c5ffc] dark:text-[#145efc]" />
                       <div className="flex flex-col">
-                        <span className="text-[#1c5ffc] font-medium text-xs">
+                        <span className="text-[#1c5ffc] font-medium text-xs dark:text-[#145efc]">
                           {copy.data.leftPanel.conversionBadge.percentage}
                         </span>
-                        <span className="text-[#1c5ffc] text-xs">
+                        <span className="text-[#1c5ffc] text-xs dark:text-[#164cc9]">
                           {copy.data.leftPanel.conversionBadge.note}
                         </span>
                       </div>
@@ -624,18 +629,18 @@ export const LandingPage = () => {
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-700 mb-2">
+                    <h3 className="text-sm font-semibold text-gray-700 mb-2 dark:text-[#f2f6fa]">
                       {copy.data.leftPanel.aiProvider.title}
                     </h3>
-                    <div className="flex items-center gap-3 border border-gray-200 rounded-lg p-2 bg-[#f9fafb] text-[13px]">
+                    <div className="flex items-center gap-3 border border-gray-200 rounded-lg p-2 bg-[#f9fafb] text-[13px] dark:bg-[#1e293b] dark:border-[#1f2c40]">
                       <div className="bg-[#00bd7e] p-1.5 rounded-sm">
                         <Bot className="text-black" size={16} />
                       </div>
                       <div>
-                        <p className="text-gray-800 font-medium">
+                        <p className="text-gray-800 font-medium dark:text-[#f2f6fa]">
                           {copy.data.leftPanel.aiProvider.name}
                         </p>
-                        <p className="text-gray-500 text-[0.60rem] mt-0.5">
+                        <p className="text-gray-500 text-[0.60rem] mt-0.5 dark:text-[#93a2b8]">
                           {copy.data.leftPanel.aiProvider.provider}
                         </p>
                       </div>
@@ -643,23 +648,23 @@ export const LandingPage = () => {
                   </div>
 
                   <div className="mt-1">
-                    <h3 className="text-sm font-semibold text-black mb-2">
+                    <h3 className="text-sm font-semibold text-black mb-2 dark:text-[#f2f6fa]">
                       {copy.data.leftPanel.contentType.title}
                     </h3>
-                    <div className="border border-gray-200 rounded-lg bg-[#f9fafb] px-2 py-2.5 text-xs text-black">
+                    <div className="border border-gray-200 dark:bg-[#1e293b] dark:border-[#324154] dark:text-[#f2f6fa] rounded-lg bg-[#f9fafb] px-2 py-2.5 text-xs text-black">
                       {copy.data.leftPanel.contentType.type}
                     </div>
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-semibold text-black mb-2">
+                    <h3 className="text-sm font-semibold text-black mb-2 dark:text-[#f2f6fa]">
                       {copy.data.leftPanel.toneStyle.title}
                     </h3>
                     <div className="flex gap-2 text-[.65rem]">
                       {copy.data.leftPanel.toneStyle.styles.map((style) => (
                         <span
                           key={style}
-                          className="border items-center border-gray-200 rounded-full bg-[#f0f9ff] font-medium px-1.5 text-[#0c4a6e] text-xs"
+                          className="border items-center border-gray-200 rounded-full bg-[#f0f9ff] font-medium px-1.5 text-[#0c4a6e] text-xs dark:bg-[#1e293b] dark:text-[#e1e8f0]"
                         >
                           {style}
                         </span>
@@ -670,71 +675,71 @@ export const LandingPage = () => {
 
                 <div className="w-full md:w-[62%] py-6">
                   <div className="flex items-center mb-3 justify-between">
-                    <div className="text-sm font-bold text-gray-700">
+                    <div className="text-sm font-bold text-gray-700 dark:text-[#f2f6fa]">
                       {copy.data.rightPanel.generatedContent.title}
                     </div>
                     <div className="flex items-center">
-                      <Dot className="w-8 h-auto text-green-500" />
-                      <div className="-ml-1 text-[.70rem] text-green-500 font-medium">
+                      <Dot className="w-8 h-auto text-green-500 dark:text-[#0a7d60]" />
+                      <div className="-ml-1 text-[.70rem] text-green-500 font-medium dark:text-[#008553]">
                         {copy.data.rightPanel.generatedContent.generating}
                       </div>
                     </div>
                   </div>
-                  <div className="bg-[#edf7fc] border border-[#c3e7fa] rounded-lg p-5 items-center">
+                  <div className="bg-[#edf7fc] border border-[#c3e7fa] rounded-lg p-5 items-center bg-gradient-to-tl from-[#162640] to-[#1c2d45] dark:border-[#224a6b]">
                     <div className="flex items-center gap-1">
-                      <div className="text-xs text-[#0a0a0a] font-normal border border-[#e1e8f0] text-center rounded-md px-1 items-center">
+                      <div className="text-xs text-[#0a0a0a] font-normal border border-[#e1e8f0] text-center rounded-md px-1 items-center dark:text-[#f2f6fa] dark:border-[#324154]">
                         {copy.data.rightPanel.generatedContent.headline.label}
                       </div>
-                      <CheckCircle className="text-[#00bd7e] w-2.5 items-center" />
+                      <CheckCircle className="text-[#00bd7e] w-2.5 items-center dark:text-[#00bd7e]" />
                     </div>
-                    <h2 className="text-lg font-bold text-gray-900 mb-3">
+                    <h2 className="text-lg font-bold text-gray-900 mb-3 dark:text-[#f2f6fa]">
                       {copy.data.rightPanel.generatedContent.headline.content}
                     </h2>
                     <div className="flex items-center gap-1">
-                      <div className="text-xs text-[#0a0a0a] font-medium border border-[#e1e8f0] text-center rounded-md px-1 items-center">
+                      <div className="text-xs text-[#0a0a0a] font-medium border border-[#e1e8f0] text-center rounded-md px-1 items-center dark:text-[#f2f6fa] dark:border-[#324154]">
                         {copy.data.rightPanel.generatedContent.bodyCopy.label}
                       </div>
-                      <CheckCircle className="text-[#00bd7e] w-2.5 items-center" />
+                      <CheckCircle className="text-[#00bd7e] w-2.5 items-center dark:text-[#00bd7e]" />
                     </div>
-                    <p className="text-sm text-[#65758c] mb-4 leading-relaxed">
+                    <p className="text-sm text-[#65758c] mb-4 leading-relaxed dark:text-[#93a2b8]">
                       {copy.data.rightPanel.generatedContent.bodyCopy.content}
                     </p>
                     <div className="flex items-center gap-1">
-                      <div className="text-xs text-[#0a0a0a] font-medium border border-[#e1e8f0] text-center rounded-md px-1 items-center">
+                      <div className="text-xs text-[#0a0a0a] font-medium border border-[#e1e8f0] text-center rounded-md px-1 items-center dark:text-[#f2f6fa] dark:border-[#324154]">
                         {
                           copy.data.rightPanel.generatedContent.callToAction
                             .label
                         }
                       </div>
-                      <CheckCircle className="text-[#00bd7e] w-2.5 items-center" />
+                      <CheckCircle className="text-[#00bd7e] w-2.5 items-center dark:text-[#00bd7e]" />
                     </div>
-                    <Button className="w-full bg-[#007bff] hover:bg-[#006ae0] text-white text-xs font-medium py-2.5 rounded-md mt-2">
+                    <Button className="w-full bg-[#007bff] hover:bg-[#006ae0] text-white text-xs font-medium py-2.5 rounded-md mt-2 dark:bg-gradient-to-l from-[#1167fa] to-[#28a9fa]">
                       {
                         copy.data.rightPanel.generatedContent.callToAction
                           .buttonText
                       }{" "}
                       <ArrowRight className="ml-1 w-3 h-3 font-bold text-white" />
                     </Button>
-                    <div className="border-b mt-6"></div>
+                    <div className="border-b mt-6 dark:text-[#324154]"></div>
                     <div className="flex items-center gap-1 justify-between mt-5">
-                      <div className="text-xs text-[#65758c] font-medium text-center px-1 items-center">
+                      <div className="text-xs text-[#65758c] font-medium text-center px-1 items-center dark:text-[#93a2b8]">
                         {copy.data.rightPanel.generatedContent.tokensUsed}
                       </div>
-                      <div className="text-xs text-[#65758c] font-medium text-center px-1 items-center">
+                      <div className="text-xs text-[#65758c] font-medium text-center px-1 items-center dark:text-[#93a2b8]">
                         {copy.data.rightPanel.generatedContent.generatedIn}
                       </div>
                     </div>
                   </div>
                   <div className="flex gap-2 mt-4">
-                    <Button className="w-full bg-[#059ced] hover:bg-[#006ae0] text-white text-xs font-medium py-2.5 rounded-md mt-2">
-                      <ArrowRight className="ml-1 w-3 h-3 font-bold text-white" />
+                    <Button className="w-full bg-[#059ced] hover:bg-[#006ae0] text-white text-xs font-medium py-2.5 rounded-md mt-2 dark:bg-gradient-to-l from-[#1167fa] to-[#28a9fa]">
+                      <Play className="ml-1 w-3 h-3 font-bold text-white" />
                       {/* Try It Yourself */}
                       {copy.data.rightPanel.actions.tryYourself}
                     </Button>
 
                     <Button
                       className="w-[14rem] bg-white hover:bg-sky-100  text-sm font-medium py-2
-                    rounded-md mt-2 text-black border border-[#e1e8f0]"
+                    rounded-md mt-2 text-black border border-[#e1e8f0] dark:bg-[#1c2a3d]  dark:border-[#324154] dark:text-[#f2f6fa]"
                     >
                       <div className="flex items-center gap-1">
                         <div>
@@ -750,21 +755,20 @@ export const LandingPage = () => {
             </div>
           </motion.section>
         </div>
-
         <motion.section
-          className="space-y-10 bg-[#fafdff]"
+          className="space-y-10 bg-[#fafdff] dark:bg-[#0f1729]"
           id="resources"
           {...fadeIn(0.1)}
         >
           <motion.div className="space-y-3 text-center" {...fadeIn(0.1, 20)}>
-            <span className="inline-flex items-center text-xs font-medium border border-[#e1e8f0] py-1 px-3 rounded-lg">
+            <span className="inline-flex items-center text-xs font-medium border border-[#e1e8f0] py-1 px-3 rounded-lg dark:text-[#f2f6fa] dark:border-[#324154]">
               <Sparkles className="w-3 h-3 mr-1" />
               {copy.creationFeature}
             </span>
-            <h2 className="text-[28px] sm:text-4xl  lg:text-5xl font-bold">
+            <h2 className="text-[28px] sm:text-4xl  lg:text-5xl font-bold dark:text-[#f2f6fa]">
               {copy.creationTitle}
             </h2>
-            <p className="text-xl text-muted-foreground md:text-lg max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground md:text-lg max-w-3xl mx-auto dark:text-[#93a2b8]">
               {copy.creationSubtitle}
             </p>
           </motion.div>
@@ -772,7 +776,7 @@ export const LandingPage = () => {
             {creationFeatures.map(({ title, description, Icon }, index) => (
               <motion.div
                 key={title}
-                className="rounded-xl border border-sky-100 bg-white p-6 shadow-sm"
+                className="rounded-xl border border-sky-100 bg-white p-6 shadow-sm dark:bg-[#1e293b] dark:border-[#324154]"
                 whileHover={{
                   y: -8,
                   boxShadow:
@@ -787,30 +791,30 @@ export const LandingPage = () => {
                 >
                   <Icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-4 text-xl font-normal text-slate-900">
+
+                <h3 className="mt-4 text-xl font-normal text-slate-900 dark:text-[#f2f6fa]">
                   {title}
                 </h3>
-                <p className="mt-6 text-base leading-6 text-slate-600">
+                <p className="mt-6 text-base leading-6 text-slate-600 dark:text-[#93a2b8]">
                   {description}
                 </p>
               </motion.div>
             ))}
           </div>
         </motion.section>
-
         <motion.section {...fadeIn(0.1)}>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <motion.div {...fadeIn(0.1, 20)}>
-                <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-slate-700 bg-[#F0F9FF] rounded-full">
+                <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-slate-700 bg-[#F0F9FF] rounded-full dark:bg-[#1E293B] dark:text-[#e1e8f0]">
                   {copy.newsOverview}
                 </span>
 
-                <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
+                <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-[#f2f6fa]">
                   {copy.newsroomTitle}
                 </h2>
 
-                <p className="mt-4 text-lg text-[#65758c] leading-relaxed">
+                <p className="mt-4 text-lg text-[#65758c] leading-relaxed dark:text-[#93a2b8]">
                   {copy.newsroomSubtitle}
                 </p>
               </motion.div>
@@ -821,12 +825,12 @@ export const LandingPage = () => {
                   return (
                     <motion.div
                       key={action.label}
-                      className="p-4 flex items-center space-x-3 border border-slate-100 rounded-xl bg-white shadow-sm"
+                      className="p-4 flex items-center space-x-3 border border-slate-100 rounded-xl bg-white shadow-sm dark:bg-[#1e293b] dark:border-[#334357]"
                       {...fadeIn(0.1 + index * 0.1, 15)}
                     >
                       <FeatureIcon className="h-5 w-5 text-sky-400 flex-shrink-0" />
 
-                      <span className="text-sm font-medium text-slate-800">
+                      <span className="text-sm font-medium text-slate-800 dark:text-[#f2f6fa]">
                         {action.label}
                       </span>
                     </motion.div>
@@ -855,16 +859,15 @@ export const LandingPage = () => {
             </motion.div>
           </div>
         </motion.section>
-
         <motion.section
-          className="pb-20 bg-[#fafdff] text-center"
+          className="pb-20 bg-[#fafdff] text-center dark:bg-[#0f1729]"
           {...fadeIn(0.2)}
         >
           <motion.div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-[#f2f6fa]">
               {copy.TypeTitle}
             </h2>
-            <p className="mt-4 text-gray-500 text-[17px] md:text-lg">
+            <p className="mt-4 text-gray-500 text-[17px] md:text-lg dark:text-[#93a2b8]">
               {copy.TypeDescription}
             </p>
           </motion.div>
@@ -878,18 +881,18 @@ export const LandingPage = () => {
                 <motion.div
                   key={card.title}
                   {...fadeIn(index * 0.15, 20)}
-                  className="rounded-2xl bg-white border border-gray-200 shadow-sm  transition-colors duration-300 cursor-pointer p-10 flex flex-col items-center text-center"
+                  className="rounded-2xl bg-white border border-gray-200 shadow-sm  transition-colors duration-300 cursor-pointer p-10 flex flex-col items-center text-center dark:bg-[#1e293b] dark:border-[#324154]"
                 >
                   <div
-                    className={`flex items-center justify-center h-16 w-16 rounded-full ${bg} mb-6`}
+                    className={`flex items-center justify-center h-16 w-16 rounded-full ${bg} mb-6 dark:${bg}`}
                   >
                     <Icon className={`h-8 w-8 ${text}`} />
                   </div>
 
-                  <h3 className="text-lg md:text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg md:text-lg font-semibold text-gray-900 dark:text-[#f2f6fa]">
                     {card.title}
                   </h3>
-                  <p className="mt-3 text-muted-foreground text-xs leading-relaxed">
+                  <p className="mt-3 text-muted-foreground text-xs leading-relaxed dark:text-[#93a2b8]">
                     {card.description}
                   </p>
                 </motion.div>
@@ -897,20 +900,21 @@ export const LandingPage = () => {
             })}
           </div>
         </motion.section>
-
         <motion.section id="pricing" className="space-y-10" {...fadeIn(0.1)}>
           <motion.div className="space-y-3 text-center" {...fadeIn(0.1, 20)}>
             <div
               className="inline-flex justify-center items-center border py-0.5
-                 px-2 mx-auto rounded-md border-slate-300 gap-1"
+                 px-2 mx-auto rounded-md border-slate-300 gap-1 dark:bg-[#0f1729]"
             >
-              <Zap className="w-3 h-auto mr-1" />
-              <span className="text-xs font-medium">{copy.pricingHead}</span>
+              <Zap className="w-3 h-auto mr-1 dark:text-[#f2f6fa]" />
+              <span className="text-xs font-medium dark:text-[#f2f6fa] dark:border-[#324154]">
+                {copy.pricingHead}
+              </span>
             </div>
-            <h2 className="text-3xl font-bold text-slate-900 md:text-5xl">
+            <h2 className="text-3xl font-bold text-slate-900 md:text-5xl dark:text-[#f2f6fa]">
               {copy.pricingTitle}
             </h2>
-            <p className="text-base text-[#787F8F] md:text-xl">
+            <p className="text-base text-[#787F8F] md:text-xl dark:text-[#93a2b8]">
               {copy.pricingSubtitle}
             </p>
           </motion.div>
@@ -919,7 +923,7 @@ export const LandingPage = () => {
               return (
                 <motion.div key={plan.id} {...fadeIn(index * 0.2)}>
                   <Card
-                    className={`p-6 bg-white transition hover:-translate-y-1 shadow-lg dark:bg-white dark:text-black 
+                    className={`p-6 bg-white transition hover:-translate-y-1 shadow-lg dark:bg-[#1e293b] 
                                         ${
                                           plan.popular
                                             ? "shadow-2xl hover:shadow-[0_0_25px_rgba(56,189,248,0.6)]"
@@ -936,7 +940,9 @@ export const LandingPage = () => {
                         {plan.logo && <plan.logo {...(plan.logoProps || {})} />}
                       </span>
                       <CardTitle className="flex flex-col items-center justify-center text-inherit text-xl text-black dark:text-black relative">
-                        <span className="my-2 font-normal">{plan.title}</span>
+                        <span className="my-2 font-normal dark:text-[#f2f6fa]">
+                          {plan.title}
+                        </span>
                         <div className="flex items-center gap-2">
                           {plan.popular && (
                             <span className="absolute -top-24 left-1/2 -translate-x-1/2 rounded-full border border-sky-300 bg-gradient-to-r from-[#09a0eb] to-[#0773f7] px-2 py-0.5 text-sm text-white">
@@ -947,20 +953,25 @@ export const LandingPage = () => {
                           )}
                         </div>
                         <div>
-                          <span className="text-3xl text-black mr-1">
+                          <span className="text-3xl text-black mr-1 dark:text-[#f2f6fa]">
                             {plan.price}
                           </span>
-                          <span className="text-[#65758c] text-base">
+                          <span className="text-[#65758c] text-base dark:text-[#93a2b8]">
                             {plan.priceValid}
                           </span>
                         </div>
                       </CardTitle>
-                      <p className="text-sm text-[#65758c] text-center">
+                      <p className="text-sm text-[#65758c] text-center dark:text-[#93a2b8]">
                         {plan.description}
                       </p>
-                      <div className="items-center mx-auto border border-slate-300 px-3 py-0.5 rounded-lg text-xs font-semibold text-[#0A0A0A]">
-                        <span className="mr-1">{plan.tookens}</span>
-                        <span> {plan.month}</span>
+                      <div className="items-center mx-auto border border-slate-300 px-3 py-0.5 rounded-lg text-xs font-semibold text-[#0A0A0A] dark:border-[#324154]">
+                        <span className="mr-1 dark:text-[#f2f6fa] dark:border-[#324154]">
+                          {plan.tookens}
+                        </span>
+                        <span className="dark:text-[#f2f6fa]">
+                          {" "}
+                          {plan.month}
+                        </span>
                       </div>
                     </CardHeader>
 
@@ -968,7 +979,7 @@ export const LandingPage = () => {
                       {plan.features.map((feature, featureIndex) => (
                         <motion.div
                           key={feature}
-                          className="flex items-start gap-2 text-black"
+                          className="flex items-start gap-2 text-black dark:text-[#f2f6fa]"
                           {...fadeIn(featureIndex * 0.08, 15)}
                         >
                           <Check className="mt-0.5 h-4 w-4 text-sky-500" />
@@ -978,14 +989,14 @@ export const LandingPage = () => {
 
                       {plan.boundary && (
                         <motion.div className="flex flex-col items-start gap-2 mt-3 border-t border-slate-300">
-                          <span className="font-semibold text-gray-500 mt-3 text-xs">
+                          <span className="font-semibold text-gray-500 mt-3 text-xs dark:text-[#93a2b8]">
                             {plan.boundary}
                           </span>
                           <div className="flex flex-col gap-1 ">
                             {plan.Limitations.map((limit, i) => (
                               <div
                                 key={i}
-                                className="flex items-center gap-2  text-gray-600 text-xs"
+                                className="flex items-center gap-2  text-gray-600 text-xs dark:text-[#93a2b8]"
                               >
                                 <span>•</span>
                                 {limit}
@@ -999,7 +1010,7 @@ export const LandingPage = () => {
                         className={`w-full rounded-full border mt-4 ${
                           plan.popular
                             ? "bg-gradient-to-r from-[#09a0eb] to-[#0773f7] border-none text-white hover:from-[#0773f7] hover:to-[#09a0eb] !mb-14"
-                            : "bg-white text-black border border-slate-300 hover:bg-sky-200 hover:text-[#0b60af] "
+                            : "bg-white text-black border border-slate-300 hover:bg-sky-200 hover:text-[#0b60af] dark:bg-[#243142] dark:border-[#324154] dark:text-[#f2f6fa]"
                         }`}
                         style={{ marginTop: "1.5rem" }}
                       >
@@ -1014,25 +1025,25 @@ export const LandingPage = () => {
         </motion.section>
 
         <motion.div {...fadeIn(0.1)}>
-          <Card className="rounded-3xl border border-sky-300 !bg-gradient-to-r !from-[#fafbfc] !to-[#f0f6ff] p-8 text-center text-slate-900 shadow-xl dark:border-transparent dark:bg-gradient-to-br dark:from-sky-300/60 dark:via-white dark:to-sky-200/60 dark:text-slate-900">
+          <Card className="rounded-3xl border border-sky-300 bg-[#fafbfa] p-8 text-center text-slate-900 shadow-xl dark:border-transparent dark:bg-[#111a2e] dark:border-[#193a59]">
             <CardHeader className="">
-              <div className="flex bg-[#dcf0fa] justify-center items-center mx-auto w-16 h-16 rounded-full mt-2">
+              <div className="flex bg-[#dcf0fa]  justify-center items-center mx-auto w-16 h-16 rounded-full mt-2">
                 <span className="text-[#0ea3e8] items-center">
                   {" "}
                   <Crown size={35} />
                 </span>
               </div>
-              <CardTitle className="text-2xl text-black font-bold mt-3">
+              <CardTitle className="text-2xl text-black font-bold mt-3 dark:text-[#f2f6fa]">
                 {copy.enterpriseTitle}
               </CardTitle>
-              <p className="text-base text-[slate-900] dark:text-[#65758c] max-w-[42rem] mx-auto">
+              <p className="text-base text-[slate-900] dark:text-[#93a2b8] max-w-[42rem] mx-auto">
                 {copy.enterpriseSubtitle}
               </p>
             </CardHeader>
             <CardContent className="flex flex-wrap justify-center gap-4 text-slate-900 dark:text-slate-900 mt-6">
               <Button
                 size="lg"
-                className="rounded-full bg-white  text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit"
+                className="rounded-full bg-white  text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit dark:text-[#93a2b8] dark:bg-[#1c283d] dark:border-[#324154]"
               >
                 {copy.enterpriseCta}
               </Button>
@@ -1047,43 +1058,43 @@ export const LandingPage = () => {
         </motion.div>
 
         <motion.div {...fadeIn(0.1)} className=" cursor-default">
-          <h2 className="text-center text-2xl font-semibold text-[#0A0A0A]">
+          <h2 className="text-center text-2xl font-semibold text-[#0A0A0A] dark:text-[#f2f6fa]">
             {copy.FAQTitle}
           </h2>
 
           <div className="mx-auto mt-8 max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-5">
             <div className="flex flex-col gap-2">
-              <h3 className="font-semibold text-[#0A0A0A]">
+              <h3 className="font-semibold text-[#0A0A0A] dark:text-[#f2f6fa]">
                 {copy.FAQLeftOneTitle}
               </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed dark:text-[#93a2b8]">
                 {copy.FAQLeftRightDesc}
               </p>
             </div>
 
             <div className="flex flex-col gap-2">
-              <h3 className="font-semibold text-[#0A0A0A]">
+              <h3 className="font-semibold text-[#0A0A0A] dark:text-[#f2f6fa]">
                 {copy.FAQLeftTwoTitle}
               </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed dark:text-[#93a2b8]">
                 {copy.FAQLeftRightDesc2}
               </p>
             </div>
 
             <div className="flex flex-col gap-2">
-              <h3 className="font-semibold text-[#0A0A0A]">
+              <h3 className="font-semibold text-[#0A0A0A] dark:text-[#f2f6fa]">
                 {copy.FAQLeftThreeTitle}
               </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed dark:text-[#93a2b8]">
                 {copy.FAQLeftRightDesc3}
               </p>
             </div>
 
             <div className="flex flex-col gap-2">
-              <h3 className="font-semibold text-[#0A0A0A]">
+              <h3 className="font-semibold text-[#0A0A0A] dark:text-[#f2f6fa]">
                 {copy.FAQLeftFourTitle}
               </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed dark:text-[#93a2b8]">
                 {copy.FAQLeftRightDesc4}
               </p>
             </div>
@@ -1120,7 +1131,7 @@ export const LandingPage = () => {
                   {copy.finalPrimaryCta}
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
-                <Button className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit">
+                <Button className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit dark:bg-[#1c67d8] dark:text-[#f2f6fa] dark:border-[#324154]">
                   <Zap className="w-4 h-auto mr-2" />
                   {copy.finalSecondaryCta}
                   <ArrowRight className="ml-2 w-4 h-4" />
@@ -1165,23 +1176,28 @@ export const LandingPage = () => {
           </div>
         </motion.section>
 
-        <motion.section {...fadeIn(0.1)} className="bg-[#f5fbff]">
+        <motion.section
+          {...fadeIn(0.1)}
+          className="bg-[#f5fbff] dark:bg-[#0F1729]"
+        >
           <div className="grid gap-6 md:grid-cols-3 text-center">
             {statsTiles2.map((stat, index) => {
               return (
                 <motion.div
                   key={index}
-                  className="rounded-xl bg-white shadow-md py-5 px-8 hover:shadow-lg transition-shadow duration-300"
+                  className="rounded-xl bg-white dark:bg-[#1E293B] dark:border dark:border-[#2a364a] shadow-md py-5 px-8 hover:shadow-lg transition-shadow duration-300"
                   whileHover={{ scale: 1.03 }}
                 >
                   <div className="flex flex-col items-center space-y-4 mt-1">
-                    <div className="bg-sky-100 rounded-full text-sky-500 p-3">
+                    <div className="bg-sky-100 rounded-full text-sky-500 p-3 dark:bg-[#21384E]">
                       <stat.Icon className="w-6 h-6" />
                     </div>
-                    <div className="text-3xl font-bold text-gray-900">
+                    <div className="text-3xl font-bold text-gray-900 dark:text-[#f2f6fa]">
                       {stat.description}
                     </div>
-                    <div className="text-gray-600">{stat.title}</div>
+                    <div className="text-gray-600 dark:text-[#72879c]">
+                      {stat.title}
+                    </div>
                   </div>
                 </motion.div>
               );
@@ -1191,34 +1207,35 @@ export const LandingPage = () => {
 
         <motion.section {...fadeIn(0.1)}>
           <motion.div className="flex flex-col items-center text-center">
-            <div className="flex items-center justify-center gap-2 bg-[#dcf3fc] rounded-full py-1.5 px-3">
-              <Sparkles className="text-[#2ea4e8] w-4 h-4" />
-              <h3 className="text-sm font-semibold text-[#2ea4e8]">
+            <div className="flex items-center justify-center gap-2 bg-[#dcf3fc] dark:bg-[#132e47]  rounded-full py-1.5 px-3">
+              <Sparkles className="text-[#2ea4e8] w-4 h-4 dark:text-[#39b2f7]" />
+              <h3 className="text-sm font-semibold text-[#2ea4e8] dark:text-[#39b2f7]">
                 {copy.LimitedTime}
               </h3>
             </div>
-            <p className="text-[#65758c] mt-6 max-w-[42rem] mx-auto">
+            <p className="text-[#65758c] mt-6 max-w-[42rem] mx-auto dark:text-[#93a2b8]">
               {copy.LimitedDes}
             </p>
           </motion.div>
         </motion.section>
 
-        <footer className="-mx-6 space-y-10 border-t border-sky-100 bg-white px-6 py-8 text-sm text-slate-600 shadow-inner md:-mx-10 md:px-10 lg:-mx-16 lg:px-16 xl:-mx-24 xl:px-24">
+        <footer className="-mx-6 space-y-10 border-t border-sky-100 bg-white px-6 py-8 text-sm text-slate-600 shadow-inner md:-mx-10 md:px-10 lg:-mx-16 lg:px-16 xl:-mx-24 xl:px-24 dark:bg-[#1e293b]">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between mt-5 gap-10 md:gap-16">
             <div className="max-w-sm space-y-3 text-center md:text-left">
               <Link
                 href="/"
-                className="flex justify-start items-center gap-2 text-lg font-semibold text-slate-900"
+                className="flex justify-start items-center gap-2 text-lg font-semibold text-slate-900 dark:text-[#f1f2ed]"
               >
                 <Image
                   src="/logo2.png"
                   alt="Front Cloud logo"
-                  width={20}
-                  height={20}
+                  width={28}
+                  height={28}
+                  className="mt-1"
                 />
-                Front Cloud Creative
+                Front Cloud
               </Link>
-              <p className="text-base text-slate-500 mt-2 text-start">
+              <p className="text-base text-slate-500 mt-2 text-start dark:text-[#93a2b8]">
                 {copy.footerTagline}
               </p>
 
@@ -1229,7 +1246,7 @@ export const LandingPage = () => {
                     href={href}
                     className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-sky-200 transition"
                   >
-                    <Icon className="w-5 h-5 text-slate-700 hover:text-black" />
+                    <Icon className="w-5 h-5 text-slate-700 hover:text-black dark:text-[#f2f6fa]" />
                   </Link>
                 ))}
               </div>
@@ -1239,7 +1256,7 @@ export const LandingPage = () => {
               {Object.values(copy.footerLinks).map((group) => {
                 return (
                   <div key={group.heading} className="space-y-3">
-                    <p className="text-base font-semibold text-slate-900">
+                    <p className="text-base font-semibold text-slate-900 dark:text-[#f2f6fa]">
                       {group.heading}
                     </p>
                     <ul className="space-y-3 text-sm text-slate-500">
@@ -1247,7 +1264,7 @@ export const LandingPage = () => {
                         <li key={link.label}>
                           <Link
                             href={link.href}
-                            className="transition hover:text-black"
+                            className="transition hover:text-black dark:text-[#93a2b8]"
                           >
                             {link.label}
                           </Link>
@@ -1260,8 +1277,8 @@ export const LandingPage = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 border-t border-sky-100 pt-6 text-xs sm:text-sm text-[#65758c] md:flex-row md:items-center md:justify-between">
-            <p className="text-center text-sm md:text-left">
+          <div className="flex flex-col gap-4 border-t dark:border-[#324154] border-sky-100 pt-6 text-xs sm:text-sm text-[#65758c] md:flex-row md:items-center md:justify-between">
+            <p className="text-center text-sm md:text-left dark:text-[#93a2b8]">
               {copy.footerLegal}
             </p>
             <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 cursor-pointer">
@@ -1269,7 +1286,7 @@ export const LandingPage = () => {
                 <Link
                   key={label}
                   href={href}
-                  className="flex gap-2 items-center hover:text-black"
+                  className="flex gap-2 items-center hover:text-black dark:text-[#93a2b8]"
                 >
                   {Icon && <Icon className="w-4 h-4" />}
                   {label}
@@ -1278,12 +1295,12 @@ export const LandingPage = () => {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#F3FAFE] border border-sky-100 p-6 sm:p-8 rounded-xl text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#F3FAFE] border border-sky-100 p-6 sm:p-8 rounded-xl text-center sm:text-left dark:bg-[#203145] dark:border-[#243f57]">
             <div className="flex flex-col justify-start items-start">
-              <h1 className="text-black font-semibold text-base">
+              <h1 className="text-black font-semibold text-base dark:text-[#f2f6fa]">
                 Stay updated
               </h1>
-              <p className="text-sm mt-1">
+              <p className="text-sm mt-1 dark:text-[#9382b8]">
                 Get the latest updates about new features and AI improvements.
               </p>
             </div>
@@ -1292,9 +1309,9 @@ export const LandingPage = () => {
               <input
                 type="email"
                 placeholder={copy.footerInputPlaceholder}
-                className="rounded-lg border border-[#e1e8f0] bg-white px-4 py-2 text-sm text-slate-700 focus:border-sky-400 focus:outline-none h-10"
+                className="rounded-lg border border-[#e1e8f0] bg-white px-4 py-2 text-sm text-slate-700 focus:border-sky-400 focus:outline-none h-10 dark:bg-[#0f1729] dark:border-[#324154] dark:text-[#088691]"
               />
-              <button className="rounded-lg bg-sky-500 px-5 text-white hover:bg-sky-400 py-2.5 font-semibold flex items-center justify-center">
+              <button className="rounded-lg bg-sky-500 px-5 text-white hover:bg-sky-400 py-2.5 font-semibold flex items-center justify-center dark:bg-[#39b2f7] dark:text-[#0f1729]">
                 {copy.footerBottomCta}
               </button>
             </div>

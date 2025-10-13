@@ -93,3 +93,7 @@ main {
     @apply bg-background text-foreground;
   }
 }
+
+.dark [role="combobox"] svg {
+  color: #374257 !important;
+}
