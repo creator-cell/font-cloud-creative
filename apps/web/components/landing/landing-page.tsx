@@ -1190,14 +1190,13 @@ export const LandingPage = () => {
             <div className="max-w-sm space-y-3 text-center md:text-left">
               <Link
                 href="/"
-                className="flex justify-start items-center text-lg font-semibold text-slate-900"
+                className="flex justify-start items-center gap-2 text-lg font-semibold text-slate-900"
               >
                 <Image
-                  src="/logo.svg"
+                  src="/logo2.png"
                   alt="Front Cloud logo"
-                  width={36}
-                  height={36}
-                  className="shrink-0"
+                  width={20}
+                  height={20}
                 />
                 Front Cloud Creative
               </Link>

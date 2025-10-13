@@ -40,12 +40,15 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     () => ({
       theme,
       setTheme,
-      toggleTheme: () => setTheme((prev) => (prev === "dark" ? "light" : "dark"))
+      toggleTheme: () =>
+        setTheme((prev) => (prev === "dark" ? "light" : "dark")),
     }),
     [theme]
   );
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+  );
 };
 
 export const useTheme = (): ThemeContextValue => {
