@@ -323,9 +323,9 @@ export const LandingPage = () => {
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 lg:gap-12 gap-8 items-center">
             <div className="lg:text-left bg-red-500k">
-              <h1 className="text-4xl md:text-[4.5rem] font-bold leading-tight mb-6 mt-4 md:mt-0 dark:text-[#f2f6fa]">
+              <h1 className="text-4xl md:text-[3.5rem] font-bold leading-tight mb-6 mt-4 md:mt-0 dark:text-[#f2f6fa]">
                 {copy.heroTitlePrimary} <br />
-                <span className="text-[#1D8FFF] inline-block md:text-[4rem]">
+                <span className="text-[#1D8FFF] inline-block md:text-[3.5rem]">
                   {copy.heroTitleHighlight}
                 </span>
               </h1>
