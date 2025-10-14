@@ -153,6 +153,41 @@ export const LandingPage = () => {
     (tile: { value: string; label: string; icon: string }) => tile
   );
 
+  const providerItems = [
+    {
+      key: "openai",
+      label: copy.providerOpenAI,
+      icon: Bot,
+      iconBg: "bg-[#00bc7d]"
+    },
+    {
+      key: "anthropic",
+      label: copy.providerAnthropic,
+      icon: Brain,
+      iconBg: "bg-[#ff6a00]"
+    },
+    {
+      key: "google",
+      label: copy.providerGoogle,
+      icon: Search,
+      iconBg: "bg-[#2b80ff]"
+    },
+    {
+      key: "ollama",
+      label: copy.providerOllama,
+      icon: Zap,
+      iconBg: "bg-[#ab45ff]"
+    },
+    {
+      key: "allam",
+      label: copy.providerAllam,
+      badge: copy.providerAllamSubtitle,
+      icon: Sparkles,
+      iconBg: "bg-[#0EA5E9]",
+      colSpan: "lg:col-span-2"
+    }
+  ];
+
   const pricingPlans = (copy.pricingPlans || []).map(
     (plan: {
       id: string;
@@ -265,9 +300,9 @@ export const LandingPage = () => {
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 lg:gap-12 gap-8 items-start">
             <div className="lg:text-left">
-              <h1 className="text-4xl md:text-[4.5rem] font-bold leading-tight mb-6 mt-4 md:mt-0 dark:text-[#f2f6fa]">
+              <h1 className="text-4xl md:text-[4rem] font-bold leading-[1] mb-6 mt-4 md:mt-0 dark:text-[#f2f6fa]">
                 {copy.heroTitlePrimary} <br />
-                <span className="text-[#1D8FFF] inline-block md:text-[3.5rem]">
+                <span className="text-[#1D8FFF] inline-block md:text-[4rem]">
                   {copy.heroTitleHighlight}
                 </span>
               </h1>
@@ -333,45 +368,33 @@ export const LandingPage = () => {
               </div>
             </div>
 
-            <motion.div className="space-y-6 md:mt-8" {...fadeIn(0.2)}>
+            <motion.div className="space-y-6 md:mt-8 overflow-visible" {...fadeIn(0.2)}>
               <div>
                 <h3 className="flex items-center text-base font-medium text-gray-800 mb-6 justify-start lg:justify-start dark:text-[#f0f5fa]">
                   <Brain className="h-5 w-5 mr-2 text-[#0EA5E9]" />{" "}
                   {copy.providerHeading}
                 </h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3 p-4 bg-white border rounded-xl shadow-sm dark:bg-[#162033] dark:hover:border-[#324154]">
-                    <div className="flex items-center justify-center rounded-lg bg-[#00bc7d] p-2">
-                      <Bot size={20} className="text-white" />
-                    </div>
-                    <span className="font-medium text-gray-700 dark:text-[#e4e7eb]">
-                      {copy.providerOpenAI}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 p-4 bg-white border  rounded-xl shadow-sm dark:bg-[#162033] dark:hover:border-[#324154]">
-                    <div className="flex items-center justify-center  rounded-md bg-[#ff6a00] p-2">
-                      <Brain size={20} className="text-white " />
-                    </div>
-                    <span className="font-medium text-gray-700 dark:text-[#e4e7eb]">
-                      {copy.providerAnthropic}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 p-4 bg-white border  rounded-xl shadow-sm dark:bg-[#162033] dark:hover:border-[#324154]">
-                    <div className="flex items-center justify-center  rounded-md bg-[#2b80ff] p-2">
-                      <Search size={20} className="text-white" />
-                    </div>
-                    <span className="font-medium text-gray-700 dark:text-[#e4e7eb]">
-                      {copy.providerGoogle}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 p-4 bg-white border  rounded-xl shadow-sm dark:bg-[#162033] dark:hover:border-[#324154]">
-                    <div className="flex items-center justify-center  rounded-md bg-[#ab45ff] p-2">
-                      <Zap size={20} className="text-white" />
-                    </div>
-                    <span className="font-medium text-gray-700 dark:text-[#e4e7eb]">
-                      {copy.providerOllama}
-                    </span>
-                  </div>
+                <div className="grid min-h-0 grid-flow-row grid-cols-1 gap-4 overflow-visible sm:grid-cols-2 lg:grid-cols-3 auto-rows-[4rem]">
+                  {providerItems.map(({ key, label, badge, icon: Icon, iconBg, colSpan }) => (
+                    <button
+                      key={key}
+                      type="button"
+                      aria-label={`${label} provider`}
+                      className={`flex h-16 min-w-0 items-center gap-2 rounded-2xl border bg-white px-3 shadow-sm transition hover:border-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 dark:bg-[#162033] dark:hover:border-[#324154] ${colSpan ?? ""}`}
+                    >
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${iconBg}`}>
+                        <Icon size={20} className="text-white" />
+                      </div>
+                      <div className="flex min-w-0 flex-1 items-center gap-2 text-sm font-medium text-gray-700 dark:text-[#e4e7eb]">
+                        <span className={`flex-shrink-0 whitespace-nowrap ${key === "allam" ? "" : "truncate"}`}>{label}</span>
+                        {badge ? (
+                          <span className="flex-shrink-0 whitespace-nowrap rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600 dark:bg-[#1f2b3b] dark:text-[#b7c2d0]">
+                            {badge}
+                          </span>
+                        ) : null}
+                      </div>
+                    </button>
+                  ))}
                 </div>
               </div>
 

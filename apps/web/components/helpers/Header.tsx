@@ -45,10 +45,10 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
         >
           <Image src="/logo2.png" alt="Logo" height={40} width={40} />
           <div className="flex flex-col leading-tight">
-            <span className="text-[#0A0A0A] text-sm font-semibold dark:text-[#f2f6fa]">
+            <span className="text-[#0A0A0A] text-medium font-semibold dark:text-[#f2f6fa]">
               Front Cloud
             </span>
-            <span className="text-[0.70rem] text-[#64748B] font-normal dark:text-white">
+            <span className="text-[0.70rem] text-[#64748B] text-medium font-normal dark:text-white">
               Creative
             </span>
           </div>
