@@ -60,7 +60,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
             <Link
               key={item.label}
               href={item.href}
-              className="transition hover:text-[#0A0A0A] dark:text-white dark:hover:text-white"
+              className="transition hover:text-[#0A0A0A] dark:text-white dark:hover:text-white text-xs"
             >
               {item.label}
             </Link>
