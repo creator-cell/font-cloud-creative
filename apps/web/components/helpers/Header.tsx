@@ -42,26 +42,26 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-1.5 text-base font-semibold text-slate-900"
+          className="flex items-center gap-1.5 text-base font-semibold text-slate-900 dark:text-white"
         >
           <Image src="/logo2.png" alt="Logo" height={40} width={40} />
           <div className="flex flex-col leading-tight">
             <span className="text-[#0A0A0A] text-sm font-semibold dark:text-[#f2f6fa]">
               Front Cloud
             </span>
-            <span className="text-[0.70rem] text-[#64748B] font-normal dark:text-[#69758a]">
+            <span className="text-[0.70rem] text-[#64748B] font-normal dark:text-white">
               Creative
             </span>
           </div>
         </Link>
 
         {/* Nav */}
-        <nav className="hidden md:flex items-center gap-6 text-xs text-[#64748B] font-semibold">
+        <nav className="hidden md:flex items-center gap-6 text-medium text-[#64748B] font-semibold dark:text-white">
           {navItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}
-              className="transition hover:text-[#0A0A0A] dark:text-[#8f9eb3] dark:hover:text-white"
+              className="transition hover:text-[#0A0A0A] dark:text-white dark:hover:text-white"
             >
               {item.label}
             </Link>
@@ -117,7 +117,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
           </Select>
           <Link
             href="/api/auth/signin?callbackUrl=%2Fdashboard"
-            className="ml-1 text-xs font-medium dark:text-[#f2f6fa]"
+            className="ml-1 text-xs font-medium dark:text-white"
           >
             {language === "ar" ? "تسجيل الدخول" : "Sign In"}
           </Link>
@@ -141,12 +141,12 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
 
       {mobileOpen && (
         <nav className="md:hidden bg-white dark:bg-gray-900 border-t dark:border-[#324154] border-gray-200 px-4 sm:px-6">
-          <ul className="flex flex-col gap-1 px-2 space-y-1 pt-2 pb-3 text-sm text-[#778599] font-medium">
+          <ul className="flex flex-col gap-1 px-2 space-y-1 pt-2 pb-3 text-sm text-[#778599] font-medium dark:text-white">
             {navItems.map((item) => (
               <li key={item.label}>
                 <Link
                   href={item.href}
-                  className="block w-full px-3 py-2 text-sm font-medium transition hover:text-[#0A0A0A] dark:text-[#93a2b8]"
+                  className="block w-full px-3 py-2 text-sm font-medium transition hover:text-[#0A0A0A] dark:text-white"
                   onClick={() => setMobileOpen(false)}
                 >
                   {item.label}
@@ -158,7 +158,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
             {/* theme */}
             <div>
               <li className="flex items-center justify-between px-2 space-y-1 pt-2 pb-2 text-sm  font-medium">
-                <div className=" dark:text-[#d3d8d2] text-black">Theme</div>
+                <div className="text-black dark:text-white">Theme</div>
                 <div>
                   <Select value={theme} onValueChange={setTheme}>
                     <SelectTrigger className="w-auto min-w-[2.5rem] border-0 bg-[#f7fafc] dark:bg-[#1a2438] rounded-md px-2 flex items-center justify-center gap-10">
@@ -193,7 +193,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
               </li>
 
               <li className="flex items-center justify-between px-2 space-y-1 pt-2  text-sm  font-medium">
-                <div className="text-black dark:text-[#d3d8d2]">Language</div>
+                <div className="text-black dark:text-white">Language</div>
                 <div>
                   <Select
                     value={language}
@@ -215,7 +215,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
             <li>
               <Link
                 href="/api/auth/signin?callbackUrl=%2Fdashboard"
-                className="block w-full pb-1  font-medium text-sm text-center text-black dark:text-[#f2f6fa]"
+                className="block w-full pb-1  font-medium text-sm text-center text-black dark:text-white"
                 onClick={() => setMobileOpen(false)}
               >
                 {language === "ar" ? "تسجيل الدخول" : "Sign In"}
