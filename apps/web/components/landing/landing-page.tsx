@@ -211,13 +211,12 @@ export const LandingPage = () => {
 
   return (
     <div
-      className="relative min-h-screen overflow-hidden bg-white text-slate-900 dark:bg-[#0f1729]"
+      className="min-h-screen bg-white text-slate-900 dark:bg-[#0f1729]"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       <Header language={language} setLanguage={setLanguage} copy={copy} />
 
-      <main className=" flex w-full flex-col gap-24 px-7 pb-0 pt-16 md:pt-20 xl:px-16 2xl:max-w-screen-2xl 2xl:mx-auto">
-        {/* Done  */}
+      <main className=" flex w-full overflow-hidden flex-col gap-24 px-7 pb-0 py-4 md:py-8 xl:px-16 2xl:max-w-screen-2xl 2xl:mx-auto">
         <motion.section
           className="relative w-full text-gray-900"
           id="product"
@@ -334,7 +333,6 @@ export const LandingPage = () => {
               </div>
             </div>
 
-            {/* Right Column - Cards */}
             <motion.div className="space-y-6 md:mt-8" {...fadeIn(0.2)}>
               <div>
                 <h3 className="flex items-center text-base font-medium text-gray-800 mb-6 justify-start lg:justify-start dark:text-[#f0f5fa]">
@@ -423,7 +421,6 @@ export const LandingPage = () => {
             </motion.div>
           </div>
         </motion.section>
-        {/* Done  */}
         <motion.section
           className="space-y-6 pb-8 bg-white dark:bg-[#0F1729]"
           id="solutions"
@@ -676,7 +673,6 @@ export const LandingPage = () => {
                   <div className="flex gap-2 mt-4">
                     <Button className="w-full bg-[#059ced] hover:bg-[#006ae0] text-white text-xs font-medium py-2.5 rounded-md mt-2 dark:bg-gradient-to-l from-[#1167fa] to-[#28a9fa]">
                       <Play className="ml-1 w-3 h-3 font-bold text-white" />
-                      {/* Try It Yourself */}
                       {copy.data.rightPanel.actions.tryYourself}
                     </Button>
 
@@ -689,7 +685,6 @@ export const LandingPage = () => {
                           <Globe2 className="w-4 h-4" />
                         </div>
                         {copy.data.rightPanel.actions.watchDemo}
-                        {/* Watch Full Demo */}
                       </div>
                     </Button>
                   </div>
@@ -1049,7 +1044,6 @@ export const LandingPage = () => {
           className="relative bg-gradient-to-r from-[#0072ff] via-[#0099ff] to-[#00c6ff] text-[#FFFFFF] rounded-2xl py-10 px-6 md:px-8 my-10 overflow-hidden"
         >
           <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-center">
-            {/* Left Section */}
             <div>
               <h2 className="text-3xl md:text-[2.5rem] font-bold leading-tight mb-3">
                 {copy.finalCtaTitle} <br className="hidden md:block" />{" "}
@@ -1082,7 +1076,6 @@ export const LandingPage = () => {
               </div>
             </div>
 
-            {/* Right Section */}
             <div className="relative flex justify-center">
               <div className="relative rounded-2xl bg-[#1e6ce3] p-5 shadow-lg">
                 <img

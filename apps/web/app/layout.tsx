@@ -4,15 +4,19 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Front Cloud Creative",
-  description: "Multi-model marketing content that respects your brand voice."
+  description: "Multi-model marketing content that respects your brand voice.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className="dark">
-      <body>
+      <body className="">
         <AppProviders>
-          <main className="flex flex-col min-h-screen w-full">{children}</main>
+          <main className="min-h-screen w-full">{children}</main>
         </AppProviders>
       </body>
     </html>
