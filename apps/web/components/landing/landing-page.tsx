@@ -214,63 +214,6 @@ export const LandingPage = () => {
       className="relative min-h-screen overflow-hidden bg-white text-slate-900 dark:bg-[#0f1729]"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-      {/* <header className="fixed inset-x-0 top-0 z-50 border-b border-sky-100 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex w-full flex-wrap items-center justify-between gap-4 px-6 py-4 text-sm text-slate-600 md:px-10 lg:px-16 xl:px-24">
-          <Link
-            href="/"
-            className="flex items-center gap-3 text-base font-semibold text-slate-900"
-          >
-            <Image
-              src="/logo.svg"
-              alt="Front Cloud logo"
-              width={60}
-              height={85}
-              className="h-12 w-auto"
-              priority
-            />
-            Front Cloud Creative
-          </Link>
-          <nav className="flex flex-1 items-center justify-center gap-6 text-sm text-slate-600">
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="transition hover:text-sky-600"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="flex items-center gap-3">
-            <Button
-              size="sm"
-              onClick={() =>
-                setLanguage((prev) => (prev === "en" ? "ar" : "en"))
-              }
-              className="rounded-full bg-sky-500 px-4 text-xs text-white transition hover:bg-sky-400"
-            >
-              <Globe2 className="mr-1 h-4 w-4" /> {copy.languageToggle}
-            </Button>
-            <Link
-              href="/api/auth/signin?callbackUrl=%2Fdashboard"
-              className="inline-flex"
-            >
-              <Button className="rounded-full bg-sky-500 px-5 text-white transition hover:bg-sky-400">
-                {language === "ar" ? "تسجيل الدخول" : "Sign in"}
-              </Button>
-            </Link>
-            <Link
-              href="/api/auth/signin?callbackUrl=%2Fdashboard"
-              className="inline-flex"
-            >
-              <Button className="bg-sky-500 px-4 text-white transition hover:bg-sky-400">
-                {copy.heroPrimaryCta}
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header> */}
-      {/* <Header /> */}
       <Header language={language} setLanguage={setLanguage} copy={copy} />
 
       <main className=" flex w-full flex-col gap-24 px-7 pb-0 pt-16 md:pt-20 xl:px-16 2xl:max-w-screen-2xl 2xl:mx-auto">
@@ -321,9 +264,9 @@ export const LandingPage = () => {
             </div>
           </motion.div>
 
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 lg:gap-12 gap-8 items-center">
-            <div className="lg:text-left bg-red-500k">
-              <h1 className="text-4xl md:text-[3.5rem] font-bold leading-tight mb-6 mt-4 md:mt-0 dark:text-[#f2f6fa]">
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 lg:gap-12 gap-8 items-start">
+            <div className="lg:text-left">
+              <h1 className="text-4xl md:text-[4.5rem] font-bold leading-tight mb-6 mt-4 md:mt-0 dark:text-[#f2f6fa]">
                 {copy.heroTitlePrimary} <br />
                 <span className="text-[#1D8FFF] inline-block md:text-[3.5rem]">
                   {copy.heroTitleHighlight}
@@ -392,7 +335,7 @@ export const LandingPage = () => {
             </div>
 
             {/* Right Column - Cards */}
-            <motion.div className="space-y-6" {...fadeIn(0.2)}>
+            <motion.div className="space-y-6 md:mt-8" {...fadeIn(0.2)}>
               <div>
                 <h3 className="flex items-center text-base font-medium text-gray-800 mb-6 justify-start lg:justify-start dark:text-[#f0f5fa]">
                   <Brain className="h-5 w-5 mr-2 text-[#0EA5E9]" />{" "}
@@ -1176,16 +1119,13 @@ export const LandingPage = () => {
           </div>
         </motion.section>
 
-        <motion.section
-          {...fadeIn(0.1)}
-          className="bg-[#f5fbff] dark:bg-[#0F1729]"
-        >
+        <motion.section {...fadeIn(0.1)} className=" dark:bg-[#0F1729]">
           <div className="grid gap-6 md:grid-cols-3 text-center">
             {statsTiles2.map((stat, index) => {
               return (
                 <motion.div
                   key={index}
-                  className="rounded-xl bg-white dark:bg-[#1E293B] dark:border dark:border-[#2a364a] shadow-md py-5 px-8 hover:shadow-lg transition-shadow duration-300"
+                  className="rounded-xl bg-white border dark:bg-[#1E293B] dark:border dark:border-[#2a364a] shadow-md py-5 px-8 hover:shadow-lg transition-shadow duration-300"
                   whileHover={{ scale: 1.03 }}
                 >
                   <div className="flex flex-col items-center space-y-4 mt-1">

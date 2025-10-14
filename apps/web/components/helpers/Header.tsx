@@ -128,7 +128,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
           </Link>
         </div>
         <button
-          className="md:hidden flex items-center p-2 hover:bg-[#1e293b] rounded-md"
+          className="md:hidden flex items-center p-2 dark:hover:bg-[#1e293b] rounded-md cursor-pointer hover:bg-[#F3FAFE]"
           onClick={() => setMobileOpen(!mobileOpen)}
         >
           {mobileOpen ? (
@@ -176,7 +176,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
                     </SelectTrigger>
                     <SelectContent className="bg-white text-black dark:bg-[#192438] dark:text-white">
                       <SelectItem value="light">
-                        <div className="flex items-center justify-center gap-1">
+                        <div className="flex items-center justify-center gap-1 dark:text-[#d3d8d2]">
                           <Sun className="h-4 w-4" />
                           Light
                         </div>
