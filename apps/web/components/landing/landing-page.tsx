@@ -268,7 +268,7 @@ export const LandingPage = () => {
             <div className="lg:text-left">
               <h1 className="text-4xl md:text-[4.5rem] font-bold leading-tight mb-6 mt-4 md:mt-0 dark:text-[#f2f6fa]">
                 {copy.heroTitlePrimary} <br />
-                <span className="text-[#1D8FFF] inline-block md:text-[4rem]">
+                <span className="text-[#1D8FFF] inline-block md:text-[3.5rem]">
                   {copy.heroTitleHighlight}
                 </span>
               </h1>
