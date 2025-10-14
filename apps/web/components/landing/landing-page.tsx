@@ -685,7 +685,7 @@ export const LandingPage = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="bg-[#edf7fc] border border-[#c3e7fa] rounded-lg p-5 items-center bg-gradient-to-tl from-[#162640] to-[#1c2d45] dark:border-[#224a6b]">
+                  <div className="bg-[#edf7fc] border border-[#c3e7fa] rounded-lg p-5 items-center dark:bg-gradient-to-tl from-[#162640] to-[#1c2d45] dark:border-[#224a6b]">
                     <div className="flex items-center gap-1">
                       <div className="text-xs text-[#0a0a0a] font-normal border border-[#e1e8f0] text-center rounded-md px-1 items-center dark:text-[#f2f6fa] dark:border-[#324154]">
                         {copy.data.rightPanel.generatedContent.headline.label}
