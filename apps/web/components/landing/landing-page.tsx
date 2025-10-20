@@ -312,8 +312,7 @@ export const LandingPage = () => {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
                 <Link
-                  href={"/api/auth/signin?callbackUrl=%2Fdashboard"}
-                  target="_main"
+                  href="/signin?register=1"
                   className="flex items-center justify-center w-full sm:w-auto px-4 py-3.5 text-white font-medium rounded-lg shadow-md transition-colors bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-sm"
                 >
                   <Zap className="h-4 w-4 mr-2" /> {copy.heroPrimaryCta}
@@ -1086,11 +1085,14 @@ export const LandingPage = () => {
               </div>
 
               <div className="flex flex-col gap-4 sm:gap-2 sm:flex-row">
-                <Button className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit">
-                  <Zap className="w-4 h-auto mr-2" />
+                <Link
+                  href="/signin?register=1"
+                  className="flex w-full items-center justify-center rounded-lg bg-white px-5 py-3 font-semibold text-sky-400 transition hover:bg-white/90 sm:w-fit"
+                >
+                  <Zap className="mr-2 h-auto w-4" />
                   {copy.finalPrimaryCta}
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
                 <Button className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit dark:bg-[#1c67d8] dark:text-[#f2f6fa] dark:border-[#324154]">
                   <Zap className="w-4 h-auto mr-2" />
                   {copy.finalSecondaryCta}

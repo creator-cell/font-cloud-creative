@@ -11,6 +11,9 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt"
   },
+  pages: {
+    signIn: "/signin"
+  },
   providers: [
     CredentialsProvider({
       id: "super-admin",
@@ -45,6 +48,100 @@ export const authOptions: NextAuthOptions = {
         return null;
       }
     }),
+    CredentialsProvider({
+      id: "credentials",
+      name: "Email Login",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+        const email = credentials?.email?.toString().trim().toLowerCase();
+        const password = credentials?.password?.toString() ?? "";
+        if (!email || !password) {
+          return null;
+        }
+
+        try {
+          const response = await fetch(`${apiBase}/auth/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            return {
+              id: data.user.id,
+              email: data.user.email,
+              plan: data.user.plan,
+              roles: data.user.roles,
+              apiToken: data.token
+            } as any;
+          }
+        } catch (err) {
+          console.error("Password login failed", err);
+        }
+
+        return null;
+      }
+    }),
+    CredentialsProvider({
+      id: "register",
+      name: "Register",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        plan: { label: "Plan", type: "text" },
+        name: { label: "Name", type: "text" }
+      },
+      async authorize(credentials) {
+        const email = credentials?.email?.toString().trim().toLowerCase();
+        const plan = (credentials?.plan?.toString().trim() as
+          | "free"
+          | "starter"
+          | "pro"
+          | "team") ?? "starter";
+        if (!email || !plan) {
+          return null;
+        }
+
+        try {
+          const response = await fetch(`${apiBase}/auth/token`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              userId: email,
+              email,
+              plan
+            })
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            return {
+              id: data.user.sub,
+              email: data.user.email,
+              plan: data.user.plan,
+              roles: data.user.roles,
+              apiToken: data.token
+            } as any;
+          }
+        } catch (err) {
+          console.error("Failed to finalize registration via token endpoint", err);
+        }
+
+        return {
+          id: email,
+          email,
+          plan,
+          roles: ["user"]
+        } as any;
+      }
+    }),
     // EmailProvider({
     //   server: process.env.EMAIL_SERVER,
     //   from: process.env.EMAIL_FROM,
@@ -68,6 +165,20 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, account }) {
       if (user?.email) {
+        if ((user as any)?.apiToken) {
+          token.apiToken = (user as any).apiToken;
+          token.plan = (user as any)?.plan ?? token.plan ?? "free";
+          token.roles = (user as any)?.roles ?? token.roles ?? ["user"];
+          if (account?.provider && account.provider !== "register") {
+            token.provider = account.provider;
+          } else if (!token.provider) {
+            token.provider = account?.provider ?? "credentials";
+          }
+          if (token.plan && token.plan !== "free") {
+            token.requiresPlan = false;
+          }
+          return token;
+        }
         try {
           const plan = (user as any)?.plan ?? (account?.provider === "super-admin" ? process.env.SUPERADMIN_PLAN ?? "team" : "free");
           const response = await fetch(`${apiBase}/auth/token`, {
@@ -88,7 +199,16 @@ export const authOptions: NextAuthOptions = {
             token.preferredProvider = data.user.preferredProvider;
             token.preferredModel = data.user.preferredModel;
             token.roles = data.user.roles;
-            token.provider = account?.provider ?? "credentials";
+            if (account?.provider && account.provider !== "register") {
+              token.provider = account.provider;
+            } else if (!token.provider) {
+              token.provider = account?.provider ?? "credentials";
+            }
+            if (account?.provider === "google") {
+              token.requiresPlan = data.created || data.user.plan === "free";
+            } else if (token.plan && token.plan !== "free") {
+              token.requiresPlan = false;
+            }
           } else if (account?.provider === "super-admin") {
             token.roles = (user as any)?.roles ?? ["owner", "admin", "analyst", "support", "billing", "user"];
             token.provider = "super-admin";
@@ -116,6 +236,7 @@ export const authOptions: NextAuthOptions = {
         session.user.provider = (token.provider as string | undefined) ?? "google";
       }
       session.apiToken = token.apiToken as string | undefined;
+      session.requiresPlan = token.requiresPlan as boolean | undefined;
       return session;
     }
   }

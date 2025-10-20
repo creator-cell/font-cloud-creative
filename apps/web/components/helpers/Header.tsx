@@ -115,12 +115,12 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
             </SelectContent>
           </Select>
           <Link
-            href="/api/auth/signin?callbackUrl=%2Fdashboard"
+            href="/signin"
             className="ml-1 text-xs font-medium dark:text-white"
           >
             {language === "ar" ? "تسجيل الدخول" : "Sign In"}
           </Link>
-          <Link href="/api/auth/signin?callbackUrl=%2Fdashboard">
+          <Link href="/signin?register=1">
             <button className="rounded-lg bg-sky-500 text-white hover:bg-sky-400 px-2.5 py-1.5 font-semibold text-sm">
               {language === "ar" ? "ابدأ الآن" : "Get Started"}
             </button>
@@ -213,7 +213,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
 
             <li>
               <Link
-                href="/api/auth/signin?callbackUrl=%2Fdashboard"
+                href="/signin"
                 className="block w-full pb-1  font-medium text-sm text-center text-black dark:text-white"
                 onClick={() => setMobileOpen(false)}
               >
@@ -223,7 +223,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
 
             <li className="flex justify-center pb-1.5">
               <Link
-                href="/api/auth/signin?callbackUrl=%2Fdashboard"
+                href="/signin?register=1"
                 onClick={() => setMobileOpen(false)}
               >
                 <button className="w-[320px] rounded-lg bg-sky-500 text-white hover:bg-sky-400 px-1.5 py-1.5 font-semibold text-sm mt-1">

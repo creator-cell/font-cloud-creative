@@ -12,6 +12,7 @@ interface IssueTokenInput {
   plan: PlanTier;
   preferredProvider?: ProviderId;
   preferredModel?: string;
+  passwordHash?: string;
 }
 
 const elevatedRoles: Role[] = ["owner", "admin", "analyst", "support", "billing", "user"];
@@ -34,13 +35,15 @@ export const issueUserToken = async ({
   email,
   plan,
   preferredProvider,
-  preferredModel
-}: IssueTokenInput): Promise<{ token: string; claims: AuthClaims }> => {
+  preferredModel,
+  passwordHash
+}: IssueTokenInput): Promise<{ token: string; claims: AuthClaims; created: boolean }> => {
   const existing = Types.ObjectId.isValid(userId)
     ? await UserModel.findById(userId)
     : await UserModel.findOne({ email });
 
   let user = existing;
+  let created = false;
   if (user) {
     user = await UserModel.findByIdAndUpdate(
       user._id,
@@ -48,7 +51,8 @@ export const issueUserToken = async ({
         email,
         plan,
         preferredProvider,
-        preferredModel
+        preferredModel,
+        ...(passwordHash ? { passwordHash } : {})
       },
       { new: true }
     );
@@ -60,8 +64,10 @@ export const issueUserToken = async ({
       plan,
       preferredProvider,
       preferredModel,
-      roles
+      roles,
+      passwordHash
     });
+    created = true;
   }
 
   const normalizedEmail = email.toLowerCase();
@@ -83,5 +89,5 @@ export const issueUserToken = async ({
   };
 
   const token = jwt.sign(claims, env.jwtSecret, { expiresIn: "1h" });
-  return { token, claims };
+  return { token, claims, created };
 };

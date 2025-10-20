@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createCheckoutSession } from "@/lib/api/endpoints";
 
-const plans = [
+export const planOptions = [
   {
     id: "starter" as const,
     label: "Starter",
@@ -27,11 +27,13 @@ const plans = [
     description: "3M tokens, seats & priority support",
     perks: ["3M tokens", "Team seats", "Priority SLA"]
   }
-];
+] as const;
+
+type PlanId = (typeof planOptions)[number]["id"];
 
 export const PlanSelector = ({ token }: { token: string }) => {
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
-  const handleSelect = async (plan: "starter" | "pro" | "team") => {
+  const handleSelect = async (plan: PlanId) => {
     setLoadingPlan(plan);
     try {
       const { url } = await createCheckoutSession(token, plan);
@@ -46,7 +48,7 @@ export const PlanSelector = ({ token }: { token: string }) => {
 
   return (
     <div className="grid gap-6 md:grid-cols-3">
-      {plans.map((plan) => (
+      {planOptions.map((plan) => (
         <Card key={plan.id} className="flex flex-col justify-between">
           <div>
             <CardHeader>

@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { createToken } from "../controllers/authController";
+import {
+  createToken,
+  registerUser,
+  loginWithPassword,
+  completePlanSelection
+} from "../controllers/authController";
 import { listModels } from "../controllers/modelsController";
 import { buildBrandVoice } from "../controllers/brandVoiceController";
 import { generate } from "../controllers/generationController";
@@ -31,6 +36,9 @@ const router = Router();
 
 router.get("/health", health);
 router.post("/auth/token", createToken);
+router.post("/auth/register", registerUser);
+router.post("/auth/login", loginWithPassword);
+router.post("/auth/complete-plan", requireAuth, completePlanSelection);
 
 router.get("/models", requireAuth, listModels);
 router.get("/projects", requireAuth, listProjects);

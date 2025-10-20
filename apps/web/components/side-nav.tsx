@@ -3,20 +3,50 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { clsx } from "clsx";
-import { LayoutDashboard, FolderKanban, Sparkles, MessageSquare, CreditCard, Settings } from "lucide-react";
+import {
+  LayoutDashboard,
+  FolderKanban,
+  Sparkles,
+  MessageSquare,
+  CreditCard,
+  Settings,
+  type LucideIcon,
+} from "lucide-react";
 
-const navLinks = [
+type NavLink = {
+  href: string;
+  label: string;
+  Icon: LucideIcon;
+  allowedRoles?: string[];
+};
+
+const navLinks: NavLink[] = [
   { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
   { href: "/projects", label: "Projects", Icon: FolderKanban },
   { href: "/brand-voice", label: "Brand Voice", Icon: MessageSquare },
+  {
+    href: "/chat/single",
+    label: "AI Chat",
+    Icon: MessageSquare,
+    allowedRoles: ["owner", "admin", "developer"],
+  },
   { href: "/generate", label: "Generate", Icon: Sparkles },
   { href: "/billing", label: "Billing", Icon: CreditCard },
-  { href: "/settings", label: "Settings", Icon: Settings }
-] as const;
+  { href: "/settings", label: "Settings", Icon: Settings },
+];
 
 export const SideNav = () => {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const roles = session?.user?.roles?.map((role) => role.toLowerCase()) ?? [];
+
+  const visibleLinks = navLinks.filter(({ allowedRoles }) => {
+    if (!allowedRoles?.length) return true;
+    if (!roles.length) return false;
+    return allowedRoles.some((role) => roles.includes(role));
+  });
 
   return (
     <aside className="flex h-full w-full flex-col bg-white lg:sticky lg:top-0 lg:h-screen">
@@ -31,7 +61,7 @@ export const SideNav = () => {
           </div>
         </div>
         <nav className="flex flex-col gap-1 px-3">
-          {navLinks.map(({ href, label, Icon }) => {
+          {visibleLinks.map(({ href, label, Icon }) => {
             const isActive = pathname === href;
             return (
               <Link

@@ -73,6 +73,17 @@ export const createCheckoutSession = (token: string, plan: "starter" | "pro" | "
 export const createPortalSession = (token: string) =>
   apiFetch<{ url: string }>("/subscriptions/portal", { token });
 
+export const completePlanSelection = (token: string, plan: "starter" | "pro" | "team") =>
+  apiFetch<{
+    payment: { status: string; reference: string; gateway: string };
+    token: string;
+    user: { id: string; email: string; plan: string; roles: string[] };
+  }>("/auth/complete-plan", {
+    token,
+    method: "POST",
+    body: JSON.stringify({ plan })
+  });
+
 export const fetchProjects = (token: string) =>
   apiFetch<{ projects: ProjectSummary[] }>("/projects", { token });
 
