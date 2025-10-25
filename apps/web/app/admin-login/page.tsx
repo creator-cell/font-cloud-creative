@@ -10,10 +10,6 @@ export default function AdminLoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleGoogleSignIn = async () => {
-    await signIn("google", { callbackUrl: "/admin" });
-  };
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
@@ -97,19 +93,6 @@ export default function AdminLoginPage() {
           disabled={loading}
         >
           {loading ? "Signing in..." : "Sign in"}
-        </Button>
-        <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-slate-400/70">
-          <span className="h-px flex-1 bg-slate-500/40" />
-          or
-          <span className="h-px flex-1 bg-slate-500/40" />
-        </div>
-        <Button
-          type="button"
-          variant="ghost"
-          onClick={handleGoogleSignIn}
-          className="w-full items-center rounded-full border border-slate-700 bg-slate-800/70 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-700/70"
-        >
-          Continue with Google
         </Button>
       </form>
     </div>

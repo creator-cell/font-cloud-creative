@@ -26,7 +26,12 @@ export async function GET(request: Request) {
   const stream = new ReadableStream({
     start(controller) {
       const provider = getProviderFromModel(storedTurn.model);
-      const responseChunks = createMockResponseChunks(storedTurn.message, storedTurn.model, storedTurn.attachments);
+      const responseChunks = createMockResponseChunks(
+        storedTurn.message,
+        storedTurn.model,
+        storedTurn.attachments,
+        storedTurn.projectId
+      );
       const latencyMs = 400 + Math.floor(Math.random() * 1200);
       const tokensIn = Math.max(1, Math.round(storedTurn.message.split(/\s+/).filter(Boolean).length * 1.5));
       const approximateOutTokens = Math.max(
@@ -86,7 +91,8 @@ export async function GET(request: Request) {
 const createMockResponseChunks = (
   message: string,
   model: string,
-  attachments?: Array<{ name: string; size: number; type: string }>
+  attachments?: Array<{ name: string; size: number; type: string }>,
+  projectId?: string
 ) => {
   const providerName = model.split(":")[0] ?? "provider";
   const attachmentLines =
@@ -101,11 +107,14 @@ const createMockResponseChunks = (
         ]
       : [];
 
+  const projectLine = projectId ? [`Tagged project: ${projectId}`, ""] : [];
+
   const paragraphs = [
     `### Mock response from ${providerName.toUpperCase()}`,
     "",
     `You said: "${message}".`,
     "",
+    ...projectLine,
     ...attachmentLines,
     "- This is a simulated answer with placeholder data.",
     "- Replace this handler with a real provider integration.",

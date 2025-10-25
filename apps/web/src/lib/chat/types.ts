@@ -41,12 +41,14 @@ export type ChatTurn = {
   userMessage: string;
   answer: ProviderAnswer;
   createdAt: number;
+  projectId?: string;
   attachments: ChatAttachment[];
 };
 
 export type ChatSession = {
   id: string;
   turns: ChatTurn[];
+  activeProjectId: string | null;
   lastModelId: string;
 };
 
@@ -64,6 +66,7 @@ export type ChatAction =
   | { type: "set-streaming"; value: boolean }
   | { type: "set-session"; session: ChatSession }
   | { type: "update-last-model"; modelId: string }
+  | { type: "set-active-project"; projectId: string | null }
   | { type: "replace-turn"; turn: ChatTurn };
 
 export const PROVIDER_MODELS: ProviderModel[] = [

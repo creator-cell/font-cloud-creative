@@ -38,7 +38,7 @@ const FooterSection = ({ copy }: any) => {
             className="flex justify-start items-center text-lg font-semibold text-slate-900"
           >
             <Image
-              src="/logo.svg"
+              src="/logo1.svg"
               alt="Front Cloud logo"
               width={36}
               height={36}

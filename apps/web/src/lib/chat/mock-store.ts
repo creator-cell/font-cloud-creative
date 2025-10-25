@@ -3,6 +3,7 @@ export type StoredTurn = {
   sessionId: string;
   message: string;
   model: string;
+  projectId?: string;
   attachments?: Array<{
     id: string;
     name: string;

@@ -4,6 +4,7 @@ export type CreateTurnPayload = {
   sessionId: string;
   message: string;
   model: string;
+  projectId?: string | null;
   attachments?: Array<
     Pick<ChatAttachment, "id" | "name" | "size" | "type"> & {
       dataUrl?: string;

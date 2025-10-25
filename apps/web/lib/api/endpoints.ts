@@ -94,5 +94,18 @@ export const createProject = (token: string, payload: { name: string }) =>
     body: JSON.stringify(payload)
   });
 
+export const updateProject = (token: string, projectId: string, payload: { name: string }) =>
+  apiFetch<{ project: ProjectSummary }>(`/projects/${projectId}`, {
+    token,
+    method: "PATCH",
+    body: JSON.stringify(payload)
+  });
+
+export const deleteProject = (token: string, projectId: string) =>
+  apiFetch<{ success: boolean }>(`/projects/${projectId}`, {
+    token,
+    method: "DELETE"
+  });
+
 export const fetchBrandVoices = (token: string) =>
   apiFetch<{ brandVoices: BrandVoiceSummary[] }>("/brand-voice", { token });

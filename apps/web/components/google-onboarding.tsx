@@ -175,8 +175,7 @@ export function GoogleOnboarding({ email, token, nextPath }: GoogleOnboardingPro
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <Button
                 type="button"
-                variant="ghost"
-                className="text-sm font-medium text-indigo-200 hover:text-indigo-100"
+                className="rounded-full bg-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
                 onClick={() => {
                   setStep(1);
                   setPaymentStatus("idle");

@@ -205,8 +205,8 @@ export const authOptions: NextAuthOptions = {
               token.provider = account?.provider ?? "credentials";
             }
             if (account?.provider === "google") {
-              token.requiresPlan = data.created || data.user.plan === "free";
-            } else if (token.plan && token.plan !== "free") {
+              token.requiresPlan = data.created;
+            } else {
               token.requiresPlan = false;
             }
           } else if (account?.provider === "super-admin") {

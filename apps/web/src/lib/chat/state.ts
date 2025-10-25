@@ -7,14 +7,19 @@ import {
   createEmptyAnswer,
 } from "./types";
 
-export const createInitialSession = (sessionId: string, modelId: string): ChatSession => ({
+export const createInitialSession = (
+  sessionId: string,
+  modelId: string,
+  projectId: string | null
+): ChatSession => ({
   id: sessionId,
   turns: [],
+  activeProjectId: projectId,
   lastModelId: modelId,
 });
 
-export const createInitialState = (sessionId: string, modelId: string): ChatState => ({
-  session: createInitialSession(sessionId, modelId),
+export const createInitialState = (sessionId: string, modelId: string, projectId: string | null): ChatState => ({
+  session: createInitialSession(sessionId, modelId, projectId),
   isStreaming: false,
   inputValue: "",
 });
@@ -33,6 +38,14 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
         session: {
           ...state.session,
           lastModelId: action.modelId,
+        },
+      };
+    case "set-active-project":
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          activeProjectId: action.projectId,
         },
       };
     case "append-turn":
@@ -94,7 +107,8 @@ export const createPendingTurn = (
   turnId: string,
   userMessage: string,
   modelId: string,
-  attachments: ChatAttachment[]
+  attachments: ChatAttachment[],
+  projectId: string | null
 ): ChatTurn => ({
   id: turnId,
   userMessage,
@@ -103,5 +117,6 @@ export const createPendingTurn = (
     ...createEmptyAnswer(turnId, modelId),
     status: "streaming",
   },
+  projectId: projectId ?? undefined,
   attachments,
 });

@@ -44,7 +44,7 @@ export default function TermsPage() {
           </Link>
           <Link
             href="/signin"
-            className="text-sm font-medium text-indigo-200 underline decoration-indigo-300/60 underline-offset-4 hover:text-indigo-100"
+            className="rounded-full bg-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
           >
             Back to sign in
           </Link>

@@ -7,6 +7,7 @@ const createTurnSchema = z.object({
   sessionId: z.string().min(1, "sessionId is required"),
   message: z.string().min(1, "message is required"),
   model: z.string().min(1, "model is required"),
+  projectId: z.string().min(1).optional(),
   attachments: z
     .array(
       z.object({
@@ -31,6 +32,7 @@ export async function POST(request: Request) {
       sessionId: payload.sessionId,
       message: payload.message,
       model: payload.model,
+      projectId: payload.projectId,
       attachments: payload.attachments,
       createdAt: Date.now(),
     });

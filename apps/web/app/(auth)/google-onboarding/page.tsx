@@ -34,6 +34,10 @@ export default async function GoogleOnboardingPage({ searchParams }: PageProps) 
     redirect(next);
   }
 
+  if (!session.requiresPlan) {
+    redirect(next);
+  }
+
   if (session.user.plan !== "free") {
     redirect(next);
   }

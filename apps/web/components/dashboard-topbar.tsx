@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-
+import { signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 
 type DashboardTopbarProps = {
@@ -32,7 +32,15 @@ export const DashboardTopbar = ({ plan, userName }: DashboardTopbarProps) => {
           <Button className="rounded-full bg-sky-500 px-5 text-sm font-semibold text-white hover:bg-sky-400">
             Create Content
           </Button>
-          <Button variant="secondary" className="text-sm" onClick={() => (window.location.href = "/api/auth/signout")}>
+          <Button
+            variant="secondary"
+            className="text-sm"
+            onClick={() =>
+              void signOut({
+                callbackUrl: "/",
+              })
+            }
+          >
             Log out
           </Button>
         </div>

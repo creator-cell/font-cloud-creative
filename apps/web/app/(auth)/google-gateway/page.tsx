@@ -29,9 +29,7 @@ export default async function GoogleGatewayPage({ searchParams }: PageProps) {
     redirect(`/signin?callbackUrl=${encodeURIComponent(next)}`);
   }
 
-  const needsPlan =
-    (session.user.provider === "google" || session.user.provider === undefined) &&
-    (session.user.plan ?? "free") === "free";
+  const needsPlan = session.requiresPlan && session.user.provider === "google";
 
   if (needsPlan) {
     redirect(`/google-onboarding?next=${encodeURIComponent(next)}`);

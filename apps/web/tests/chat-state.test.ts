@@ -4,10 +4,12 @@ import { PROVIDER_MODELS } from "../src/lib/chat/types";
 
 const defaultModel = PROVIDER_MODELS[0]?.id ?? "openai:gpt-4.1-mini";
 
+const defaultProject = "project-1";
+
 describe("chatReducer", () => {
   it("appends a turn and streams content deltas", () => {
-    const initial = createInitialState("session-test", defaultModel);
-    const turn = createPendingTurn("turn-1", "Hello there", defaultModel, []);
+    const initial = createInitialState("session-test", defaultModel, defaultProject);
+    const turn = createPendingTurn("turn-1", "Hello there", defaultModel, [], defaultProject);
 
     const withTurn = chatReducer(initial, { type: "append-turn", turn });
     expect(withTurn.session.turns).toHaveLength(1);
@@ -29,8 +31,8 @@ describe("chatReducer", () => {
   });
 
   it("updates answer metadata on completion", () => {
-    const initial = createInitialState("session-test", defaultModel);
-    const turn = createPendingTurn("turn-2", "Summarize this", defaultModel, []);
+    const initial = createInitialState("session-test", defaultModel, defaultProject);
+    const turn = createPendingTurn("turn-2", "Summarize this", defaultModel, [], defaultProject);
     const withTurn = chatReducer(initial, { type: "append-turn", turn });
 
     const completed = chatReducer(withTurn, {
@@ -54,7 +56,7 @@ describe("chatReducer", () => {
   });
 
   it("updates session meta information and input value", () => {
-    const initial = createInitialState("session-test", defaultModel);
+    const initial = createInitialState("session-test", defaultModel, defaultProject);
 
     const withModel = chatReducer(initial, {
       type: "update-last-model",
@@ -68,5 +70,8 @@ describe("chatReducer", () => {
 
     const idle = chatReducer(withInput, { type: "set-streaming", value: true });
     expect(idle.isStreaming).toBe(true);
+
+    const withProjectChange = chatReducer(idle, { type: "set-active-project", projectId: "project-2" });
+    expect(withProjectChange.session.activeProjectId).toBe("project-2");
   });
 });

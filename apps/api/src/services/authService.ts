@@ -42,6 +42,11 @@ export const issueUserToken = async ({
     ? await UserModel.findById(userId)
     : await UserModel.findOne({ email });
 
+  const resolvedPlan: PlanTier =
+    existing && existing.plan && plan === "free" && existing.plan !== "free"
+      ? (existing.plan as PlanTier)
+      : plan;
+
   let user = existing;
   let created = false;
   if (user) {
@@ -49,7 +54,7 @@ export const issueUserToken = async ({
       user._id,
       {
         email,
-        plan,
+        plan: resolvedPlan,
         preferredProvider,
         preferredModel,
         ...(passwordHash ? { passwordHash } : {})
@@ -61,7 +66,7 @@ export const issueUserToken = async ({
     user = await UserModel.create({
       _id: Types.ObjectId.isValid(userId) ? new Types.ObjectId(userId) : undefined,
       email,
-      plan,
+      plan: resolvedPlan,
       preferredProvider,
       preferredModel,
       roles,
@@ -82,7 +87,7 @@ export const issueUserToken = async ({
   const claims: AuthClaims = {
     sub: user!._id.toHexString(),
     email: user!.email,
-    plan: user!.plan,
+    plan: resolvedPlan,
     preferredProvider: user!.preferredProvider,
     preferredModel: user!.preferredModel,
     roles: user!.roles ?? ["user"]

@@ -1,18 +1,20 @@
 import { ReactNode } from "react";
 import { requireServerRole } from "@/lib/roles";
 import { AdminSideNav } from "@/components/admin/admin-side-nav";
+import { AdminTopbar } from "@/components/admin/admin-topbar";
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const session = await requireServerRole(["owner", "admin", "analyst", "support", "billing"]);
 
   return (
-    <div className="grid min-h-screen grid-cols-1 gap-6 px-6 py-6 lg:grid-cols-[220px_1fr] lg:gap-8 lg:px-10">
-      <aside className="lg:border-r lg:border-slate-200/70 lg:pr-8 lg:dark:border-slate-800/80">
-        <div className="space-y-4 pr-6 pt-2 lg:pr-0 lg:pt-6">
-          <AdminSideNav />
-        </div>
+    <div className="flex min-h-screen flex-col bg-slate-50 lg:flex-row">
+      <aside className="flex flex-none border-b border-slate-200 bg-white lg:h-screen lg:w-60 lg:border-b-0 lg:border-r">
+        <div className="flex w-full flex-col"><AdminSideNav /></div>
       </aside>
-      <div className="space-y-6">{children}</div>
+      <div className="flex flex-1 flex-col overflow-hidden lg:h-screen">
+        <AdminTopbar userName={session.user?.name ?? undefined} />
+        <main className="flex-1 overflow-y-auto px-6 py-8 lg:px-10">{children}</main>
+      </div>
     </div>
   );
 }

@@ -10,10 +10,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
     redirect("/api/auth/signin");
   }
 
-  if (
-    (session.user.provider === "google" || session.user.provider === undefined) &&
-    (session.user.plan ?? "free") === "free"
-  ) {
+  if (session.requiresPlan && session.user.provider === "google") {
     redirect("/google-onboarding?next=/dashboard");
   }
 

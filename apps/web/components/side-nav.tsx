@@ -9,9 +9,11 @@ import {
   LayoutDashboard,
   FolderKanban,
   Sparkles,
-  MessageSquare,
+  MicVocal,
+  Bot,
   CreditCard,
   Settings,
+  ChevronDown,
   type LucideIcon,
 } from "lucide-react";
 
@@ -20,17 +22,25 @@ type NavLink = {
   label: string;
   Icon: LucideIcon;
   allowedRoles?: string[];
+  children?: NavLink[];
 };
 
 const navLinks: NavLink[] = [
   { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
   { href: "/projects", label: "Projects", Icon: FolderKanban },
-  { href: "/brand-voice", label: "Brand Voice", Icon: MessageSquare },
   {
-    href: "/chat/single",
-    label: "AI Chat",
-    Icon: MessageSquare,
-    allowedRoles: ["owner", "admin", "developer"],
+    href: "#front-cloud-ai",
+    label: "Front Cloud AI",
+    Icon: Sparkles,
+    children: [
+      { href: "/brand-voice", label: "Brand Voice", Icon: MicVocal },
+      {
+        href: "/chat/single",
+        label: "AI Analysis",
+        Icon: Bot,
+        allowedRoles: ["owner", "admin", "developer"],
+      },
+    ],
   },
   { href: "/generate", label: "Generate", Icon: Sparkles },
   { href: "/billing", label: "Billing", Icon: CreditCard },
@@ -61,7 +71,61 @@ export const SideNav = () => {
           </div>
         </div>
         <nav className="flex flex-col gap-1 px-3">
-          {visibleLinks.map(({ href, label, Icon }) => {
+          {visibleLinks.map(({ href, label, Icon, children }) => {
+            if (children && children.length > 0) {
+              const visibleChildren = children.filter(({ allowedRoles: childRoles }) => {
+                if (!childRoles?.length) return true;
+                if (!roles.length) return false;
+                return childRoles.some((role) => roles.includes(role));
+              });
+
+              if (visibleChildren.length === 0) return null;
+
+              const isGroupActive = visibleChildren.some((child) => pathname === child.href);
+
+              return (
+                <div key={label} className="flex flex-col">
+                  <div
+                    className={clsx(
+                      "flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-600",
+                      isGroupActive && "bg-sky-50 text-sky-600"
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Icon className="h-4 w-4 text-slate-400" />
+                      {label}
+                    </div>
+                    <ChevronDown className="h-4 w-4 text-slate-400" />
+                  </div>
+                  <div className="ml-9 mt-1 flex flex-col gap-1">
+                    {visibleChildren.map(({ href: childHref, label: childLabel, Icon: ChildIcon }) => {
+                      const isActive = pathname === childHref;
+                      return (
+                        <Link
+                          key={childHref}
+                          href={childHref}
+                          className={clsx(
+                            "group flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition",
+                            isActive
+                              ? "bg-sky-50 text-sky-600 ring-1 ring-inset ring-sky-100"
+                              : "text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+                          )}
+                        >
+                          <ChildIcon
+                            className={clsx(
+                              "h-4 w-4 transition-colors",
+                              isActive ? "text-sky-500" : "text-slate-400 group-hover:text-slate-600"
+                            )}
+                          />
+                          {childLabel}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            }
+
             const isActive = pathname === href;
             return (
               <Link

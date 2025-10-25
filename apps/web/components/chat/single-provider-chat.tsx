@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
+import type { ProjectSummary } from "@/lib/api/endpoints";
 import {
   PROVIDER_MODELS,
   getProviderFromModel,
@@ -34,6 +35,7 @@ import { cn } from "@/lib/utils";
 
 const STREAM_TIMEOUT_MS = 45_000;
 const STORAGE_KEY = "frontcloud.single-chat.model";
+const PROJECT_STORAGE_KEY = "frontcloud.single-chat.project";
 const MAX_INLINE_FILE_BYTES = 2 * 1024 * 1024; // 2 MB
 
 type StreamControllers = {
@@ -46,11 +48,21 @@ type PendingAttachment = {
   file: File;
 };
 
-export const SingleProviderChat = () => {
+export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] }) => {
   const initialModel = useMemo(() => {
     if (typeof window === "undefined") return PROVIDER_MODELS[0]?.id ?? "openai:gpt-4.1-mini";
     return window.localStorage.getItem(STORAGE_KEY) ?? PROVIDER_MODELS[0]?.id ?? "openai:gpt-4.1-mini";
   }, []);
+
+  const initialProjectId = useMemo(() => {
+    if (typeof window !== "undefined") {
+      const stored = window.localStorage.getItem(PROJECT_STORAGE_KEY);
+      if (stored && projects.some((project) => project._id === stored)) {
+        return stored;
+      }
+    }
+    return projects[0]?._id ?? null;
+  }, [projects]);
 
   const sessionId = useMemo(() => {
     if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -59,20 +71,52 @@ export const SingleProviderChat = () => {
     return `session-${Date.now()}`;
   }, []);
 
-  const [state, dispatch] = useReducer(chatReducer, createInitialState(sessionId, initialModel));
+  const [state, dispatch] = useReducer(
+    chatReducer,
+    createInitialState(sessionId, initialModel, initialProjectId)
+  );
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [pendingAttachments, setPendingAttachments] = useState<PendingAttachment[]>([]);
   const [isPreparingAttachments, setIsPreparingAttachments] = useState(false);
   const [isDragActive, setIsDragActive] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(initialProjectId);
   const controllersRef = useRef<StreamControllers>({ source: null, timeout: null });
   const activeTurnRef = useRef<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const dragCounter = useRef(0);
+  const chatScrollRef = useRef<HTMLDivElement | null>(null);
+
+  const projectMap = useMemo(() => {
+    const map = new Map<string, ProjectSummary>();
+    projects.forEach((project) => map.set(project._id, project));
+    return map;
+  }, [projects]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     window.localStorage.setItem(STORAGE_KEY, state.session.lastModelId);
   }, [state.session.lastModelId]);
+
+  useEffect(() => {
+    if (selectedProjectId && !projectMap.has(selectedProjectId)) {
+      const fallback = projects[0]?._id ?? null;
+      setSelectedProjectId(fallback);
+      return;
+    }
+    if (!selectedProjectId && projects.length > 0) {
+      setSelectedProjectId(projects[0]._id);
+    }
+  }, [projectMap, projects, selectedProjectId]);
+
+  useEffect(() => {
+    dispatch({ type: "set-active-project", projectId: selectedProjectId ?? null });
+    if (typeof window === "undefined") return;
+    if (selectedProjectId) {
+      window.localStorage.setItem(PROJECT_STORAGE_KEY, selectedProjectId);
+    } else {
+      window.localStorage.removeItem(PROJECT_STORAGE_KEY);
+    }
+  }, [selectedProjectId]);
 
   useEffect(() => {
     return () => {
@@ -87,6 +131,11 @@ export const SingleProviderChat = () => {
 
   const handleModelChange = (value: string) => {
     dispatch({ type: "update-last-model", modelId: value });
+  };
+
+  const handleProjectChange = (value: string) => {
+    setSelectedProjectId(value);
+    setStatusMessage(null);
   };
 
   const setInputValue = (value: string) => {
@@ -220,10 +269,20 @@ export const SingleProviderChat = () => {
   );
 
   const sendMessage = useCallback(
-    async (options?: { message?: string; modelId?: string; attachments?: ChatAttachment[] }) => {
+    async (options?: {
+      message?: string;
+      modelId?: string;
+      attachments?: ChatAttachment[];
+      projectId?: string | null;
+    }) => {
       const rawMessage = options?.message ?? state.inputValue;
       const trimmed = rawMessage.trim();
       if (!trimmed) return;
+      const projectId = options?.projectId ?? selectedProjectId;
+      if (!projectId) {
+        setStatusMessage("Select a project to tag this analysis.");
+        return;
+      }
 
       setStatusMessage(null);
       dispatch({ type: "set-streaming", value: true });
@@ -240,6 +299,7 @@ export const SingleProviderChat = () => {
         sessionId: state.session.id,
         message: trimmed,
         model: modelId,
+        projectId,
         attachments: attachments.map(({ id, name, size, type, dataUrl }) => ({
           id,
           name,
@@ -251,7 +311,7 @@ export const SingleProviderChat = () => {
 
       try {
         const { turnId, streamUrl } = await createChatTurn(payload);
-        const pendingTurn = createPendingTurn(turnId, trimmed, modelId, attachments);
+        const pendingTurn = createPendingTurn(turnId, trimmed, modelId, attachments, projectId);
         beginStreaming(pendingTurn, streamUrl ?? `/api/chat/stream?turnId=${turnId}`);
         if (!options?.message) {
           setInputValue("");
@@ -271,12 +331,18 @@ export const SingleProviderChat = () => {
       state.inputValue,
       state.session.id,
       state.session.lastModelId,
+      selectedProjectId,
     ]
   );
 
   const retryTurn = (turn: ChatTurn) => {
     if (state.isStreaming) return;
-    void sendMessage({ message: turn.userMessage, modelId: turn.answer.model, attachments: turn.attachments });
+    void sendMessage({
+      message: turn.userMessage,
+      modelId: turn.answer.model,
+      attachments: turn.attachments,
+      projectId: turn.projectId ?? null,
+    });
   };
 
   const handleCopy = async (content: string) => {
@@ -306,7 +372,8 @@ export const SingleProviderChat = () => {
     setPendingAttachments((previous) => previous.filter((item) => item.id !== id));
   };
 
-  const showSendDisabled = state.isStreaming || !state.inputValue.trim() || isPreparingAttachments;
+  const showSendDisabled =
+    state.isStreaming || !state.inputValue.trim() || isPreparingAttachments || !selectedProjectId;
 
   const handleDragEnter = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -338,10 +405,27 @@ export const SingleProviderChat = () => {
     handleFilesAdded(files);
   };
 
+  const scrollChatToBottom = useCallback(
+    (behavior: ScrollBehavior = "smooth") => {
+      const container = chatScrollRef.current;
+      if (!container) return;
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior,
+      });
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (state.session.turns.length === 0) return;
+    scrollChatToBottom(state.isStreaming ? "auto" : "smooth");
+  }, [state.session.turns, state.isStreaming, scrollChatToBottom]);
+
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex h-full min-h-0 flex-col gap-6">
       <header className="flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold text-slate-900">AI Analytics Chat</h1>
+        <h1 className="text-2xl font-semibold text-slate-900">AI Analytics</h1>
         <p className="text-sm text-slate-500">
           Upload datasets, briefs, or research files and ask the model to analyze them with your commands.
         </p>
@@ -349,7 +433,7 @@ export const SingleProviderChat = () => {
 
       <section
         className={cn(
-          "relative flex flex-1 flex-col gap-4 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur transition",
+          "relative mb-12 flex min-h-0 flex-1 flex-col gap-4 rounded-2xl border border-slate-200 bg-white/80 px-4 pt-4 pb-8 shadow-sm backdrop-blur transition",
           isDragActive && "border-sky-300 ring-2 ring-inset ring-sky-300/60"
         )}
         onDragEnter={handleDragEnter}
@@ -364,8 +448,8 @@ export const SingleProviderChat = () => {
             <p className="text-xs text-sky-500">They’ll be added to this analysis request.</p>
           </div>
         )}
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-          <div className="flex w-full flex-col gap-2 lg:max-w-xs">
+        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,18rem)_minmax(0,18rem)_auto] lg:items-start lg:gap-6">
+          <div className="flex w-full flex-col gap-2 lg:max-w-sm">
             <label htmlFor="model" className="text-sm font-medium text-slate-700">
               Model
             </label>
@@ -383,7 +467,37 @@ export const SingleProviderChat = () => {
             </Select>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex w-full flex-col gap-2 lg:max-w-sm">
+            <label htmlFor="project" className="text-sm font-medium text-slate-700">
+              Project
+            </label>
+            <Select
+              value={selectedProjectId ?? ""}
+              onValueChange={handleProjectChange}
+              disabled={projects.length === 0}
+            >
+              <SelectTrigger id="project" aria-label="Select project">
+                <SelectValue
+                  placeholder={projects.length === 0 ? "No projects available" : "Choose a project"}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {projects.map((project) => (
+                  <SelectItem key={project._id} value={project._id}>
+                    {project.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-slate-500">
+              {projects.length === 0
+                ? "Create a project first from the Projects section."
+                : "Every conversation will be tagged to this project."}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-medium text-slate-700">Attachments</span>
             <input
               ref={fileInputRef}
               type="file"
@@ -392,21 +506,23 @@ export const SingleProviderChat = () => {
               onChange={onFileInputChange}
               aria-label="Upload reference files"
             />
-            <Button
-              type="button"
-              variant="secondary"
-              className="gap-2"
-              onClick={() => fileInputRef.current?.click()}
-              aria-label="Upload files for analysis"
-            >
-              <Paperclip className="h-4 w-4" aria-hidden="true" />
-              Attach files
-            </Button>
-            {pendingAttachments.length > 0 && (
-              <span className="text-xs font-medium text-slate-500">
-                {pendingAttachments.length} file{pendingAttachments.length > 1 ? "s" : ""} ready
-              </span>
-            )}
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+              <Button
+                type="button"
+                variant="secondary"
+                className="gap-2"
+                onClick={() => fileInputRef.current?.click()}
+                aria-label="Upload files for analysis"
+              >
+                <Paperclip className="h-4 w-4" aria-hidden="true" />
+                Attach files
+              </Button>
+              {pendingAttachments.length > 0 && (
+                <span className="text-xs font-medium text-slate-500">
+                  {pendingAttachments.length} file{pendingAttachments.length > 1 ? "s" : ""} ready
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -441,22 +557,46 @@ export const SingleProviderChat = () => {
           </div>
         )}
 
-        <div className="flex min-h-[380px] flex-1 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="flex-1 space-y-6 overflow-y-auto p-6 pr-4">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl ring-1 ring-slate-200 bg-white shadow-sm">
+          <div ref={chatScrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-3 pr-4">
+            <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-600 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Pro tips</p>
+              <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+                <div className="flex-1 rounded-xl bg-white/70 p-4">
+                  <p className="text-sm font-semibold text-slate-700">Reference your files</p>
+                  <p className="mt-1 text-xs text-slate-500">Mention uploads by filename so we can locate the right data.</p>
+                </div>
+                <div className="flex-1 rounded-xl bg-white/70 p-4">
+                  <p className="text-sm font-semibold text-slate-700">Ask for structure</p>
+                  <p className="mt-1 text-xs text-slate-500">Request summaries, action items, or comparisons to guide the response.</p>
+                </div>
+                <div className="flex-1 rounded-xl bg-white/70 p-4">
+                  <p className="text-sm font-semibold text-slate-700">Iterate quickly</p>
+                  <p className="mt-1 text-xs text-slate-500">Follow up with clarifying questions rather than starting fresh.</p>
+                </div>
+              </div>
+            </div>
+
             {state.session.turns.length === 0 ? (
-              <EmptyState />
-            ) : (
-              state.session.turns.map((turn) => (
-                <ChatTurnView
-                  key={turn.id}
-                  turn={turn}
-                  onRetry={() => retryTurn(turn)}
-                  onCopy={() => handleCopy(turn.answer.content)}
-                />
-              ))
-            )}
+              <EmptyState onUploadClick={() => fileInputRef.current?.click()} />
+            ) : null}
+
+            {state.session.turns.length > 0
+              ? state.session.turns.map((turn) => {
+                  const projectLabel = turn.projectId ? projectMap.get(turn.projectId)?.name : undefined;
+                  return (
+                    <ChatTurnView
+                      key={turn.id}
+                      turn={turn}
+                      projectLabel={projectLabel}
+                      onRetry={() => retryTurn(turn)}
+                      onCopy={() => handleCopy(turn.answer.content)}
+                    />
+                  );
+                })
+              : null}
           </div>
-          <div className="border-t border-slate-200 bg-slate-50/80 p-4">
+          <div className="border-t border-slate-200 bg-slate-50/90 px-4 pb-6 pt-5">
             <Textarea
               rows={3}
               value={state.inputValue}
@@ -465,16 +605,23 @@ export const SingleProviderChat = () => {
               placeholder="Describe the analysis you want. Reference any uploaded files by name."
               aria-label="Chat message"
             />
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-              <p className="text-xs text-slate-500">
-                Enter to send • Shift + Enter for newline {isPreparingAttachments ? "• Preparing files…" : ""}
-              </p>
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-2 rounded-full bg-slate-200/80 px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-sm">
+                <span>Enter to send</span>
+                <span className="text-slate-400">•</span>
+                <span>Shift + Enter for newline</span>
+                {isPreparingAttachments && (
+                  <span className="inline-flex items-center gap-1 text-slate-500">
+                    <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" /> Preparing files…
+                  </span>
+                )}
+              </div>
               <Button
                 type="button"
                 onClick={() => void sendMessage()}
                 disabled={showSendDisabled}
                 aria-label="Send message"
-                className="rounded-full bg-sky-500 px-5 text-sm font-semibold text-white hover:bg-sky-400 disabled:bg-sky-300 disabled:text-white/80"
+                className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:opacity-95 focus-visible:ring-2 focus-visible:ring-indigo-300 disabled:cursor-not-allowed disabled:from-slate-300 disabled:to-slate-400 disabled:text-white/80"
               >
                 {state.isStreaming ? (
                   <span className="inline-flex items-center gap-2">
@@ -482,7 +629,10 @@ export const SingleProviderChat = () => {
                     <span>Working...</span>
                   </span>
                 ) : (
-                  "Send"
+                  <>
+                    <span>Send</span>
+                    <span className="rounded-full bg-white/20 px-2 py-0.5 text-[11px] uppercase tracking-wide">⌘⤳</span>
+                  </>
                 )}
               </Button>
             </div>
@@ -498,25 +648,31 @@ export const SingleProviderChat = () => {
   );
 };
 
-const EmptyState = () => (
-  <div className="flex h-full flex-col items-center justify-center gap-3 text-center text-slate-500">
-    <UploadCloud className="h-10 w-10 text-slate-300" aria-hidden="true" />
-    <div>
-      <p className="font-medium text-slate-600">Start by adding files or a prompt</p>
-      <p className="text-sm">
-        Upload spreadsheets, PDFs, or briefs so the model can run analytics tailored to your request.
-      </p>
-    </div>
-  </div>
+const EmptyState = ({ onUploadClick }: { onUploadClick: () => void }) => (
+  <button
+    type="button"
+    onClick={onUploadClick}
+    className="mb-2 flex w-full flex-col items-center justify-center gap-3 self-stretch rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-4 py-6 text-center text-sm text-slate-600 shadow-sm transition hover:border-slate-300 hover:bg-slate-100"
+  >
+    <UploadCloud className="h-8 w-8 text-slate-400" aria-hidden="true" />
+    <p className="font-semibold text-slate-700">Upload a file or ask for an insight to get started.</p>
+    <p className="text-xs text-slate-500">
+      Attach briefs, datasets, or presentations and then describe what you want analyzed.
+    </p>
+    <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-slate-200/70 px-3 py-1 text-[11px] font-medium text-slate-600">
+      <Paperclip className="h-3 w-3" aria-hidden="true" /> Click to upload
+    </span>
+  </button>
 );
 
 type ChatTurnViewProps = {
   turn: ChatTurn;
+  projectLabel?: string;
   onCopy: () => void;
   onRetry: () => void;
 };
 
-const ChatTurnView = ({ turn, onCopy, onRetry }: ChatTurnViewProps) => {
+const ChatTurnView = ({ turn, projectLabel, onCopy, onRetry }: ChatTurnViewProps) => {
   const isError = turn.answer.status === "error" || turn.answer.status === "timeout";
   const isStreaming = turn.answer.status === "streaming";
   return (
@@ -524,6 +680,11 @@ const ChatTurnView = ({ turn, onCopy, onRetry }: ChatTurnViewProps) => {
       <div className="flex justify-end">
         <div className="max-w-[70%] rounded-2xl bg-sky-500 px-4 py-3 text-sm text-white shadow-sm">
           <p className="whitespace-pre-wrap break-words">{turn.userMessage}</p>
+          {projectLabel && (
+            <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-white">
+              Project: {projectLabel}
+            </span>
+          )}
           {turn.attachments.length > 0 && (
             <AttachmentList attachments={turn.attachments} alignment="right" />
           )}
@@ -531,6 +692,11 @@ const ChatTurnView = ({ turn, onCopy, onRetry }: ChatTurnViewProps) => {
       </div>
       <Card className="rounded-2xl border-slate-200/80 bg-white p-5 shadow-md dark:border-slate-800/60">
         <div className="space-y-4">
+          {projectLabel && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+              Project: {projectLabel}
+            </span>
+          )}
           <MarkdownPreview markdown={turn.answer.content} isStreaming={isStreaming} />
           {turn.attachments.length > 0 && (
             <AttachmentList attachments={turn.attachments} alignment="left" heading="Referenced files" compact />
