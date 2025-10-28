@@ -9,7 +9,7 @@ import { AdminErrorState } from "@/components/admin/admin-error";
 const formatNumber = (value: number) => new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(value);
 
 export default async function AdminOverviewPage() {
-  const session = await requireServerRole(["owner", "admin", "analyst", "support", "billing"]);
+  const session = await requireServerRole(["owner", "admin", "analyst", "support", "billing", "user"]);
   if (!session.apiToken) {
     return <AdminErrorState message="Your session is missing the admin token. Please sign in again." />;
   }

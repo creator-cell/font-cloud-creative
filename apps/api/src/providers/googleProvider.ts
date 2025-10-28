@@ -1,5 +1,11 @@
 import { env } from "../config/env";
-import { GenerationPayload, LLMProvider } from "./types";
+import {
+  ChatStreamHandlers,
+  ChatStreamParams,
+  ChatStreamResult,
+  GenerationPayload,
+  LLMProvider
+} from "./types";
 
 export class GoogleProvider implements LLMProvider {
   public readonly id = "google" as const;
@@ -12,5 +18,9 @@ export class GoogleProvider implements LLMProvider {
 
   async generate(): Promise<string> {
     throw new Error("Google provider not implemented in this MVP");
+  }
+
+  async streamChat(): Promise<ChatStreamResult> {
+    throw new Error("Google chat streaming not implemented");
   }
 }

@@ -3,7 +3,7 @@ import { SingleProviderChat } from "@/components/chat/single-provider-chat";
 import type { ProjectSummary } from "@/lib/api/endpoints";
 import { listProjects } from "@/src/lib/projects/mock-store";
 
-const ALLOWED_ROLES = ["owner", "admin", "developer"];
+const ALLOWED_ROLES = ["owner", "admin", "developer", "user", "analyst", "support", "billing"];
 
 export default async function SingleChatPage() {
   const session = await requireServerRole(ALLOWED_ROLES);

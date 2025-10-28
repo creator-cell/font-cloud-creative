@@ -1,9 +1,9 @@
 import type { Response } from "express";
-import type { AuthenticatedRequest } from "../types/express";
-import { AnnouncementModel } from "../models";
-import { announcementSchema } from "../schemas/adminSchemas";
-import { asyncHandler } from "../utils/asyncHandler";
-import { auditService } from "../services/auditService";
+import type { AuthenticatedRequest } from "../../types/express";
+import { AnnouncementModel } from "../../models";
+import { announcementSchema } from "../../schemas/adminSchemas";
+import { asyncHandler } from "../../utils/asyncHandler";
+import { auditService } from "../../services/auditService";
 
 export const createAnnouncement = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   const payload = announcementSchema.parse(req.body);

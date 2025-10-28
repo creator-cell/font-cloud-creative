@@ -8,9 +8,33 @@ export type GenerationPayload = {
   json: boolean;
 };
 
+export interface ChatStreamHandlers {
+  onDelta: (text: string) => void;
+}
+
+export type ChatStreamParams = {
+  system?: string;
+  message: string;
+  maxOutputTokens: number;
+  signal?: AbortSignal;
+  json?: boolean;
+};
+
+export type ChatStreamResult = {
+  tokensIn: number;
+  tokensOut: number;
+  latencyMs?: number;
+  finishReason?: string;
+};
+
 export interface LLMProvider {
   id: ProviderId;
   generate(model: string, payload: GenerationPayload): Promise<string>;
+  streamChat?(
+    model: string,
+    params: ChatStreamParams,
+    handlers: ChatStreamHandlers
+  ): Promise<ChatStreamResult>;
 }
 
 export interface ProviderModel {

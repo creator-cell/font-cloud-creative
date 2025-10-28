@@ -1,7 +1,16 @@
 "use client";
 
 import { useEffect, useMemo, useState, MouseEvent } from "react";
-import { ArrowDown, ArrowUp, ArrowUpDown, Search, X } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Loader2,
+  Pencil,
+  Search,
+  Trash2,
+  X,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -444,23 +453,30 @@ export const ProjectBoard = ({
                             </div>
                           ) : (
                             <div className="flex items-center justify-end gap-2">
-                              <Button
+                              <button
                                 type="button"
-                                variant="ghost"
                                 onClick={() => beginEdit(project)}
-                                className="h-8 rounded-full px-3 text-xs font-medium"
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-full transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
+                                aria-label={`Edit ${project.name}`}
                               >
-                                Edit
-                              </Button>
-                              <Button
+                                <Pencil className="h-4 w-4" aria-hidden="true" />
+                              </button>
+                              <button
                                 type="button"
-                                variant="ghost"
                                 onClick={() => void handleDelete(project._id)}
                                 disabled={deletingProjectId === project._id}
-                                className="h-8 rounded-full px-3 text-xs font-medium text-rose-500 hover:text-rose-600"
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-full text-rose-500 transition hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300 focus-visible:ring-offset-2 disabled:opacity-60 dark:text-rose-300 dark:hover:bg-rose-950/40 dark:hover:text-rose-200"
+                                aria-label={`Delete ${project.name}`}
                               >
-                                {deletingProjectId === project._id ? "Deleting..." : "Delete"}
-                              </Button>
+                                {deletingProjectId === project._id ? (
+                                  <Loader2
+                                    className="h-4 w-4 animate-spin"
+                                    aria-hidden="true"
+                                  />
+                                ) : (
+                                  <Trash2 className="h-4 w-4" aria-hidden="true" />
+                                )}
+                              </button>
                             </div>
                           )}
                         </td>

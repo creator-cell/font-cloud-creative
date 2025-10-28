@@ -1,6 +1,9 @@
 import { env } from "../config/env";
 import { comparePlans, type PlanTier } from "../constants/plans";
 import {
+  ChatStreamHandlers,
+  ChatStreamParams,
+  ChatStreamResult,
   GenerationPayload,
   LLMProvider,
   ProviderId,
@@ -147,4 +150,17 @@ export const callProvider = async (
 ): Promise<string> => {
   const instance = resolveProvider(provider);
   return instance.generate(model, payload);
+};
+
+export const streamProviderChat = async (
+  provider: ProviderId,
+  model: string,
+  params: ChatStreamParams,
+  handlers: ChatStreamHandlers
+): Promise<ChatStreamResult> => {
+  const instance = resolveProvider(provider);
+  if (!instance.streamChat) {
+    throw new Error(`Provider ${provider} does not support chat streaming`);
+  }
+  return instance.streamChat(model, params, handlers);
 };

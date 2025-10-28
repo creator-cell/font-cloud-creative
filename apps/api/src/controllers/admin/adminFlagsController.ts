@@ -1,9 +1,9 @@
 import type { Response } from "express";
-import type { AuthenticatedRequest } from "../types/express";
-import { FeatureFlagModel } from "../models";
-import { featureFlagUpsertSchema } from "../schemas/adminSchemas";
-import { asyncHandler } from "../utils/asyncHandler";
-import { auditService } from "../services/auditService";
+import type { AuthenticatedRequest } from "../../types/express";
+import { FeatureFlagModel } from "../../models";
+import { featureFlagUpsertSchema } from "../../schemas/adminSchemas";
+import { asyncHandler } from "../../utils/asyncHandler";
+import { auditService } from "../../services/auditService";
 
 export const upsertFeatureFlag = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   const payload = featureFlagUpsertSchema.parse(req.body);

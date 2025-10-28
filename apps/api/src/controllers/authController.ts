@@ -7,9 +7,42 @@ import {
 } from "../schemas/authSchemas";
 import { issueUserToken } from "../services/authService";
 import { asyncHandler } from "../utils/asyncHandler";
-import { UserModel } from "../models";
+import { UserModel, PurchaseModel } from "../models";
 import { hashPassword, verifyPassword } from "../utils/password";
 import type { AuthenticatedRequest } from "../types/express";
+import { allocateOnRegistration, type PlanSnapshot } from "../services/token/allocateOnRegistration";
+import { Types } from "mongoose";
+
+const PLAN_REGISTRY: Record<string, PlanSnapshot> = {
+  free: {
+    key: "free",
+    name: "Free",
+    billing: { currency: "INR" },
+    tokens: { included: 15000 }
+  },
+  starter: {
+    key: "starter",
+    name: "Starter",
+    billing: { currency: "INR" },
+    tokens: { included: 200000 }
+  },
+  pro: {
+    key: "pro",
+    name: "Pro",
+    billing: { currency: "INR" },
+    tokens: { included: 1200000 }
+  },
+  team: {
+    key: "team",
+    name: "Team",
+    billing: { currency: "INR" },
+    tokens: { included: 3000000 }
+  }
+};
+
+const resolvePlanSnapshot = (planKey: string): PlanSnapshot => {
+  return PLAN_REGISTRY[planKey] ?? PLAN_REGISTRY.starter;
+};
 
 export const createToken = asyncHandler(async (req: Request, res: Response) => {
   const payload = createTokenSchema.parse(req.body);
@@ -51,6 +84,12 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
     await UserModel.findByIdAndUpdate(claims.sub, { name: payload.name });
   }
 
+  const planSnapshot = resolvePlanSnapshot(payload.plan);
+  const userObjectId = new Types.ObjectId(claims.sub);
+
+  const allocation = await allocateOnRegistration(userObjectId, planSnapshot);
+  await PurchaseModel.create({ userId: userObjectId, planSnapshot });
+
   res.status(201).json({
     payment,
     token,
@@ -61,6 +100,10 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
       plan: claims.plan,
       roles: claims.roles,
       name: payload.name ?? null
+    },
+    wallet: {
+      credited: allocation.credited,
+      balance: allocation.balance
     }
   });
 });

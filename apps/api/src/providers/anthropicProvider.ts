@@ -1,5 +1,11 @@
 import { env } from "../config/env";
-import { GenerationPayload, LLMProvider } from "./types";
+import {
+  ChatStreamHandlers,
+  ChatStreamParams,
+  ChatStreamResult,
+  GenerationPayload,
+  LLMProvider
+} from "./types";
 
 export class AnthropicProvider implements LLMProvider {
   public readonly id = "anthropic" as const;
@@ -12,5 +18,9 @@ export class AnthropicProvider implements LLMProvider {
 
   async generate(): Promise<string> {
     throw new Error("Anthropic provider not implemented in this MVP");
+  }
+
+  async streamChat(): Promise<ChatStreamResult> {
+    throw new Error("Anthropic chat streaming not implemented");
   }
 }

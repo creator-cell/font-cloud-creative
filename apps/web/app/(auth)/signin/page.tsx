@@ -8,7 +8,7 @@ import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { planOptions } from "@/components/plan-selector";
 
-type Mode = "signin" | "register";
+type Mode = "signin" | "register" | "forgot";
 type RegisterStep = 1 | 2;
 const freePlanOption = [
   {
@@ -25,7 +25,7 @@ type RegisterPlanId = RegisterPlan["id"];
 const registerPlanOptions: RegisterPlan[] = [...freePlanOption, ...planOptions];
 const DEFAULT_PLAN: RegisterPlanId = "free";
 
-const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
+const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4004";
 const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{10,}$/;
 
 export default function SignInPage() {
@@ -43,6 +43,10 @@ export default function SignInPage() {
   const [registerLoading, setRegisterLoading] = useState(false);
   const [registerError, setRegisterError] = useState<string | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<"idle" | "processing" | "success">("idle");
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotError, setForgotError] = useState<string | null>(null);
+  const [forgotSuccess, setForgotSuccess] = useState(false);
 
   const callbackUrl = searchParams?.get("callbackUrl") ?? "/dashboard";
   const hasInitializedIntent = useRef(false);
@@ -57,6 +61,18 @@ export default function SignInPage() {
     setRegisterPassword("");
     setRegisterError(null);
     setPaymentStatus("idle");
+    setForgotEmail("");
+    setForgotError(null);
+    setForgotSuccess(false);
+    setForgotLoading(false);
+  };
+
+  const openForgotPassword = () => {
+    setMode("forgot");
+    setError(null);
+    setForgotEmail("");
+    setForgotError(null);
+    setForgotSuccess(false);
   };
 
   useEffect(() => {
@@ -102,6 +118,11 @@ export default function SignInPage() {
     setSelectedPlan(DEFAULT_PLAN);
     setRegisterError(null);
     setPaymentStatus("idle");
+    setRegisterLoading(false);
+    setForgotEmail("");
+    setForgotError(null);
+    setForgotSuccess(false);
+    setForgotLoading(false);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -134,9 +155,31 @@ export default function SignInPage() {
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
-    const googleCallback = `/google-gateway?next=${encodeURIComponent(callbackUrl)}`;
-    await signIn("google", { callbackUrl: googleCallback });
+    await signIn("google", { callbackUrl: "/dashboard" });
     setLoading(false);
+  };
+
+  const handleForgotSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const normalized = forgotEmail.trim().toLowerCase();
+    if (!normalized) {
+      setForgotError("Enter a valid email to continue.");
+      return;
+    }
+
+    setForgotLoading(true);
+    setForgotError(null);
+    setForgotSuccess(false);
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      setForgotSuccess(true);
+    } catch (err) {
+      console.error("Forgot password flow failed", err);
+      setForgotError("We couldn't process the request. Please try again.");
+    } finally {
+      setForgotLoading(false);
+    }
   };
 
   const handlePlanSelect = (plan: RegisterPlanId) => {
@@ -228,7 +271,7 @@ export default function SignInPage() {
       </div>
       <div className="absolute -z-10 h-96 w-96 rounded-full bg-gradient-to-br from-indigo-500/40 via-purple-500/30 to-pink-500/25 blur-3xl" />
 
-      {mode === "signin" ? (
+      {mode === "signin" && (
         <form
           onSubmit={handleSubmit}
           className="relative w-full max-w-md space-y-6 rounded-2xl border border-white/10 bg-white/10 px-6 py-8 shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:px-8 sm:py-10"
@@ -274,6 +317,15 @@ export default function SignInPage() {
                 disabled={loading}
                 className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
               />
+            </div>
+            <div className="text-right">
+              <button
+                type="button"
+                onClick={openForgotPassword}
+                className="text-xs font-semibold text-indigo-300 transition hover:text-indigo-200"
+              >
+                Forgot password?
+              </button>
             </div>
           </div>
 
@@ -333,7 +385,9 @@ export default function SignInPage() {
             </p>
           </div>
         </form>
-      ) : (
+      )}
+
+      {mode === "register" && (
         <div className="relative w-full max-w-3xl space-y-8 rounded-2xl border border-white/10 bg-white/10 px-6 py-8 shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:px-10 sm:py-12">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="space-y-2">
@@ -537,6 +591,66 @@ export default function SignInPage() {
             </p>
           </div>
         </div>
+      )}
+
+      {mode === "forgot" && (
+        <form
+          onSubmit={handleForgotSubmit}
+          className="relative w-full max-w-md space-y-6 rounded-2xl border border-white/10 bg-white/10 px-6 py-8 shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:px-8 sm:py-10"
+        >
+          <div className="space-y-3 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-indigo-300">
+              Reset Password
+            </p>
+            <h1 className="text-2xl font-semibold text-slate-100">Forgot your password?</h1>
+            <p className="text-sm text-slate-400">
+              Enter your email and we will send a reset link to get you back in.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="forgot-email" className="block text-sm font-medium text-slate-300">
+              Work email
+            </label>
+            <input
+              id="forgot-email"
+              name="forgot-email"
+              type="email"
+              autoComplete="email"
+              required
+              value={forgotEmail}
+              onChange={(event) => setForgotEmail(event.target.value)}
+              disabled={forgotLoading || forgotSuccess}
+              className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
+              placeholder="you@company.com"
+            />
+          </div>
+
+          {forgotError && <p className="text-sm text-rose-400">{forgotError}</p>}
+          {forgotSuccess && (
+            <p className="text-sm text-emerald-300">
+              If an account exists for {forgotEmail.trim().toLowerCase()}, you'll receive a reset link
+              shortly.
+            </p>
+          )}
+
+          <Button
+            type="submit"
+            className="w-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:opacity-95 focus-visible:ring-2 focus-visible:ring-indigo-300"
+            disabled={forgotLoading}
+          >
+            {forgotLoading ? "Sending..." : forgotSuccess ? "Resend link" : "Send reset link"}
+          </Button>
+
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={backToSignIn}
+            className="mx-auto block rounded-full px-4 py-2 text-sm font-semibold text-indigo-300 transition hover:text-indigo-200"
+          >
+            Back to sign in
+          </Button>
+        </form>
       )}
     </div>
   );

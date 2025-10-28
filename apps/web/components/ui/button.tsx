@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { clsx } from "clsx";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "ghost" | "icon";
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ variant = "primary", className, ...props }, ref) => {
@@ -10,7 +10,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ variant = "p
   const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
     primary: "bg-brand text-black hover:bg-indigo-500 focus-visible:ring-indigo-300",
     secondary: "bg-gray-200 text-slate-900 hover:bg-gray-300 focus-visible:ring-gray-400 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700",
-    ghost: "bg-transparent text-slate-700 hover:bg-gray-200 hover:text-slate-900 focus-visible:ring-gray-300 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
+    ghost: "bg-transparent text-slate-700 hover:bg-gray-200 hover:text-slate-900 focus-visible:ring-gray-300 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white",
+    icon: "bg-transparent text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-slate-300"
   };
   return (
     <button ref={ref} className={clsx(base, variants[variant], className)} {...props} />

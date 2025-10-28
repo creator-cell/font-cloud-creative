@@ -80,6 +80,7 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
   const [isPreparingAttachments, setIsPreparingAttachments] = useState(false);
   const [isDragActive, setIsDragActive] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(initialProjectId);
+  const [showTips, setShowTips] = useState(false);
   const controllersRef = useRef<StreamControllers>({ source: null, timeout: null });
   const activeTurnRef = useRef<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -91,6 +92,8 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
     projects.forEach((project) => map.set(project._id, project));
     return map;
   }, [projects]);
+
+  const hasTurns = state.session.turns.length > 0;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -312,7 +315,7 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
       try {
         const { turnId, streamUrl } = await createChatTurn(payload);
         const pendingTurn = createPendingTurn(turnId, trimmed, modelId, attachments, projectId);
-        beginStreaming(pendingTurn, streamUrl ?? `/api/chat/stream?turnId=${turnId}`);
+        beginStreaming(pendingTurn, streamUrl);
         if (!options?.message) {
           setInputValue("");
         }
@@ -423,7 +426,7 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
   }, [state.session.turns, state.isStreaming, scrollChatToBottom]);
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-6">
+    <div className="flex w-full flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold text-slate-900">AI Analytics</h1>
         <p className="text-sm text-slate-500">
@@ -433,7 +436,7 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
 
       <section
         className={cn(
-          "relative mb-12 flex min-h-0 flex-1 flex-col gap-4 rounded-2xl border border-slate-200 bg-white/80 px-4 pt-4 pb-8 shadow-sm backdrop-blur transition",
+          "relative mb-6 flex min-h-0 flex-1 flex-col gap-4 rounded-2xl border border-slate-200 bg-white/80 px-4 pt-4 pb-6 shadow-sm backdrop-blur transition xl:flex-1",
           isDragActive && "border-sky-300 ring-2 ring-inset ring-sky-300/60"
         )}
         onDragEnter={handleDragEnter}
@@ -448,8 +451,8 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
             <p className="text-xs text-sky-500">They’ll be added to this analysis request.</p>
           </div>
         )}
-        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,18rem)_minmax(0,18rem)_auto] lg:items-start lg:gap-6">
-          <div className="flex w-full flex-col gap-2 lg:max-w-sm">
+        <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[minmax(0,18rem)_minmax(0,18rem)_minmax(0,1fr)] xl:items-start xl:gap-6">
+          <div className="flex w-full flex-col gap-2 xl:max-w-sm">
             <label htmlFor="model" className="text-sm font-medium text-slate-700">
               Model
             </label>
@@ -467,7 +470,7 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
             </Select>
           </div>
 
-          <div className="flex w-full flex-col gap-2 lg:max-w-sm">
+          <div className="flex w-full flex-col gap-2 xl:max-w-sm">
             <label htmlFor="project" className="text-sm font-medium text-slate-700">
               Project
             </label>
@@ -510,7 +513,7 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
               <Button
                 type="button"
                 variant="secondary"
-                className="gap-2"
+                className="gap-2 py-2"
                 onClick={() => fileInputRef.current?.click()}
                 aria-label="Upload files for analysis"
               >
@@ -527,22 +530,22 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
         </div>
 
         {pendingAttachments.length > 0 && (
-          <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/60 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Files to analyze</p>
-            <ul className="mt-3 flex flex-wrap gap-2">
+          <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/70 p-3">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Files to analyze</p>
+            <ul className="mt-2 flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
               {pendingAttachments.map(({ id, file }) => (
                 <li
                   key={id}
-                  className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-[11px] font-medium text-slate-600 shadow-sm"
                 >
-                  <FileText className="h-4 w-4 text-slate-400" aria-hidden="true" />
-                  <span className="max-w-[200px] truncate" title={file.name}>
+                  <FileText className="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
+                  <span className="max-w-[160px] truncate" title={file.name}>
                     {file.name}
                   </span>
                   <span className="text-slate-400">{formatBytes(file.size)}</span>
                   <button
                     type="button"
-                    className="ml-1 rounded-full p-0.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                    className="ml-0.5 rounded-full p-0.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
                     onClick={() => removeAttachment(id)}
                     aria-label={`Remove ${file.name}`}
                   >
@@ -551,37 +554,50 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
                 </li>
               ))}
             </ul>
-            <p className="mt-2 text-xs text-slate-400">
+            <p className="mt-2 text-[11px] text-slate-400">
               Files up to 2&nbsp;MB are shared inline. Larger files are referenced by name and size.
             </p>
           </div>
         )}
 
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl ring-1 ring-slate-200 bg-white shadow-sm">
-          <div ref={chatScrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-3 pr-4">
+          <div
+            ref={chatScrollRef}
+            className={cn(
+              "flex-1 space-y-3 px-4 py-3 pr-4",
+              hasTurns ? "overflow-y-auto" : "overflow-visible"
+            )}
+          >
             <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-600 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Pro tips</p>
-              <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-                <div className="flex-1 rounded-xl bg-white/70 p-4">
-                  <p className="text-sm font-semibold text-slate-700">Reference your files</p>
-                  <p className="mt-1 text-xs text-slate-500">Mention uploads by filename so we can locate the right data.</p>
+              <button
+                type="button"
+                onClick={() => setShowTips((prev) => !prev)}
+                className="flex w-full items-center justify-between text-left text-xs font-semibold uppercase tracking-wide text-slate-500"
+              >
+                <span>Pro tips</span>
+                <span className="text-[11px] font-medium text-slate-400">{showTips ? "Hide" : "Show"}</span>
+              </button>
+              {showTips && (
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                  <div className="rounded-xl bg-white/70 p-4">
+                    <p className="text-sm font-semibold text-slate-700">Reference your files</p>
+                    <p className="mt-1 text-xs text-slate-500">Mention uploads by filename so we can locate the right data.</p>
+                  </div>
+                  <div className="rounded-xl bg-white/70 p-4">
+                    <p className="text-sm font-semibold text-slate-700">Ask for structure</p>
+                    <p className="mt-1 text-xs text-slate-500">Request summaries, action items, or comparisons to guide the response.</p>
+                  </div>
+                  <div className="rounded-xl bg-white/70 p-4">
+                    <p className="text-sm font-semibold text-slate-700">Iterate quickly</p>
+                    <p className="mt-1 text-xs text-slate-500">Follow up with clarifying questions rather than starting fresh.</p>
+                  </div>
                 </div>
-                <div className="flex-1 rounded-xl bg-white/70 p-4">
-                  <p className="text-sm font-semibold text-slate-700">Ask for structure</p>
-                  <p className="mt-1 text-xs text-slate-500">Request summaries, action items, or comparisons to guide the response.</p>
-                </div>
-                <div className="flex-1 rounded-xl bg-white/70 p-4">
-                  <p className="text-sm font-semibold text-slate-700">Iterate quickly</p>
-                  <p className="mt-1 text-xs text-slate-500">Follow up with clarifying questions rather than starting fresh.</p>
-                </div>
-              </div>
+              )}
             </div>
 
-            {state.session.turns.length === 0 ? (
-              <EmptyState onUploadClick={() => fileInputRef.current?.click()} />
-            ) : null}
+            {!hasTurns ? <EmptyState onUploadClick={() => fileInputRef.current?.click()} /> : null}
 
-            {state.session.turns.length > 0
+            {hasTurns
               ? state.session.turns.map((turn) => {
                   const projectLabel = turn.projectId ? projectMap.get(turn.projectId)?.name : undefined;
                   return (
@@ -596,51 +612,53 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
                 })
               : null}
           </div>
-          <div className="border-t border-slate-200 bg-slate-50/90 px-4 pb-6 pt-5">
-            <Textarea
-              rows={3}
-              value={state.inputValue}
-              onKeyDown={onTextareaKeyDown}
-              onChange={(event) => setInputValue(event.target.value)}
-              placeholder="Describe the analysis you want. Reference any uploaded files by name."
-              aria-label="Chat message"
-            />
-            <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-2 rounded-full bg-slate-200/80 px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-sm">
-                <span>Enter to send</span>
-                <span className="text-slate-400">•</span>
-                <span>Shift + Enter for newline</span>
-                {isPreparingAttachments && (
-                  <span className="inline-flex items-center gap-1 text-slate-500">
-                    <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" /> Preparing files…
-                  </span>
-                )}
+          <div className="border-t border-slate-200 bg-slate-50/90 px-4 py-6 sm:px-6">
+            <div className="flex flex-col gap-1">
+              <Textarea
+                rows={3}
+                value={state.inputValue}
+                onKeyDown={onTextareaKeyDown}
+                onChange={(event) => setInputValue(event.target.value)}
+                placeholder="Describe the analysis you want. Reference any uploaded files by name."
+                aria-label="Chat message"
+              />
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-2 rounded-full bg-slate-200/80 px-5 py-2.5 text-[11px] font-medium text-slate-600 shadow-sm">
+                  <span>Enter to send</span>
+                  <span className="text-slate-400">•</span>
+                  <span>Shift + Enter for newline</span>
+                  {isPreparingAttachments && (
+                    <span className="inline-flex items-center gap-1 text-slate-500">
+                      <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" /> Preparing files…
+                    </span>
+                  )}
+                </div>
+                <Button
+                  type="button"
+                  onClick={() => void sendMessage()}
+                  disabled={showSendDisabled}
+                  aria-label="Send message"
+                  className="inline-flex items-center gap-3 rounded-full bg-sky-500 px-8 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:bg-sky-400 focus-visible:ring-2 focus-visible:ring-sky-300 disabled:cursor-not-allowed disabled:bg-sky-300 disabled:text-white/80"
+                >
+                  {state.isStreaming ? (
+                    <span className="inline-flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                      <span>Working...</span>
+                    </span>
+                  ) : (
+                    <>
+                      <span>Send</span>
+                      <span className="rounded-full bg-white/20 px-2 py-0.5 text-[11px] uppercase tracking-wide">⌘⤳</span>
+                    </>
+                  )}
+                </Button>
               </div>
-              <Button
-                type="button"
-                onClick={() => void sendMessage()}
-                disabled={showSendDisabled}
-                aria-label="Send message"
-                className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:opacity-95 focus-visible:ring-2 focus-visible:ring-indigo-300 disabled:cursor-not-allowed disabled:from-slate-300 disabled:to-slate-400 disabled:text-white/80"
-              >
-                {state.isStreaming ? (
-                  <span className="inline-flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                    <span>Working...</span>
-                  </span>
-                ) : (
-                  <>
-                    <span>Send</span>
-                    <span className="rounded-full bg-white/20 px-2 py-0.5 text-[11px] uppercase tracking-wide">⌘⤳</span>
-                  </>
-                )}
-              </Button>
+              {statusMessage ? (
+                <p className="text-sm text-slate-600" role="status">
+                  {statusMessage}
+                </p>
+              ) : null}
             </div>
-            {statusMessage && (
-              <p className="mt-2 text-sm text-slate-600" role="status">
-                {statusMessage}
-              </p>
-            )}
           </div>
         </div>
       </section>

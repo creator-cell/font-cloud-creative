@@ -38,7 +38,7 @@ const navLinks: NavLink[] = [
         href: "/chat/single",
         label: "AI Analysis",
         Icon: Bot,
-        allowedRoles: ["owner", "admin", "developer"],
+        allowedRoles: ["owner", "admin", "developer", "user"],
       },
     ],
   },

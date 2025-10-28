@@ -9,11 +9,16 @@ import {
   Users,
   BarChart3,
   CreditCard,
+  ClipboardList,
   Cpu,
   Flag,
   ScrollText,
   LifeBuoy,
   Megaphone,
+  Wallet,
+  Receipt,
+  BellRing,
+  DollarSign,
   type LucideIcon
 } from "lucide-react";
 
@@ -26,8 +31,13 @@ type AdminNavLink = {
 const links: AdminNavLink[] = [
   { href: "/admin", label: "Overview", Icon: LayoutDashboard },
   { href: "/admin/users", label: "Users", Icon: Users },
+  { href: "/admin/wallets", label: "Wallets", Icon: Wallet },
+  { href: "/admin/ledger", label: "Ledger", Icon: Receipt },
   { href: "/admin/usage", label: "Usage", Icon: BarChart3 },
+  { href: "/admin/alerts", label: "Alerts", Icon: BellRing },
+  { href: "/admin/pricing", label: "Pricing", Icon: DollarSign },
   { href: "/admin/billing", label: "Billing", Icon: CreditCard },
+  { href: "/admin/plans", label: "Plans", Icon: ClipboardList },
   { href: "/admin/models", label: "Models", Icon: Cpu },
   { href: "/admin/flags", label: "Flags", Icon: Flag },
   { href: "/admin/logs", label: "Audit", Icon: ScrollText },

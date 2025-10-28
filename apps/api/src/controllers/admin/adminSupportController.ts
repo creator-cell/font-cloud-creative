@@ -1,10 +1,10 @@
 import type { Response } from "express";
 import { Types } from "mongoose";
-import type { AuthenticatedRequest } from "../types/express";
-import { SupportTicketModel } from "../models";
-import { supportReplySchema } from "../schemas/adminSchemas";
-import { asyncHandler } from "../utils/asyncHandler";
-import { auditService } from "../services/auditService";
+import type { AuthenticatedRequest } from "../../types/express";
+import { SupportTicketModel } from "../../models";
+import { supportReplySchema } from "../../schemas/adminSchemas";
+import { asyncHandler } from "../../utils/asyncHandler";
+import { auditService } from "../../services/auditService";
 
 export const listSupportTickets = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   const status = req.query.status as string | undefined;
