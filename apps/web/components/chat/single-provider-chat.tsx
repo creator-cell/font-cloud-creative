@@ -426,7 +426,7 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
   }, [state.session.turns, state.isStreaming, scrollChatToBottom]);
 
   return (
-    <div className="flex w-full flex-col gap-6">
+    <div className="flex w-full flex-col gap-4">
       <header className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold text-slate-900">AI Analytics</h1>
         <p className="text-sm text-slate-500">
@@ -436,7 +436,7 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
 
       <section
         className={cn(
-          "relative mb-6 flex min-h-0 flex-1 flex-col gap-4 rounded-2xl border border-slate-200 bg-white/80 px-4 pt-4 pb-6 shadow-sm backdrop-blur transition xl:flex-1",
+          "relative mb-4 flex min-h-0 flex-1 flex-col gap-3 rounded-2xl border border-slate-200 bg-white/80 px-4 pt-4 pb-5 shadow-sm backdrop-blur transition xl:flex-1",
           isDragActive && "border-sky-300 ring-2 ring-inset ring-sky-300/60"
         )}
         onDragEnter={handleDragEnter}
@@ -451,7 +451,7 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
             <p className="text-xs text-sky-500">They’ll be added to this analysis request.</p>
           </div>
         )}
-        <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[minmax(0,18rem)_minmax(0,18rem)_minmax(0,1fr)] xl:items-start xl:gap-6">
+        <div className="flex flex-col gap-3 xl:grid xl:grid-cols-[minmax(0,18rem)_minmax(0,18rem)] xl:items-start xl:gap-5">
           <div className="flex w-full flex-col gap-2 xl:max-w-sm">
             <label htmlFor="model" className="text-sm font-medium text-slate-700">
               Model
@@ -498,35 +498,24 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
                 : "Every conversation will be tagged to this project."}
             </p>
           </div>
+        </div>
 
-          <div className="flex flex-col gap-2">
-            <span className="text-sm font-medium text-slate-700">Attachments</span>
-            <input
-              ref={fileInputRef}
-              type="file"
-              className="hidden"
-              multiple
-              onChange={onFileInputChange}
-              aria-label="Upload reference files"
-            />
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-              <Button
-                type="button"
-                variant="secondary"
-                className="gap-2 py-2"
-                onClick={() => fileInputRef.current?.click()}
-                aria-label="Upload files for analysis"
-              >
-                <Paperclip className="h-4 w-4" aria-hidden="true" />
-                Attach files
-              </Button>
-              {pendingAttachments.length > 0 && (
-                <span className="text-xs font-medium text-slate-500">
-                  {pendingAttachments.length} file{pendingAttachments.length > 1 ? "s" : ""} ready
-                </span>
-              )}
-            </div>
-          </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            type="button"
+            variant="secondary"
+            className="gap-2 py-2"
+            onClick={() => fileInputRef.current?.click()}
+            aria-label="Upload files for analysis"
+          >
+            <Paperclip className="h-4 w-4" aria-hidden="true" />
+            Upload files
+          </Button>
+          {pendingAttachments.length > 0 && (
+            <span className="text-xs font-medium text-slate-500">
+              {pendingAttachments.length} file{pendingAttachments.length > 1 ? "s" : ""} ready
+            </span>
+          )}
         </div>
 
         {pendingAttachments.length > 0 && (
@@ -615,7 +604,7 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
           <div className="border-t border-slate-200 bg-slate-50/90 px-4 py-6 sm:px-6">
             <div className="flex flex-col gap-1">
               <Textarea
-                rows={3}
+                rows={2}
                 value={state.inputValue}
                 onKeyDown={onTextareaKeyDown}
                 onChange={(event) => setInputValue(event.target.value)}
@@ -670,14 +659,12 @@ const EmptyState = ({ onUploadClick }: { onUploadClick: () => void }) => (
   <button
     type="button"
     onClick={onUploadClick}
-    className="mb-2 flex w-full flex-col items-center justify-center gap-3 self-stretch rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-4 py-6 text-center text-sm text-slate-600 shadow-sm transition hover:border-slate-300 hover:bg-slate-100"
+    className="mb-2 flex w-full flex-col items-center justify-center gap-2 self-stretch rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-3 py-4 text-center text-sm text-slate-600 shadow-sm transition hover:border-slate-300 hover:bg-slate-100"
   >
-    <UploadCloud className="h-8 w-8 text-slate-400" aria-hidden="true" />
-    <p className="font-semibold text-slate-700">Upload a file or ask for an insight to get started.</p>
-    <p className="text-xs text-slate-500">
-      Attach briefs, datasets, or presentations and then describe what you want analyzed.
-    </p>
-    <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-slate-200/70 px-3 py-1 text-[11px] font-medium text-slate-600">
+    <UploadCloud className="h-6 w-6 text-slate-400" aria-hidden="true" />
+    <p className="text-sm font-semibold text-slate-700">Upload a file or ask for an insight.</p>
+    <p className="text-xs text-slate-500">Attach briefs, datasets, or presentations to analyze.</p>
+    <span className="inline-flex items-center gap-1 rounded-full bg-slate-200/70 px-2.5 py-1 text-[11px] font-medium text-slate-600">
       <Paperclip className="h-3 w-3" aria-hidden="true" /> Click to upload
     </span>
   </button>

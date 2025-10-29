@@ -21,7 +21,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
       </aside>
       <div className="flex flex-1 flex-col overflow-hidden lg:h-screen">
         <DashboardTopbar plan={session.user.plan ?? "starter"} userName={session.user.name} />
-        <main className="flex-1 overflow-y-auto px-6 py-8 lg:px-10">{children}</main>
+        <main className="flex-1 overflow-y-auto px-5 py-4 lg:px-8">{children}</main>
       </div>
     </div>
   );
