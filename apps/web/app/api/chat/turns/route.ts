@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { NextResponse } from "next/server";
 import { auth } from "@/lib/session";
 
 const apiBaseUrl =
@@ -29,7 +28,7 @@ export async function POST(request: Request) {
     const data = await request.json();
     const payload = createTurnSchema.parse(data);
     const session = await auth();
-    if (!session?.user?.id) {
+    if (!session?.user?.id || !session.apiToken) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -42,7 +41,7 @@ export async function POST(request: Request) {
       provider,
       system: undefined,
       caps: undefined,
-      projectId: payload.projectId,
+      projectId: payload.projectId ?? undefined,
       attachments: payload.attachments,
     };
 
@@ -50,6 +49,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${session.apiToken}`,
       },
       body: JSON.stringify(upstreamPayload),
     });

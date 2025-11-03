@@ -37,6 +37,7 @@ const STREAM_TIMEOUT_MS = 45_000;
 const STORAGE_KEY = "frontcloud.single-chat.model";
 const PROJECT_STORAGE_KEY = "frontcloud.single-chat.project";
 const MAX_INLINE_FILE_BYTES = 2 * 1024 * 1024; // 2 MB
+const DEFAULT_MODEL_FALLBACK = PROVIDER_MODELS[0]?.id ?? "openai:gpt-4.1-mini";
 
 type StreamControllers = {
   source: EventSource | null;
@@ -48,11 +49,31 @@ type PendingAttachment = {
   file: File;
 };
 
-export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] }) => {
+type SingleProviderChatProps = {
+  projects: ProjectSummary[];
+  defaultModelId?: string;
+};
+
+export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderChatProps) => {
+  const fallbackModelId = useMemo(() => {
+    if (defaultModelId && PROVIDER_MODELS.some((model) => model.id === defaultModelId)) {
+      return defaultModelId;
+    }
+    return DEFAULT_MODEL_FALLBACK;
+  }, [defaultModelId]);
+
   const initialModel = useMemo(() => {
-    if (typeof window === "undefined") return PROVIDER_MODELS[0]?.id ?? "openai:gpt-4.1-mini";
-    return window.localStorage.getItem(STORAGE_KEY) ?? PROVIDER_MODELS[0]?.id ?? "openai:gpt-4.1-mini";
-  }, []);
+    const availableModelIds = new Set(PROVIDER_MODELS.map((model) => model.id));
+    if (typeof window === "undefined") return fallbackModelId;
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (stored && availableModelIds.has(stored)) {
+      return stored;
+    }
+    if (availableModelIds.has(fallbackModelId)) {
+      return fallbackModelId;
+    }
+    return DEFAULT_MODEL_FALLBACK;
+  }, [fallbackModelId]);
 
   const initialProjectId = useMemo(() => {
     if (typeof window !== "undefined") {
@@ -94,6 +115,13 @@ export const SingleProviderChat = ({ projects }: { projects: ProjectSummary[] })
   }, [projects]);
 
   const hasTurns = state.session.turns.length > 0;
+
+  useEffect(() => {
+    const isKnownModel = PROVIDER_MODELS.some((model) => model.id === state.session.lastModelId);
+    if (!isKnownModel && state.session.lastModelId !== fallbackModelId) {
+      dispatch({ type: "update-last-model", modelId: fallbackModelId });
+    }
+  }, [dispatch, fallbackModelId, state.session.lastModelId]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
