@@ -250,12 +250,12 @@ router.get("/stream", async (req, res) => {
         }
       );
     } catch (providerError) {
-      console.warn("[chat][stream] provider error, falling back to mock", {
+      console.error("[chat][stream] provider error", {
         turnId: chatTurn.turnId,
         provider: selection.provider,
         error: providerError
       });
-      result = await runMockStream();
+      throw providerError;
     }
 
     if (clientClosed) {

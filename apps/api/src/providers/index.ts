@@ -1,13 +1,18 @@
-import { env } from "../config/env";
-import { AnthropicProvider } from "./anthropicProvider";
-import { GoogleProvider } from "./googleProvider";
-import { OllamaProvider } from "./ollamaProvider";
-import { OpenAIProvider } from "./openaiProvider";
-import { registerProvider } from "./registry";
+import { env } from "../config/env.js";
+import { AnthropicProvider } from "./anthropicProvider.js";
+import { GoogleProvider } from "./googleProvider.js";
+import { OllamaProvider } from "./ollamaProvider.js";
+import { OpenAIProvider } from "./openaiProvider.js";
+import { registerProvider } from "./registry.js";
 
 export const bootstrapProviders = (): void => {
-  if (env.openaiKey) {
+  try {
+    if (!env.openaiKey) {
+      throw new Error("Missing OPENAI_API_KEY");
+    }
     registerProvider(new OpenAIProvider());
+  } catch (err) {
+    console.error("Failed to initialize OpenAI provider:", (err as Error).message);
   }
 
   try {
