@@ -24,6 +24,27 @@ const estimatePromptTokens = (system?: string, user?: string): number => {
 
 const router = Router();
 
+const normalizeModelSelection = (provider: string, model: string) => {
+  let normalizedProvider = provider;
+  let normalizedModel = model;
+
+  const colonIndex = model.indexOf(":");
+  if (colonIndex !== -1) {
+    const inferredProvider = model.slice(0, colonIndex);
+    const remainder = model.slice(colonIndex + 1);
+    if (remainder) {
+      normalizedModel = remainder;
+      normalizedProvider = inferredProvider || provider;
+    }
+  }
+
+  return {
+    provider: normalizedProvider,
+    model: normalizedModel,
+    composite: `${normalizedProvider}:${normalizedModel}`
+  };
+};
+
 router.use(requireAuth);
 
 const createTurnSchema = z.object({
@@ -67,6 +88,7 @@ router.post(
 
     const payload = createTurnSchema.parse(req.body);
     const userObjectId = new Types.ObjectId(userSub);
+    const selection = normalizeModelSelection(payload.provider, payload.model);
 
     const conversationId =
       payload.conversationId && Types.ObjectId.isValid(payload.conversationId)
@@ -82,8 +104,8 @@ router.post(
         await startChatHold({
           userId: userObjectId,
           turnId,
-          provider: payload.provider,
-          model: payload.model,
+          provider: selection.provider,
+          model: selection.model,
           promptTokens,
           maxOutputTokens
         });
@@ -104,8 +126,8 @@ router.post(
       userId: userObjectId,
       conversationId,
       turnId,
-      provider: payload.provider,
-      model: payload.model,
+      provider: selection.provider,
+      model: selection.model,
       system: payload.system,
       userMessage: payload.message,
       promptTokens,
@@ -117,8 +139,8 @@ router.post(
     console.info("[chat][turn] created", {
       turnId,
       userId: userObjectId.toHexString(),
-      provider: payload.provider,
-      model: payload.model
+      provider: selection.provider,
+      model: selection.model
     });
 
     const baseUrl = process.env.API_BASE_URL ?? `${req.protocol}://${req.get("host")}`;
@@ -172,12 +194,15 @@ router.get("/stream", async (req, res) => {
     sendEvent(res, event, data);
   };
 
+  const selection = normalizeModelSelection(chatTurn.provider, chatTurn.model);
+
   safeSendEvent("provider_start", {
-    provider: chatTurn.provider,
-    model: chatTurn.model
+    provider: selection.provider,
+    model: selection.composite
   });
 
-  const providerId = chatTurn.provider as ProviderId;
+  const providerId = selection.provider as ProviderId;
+  const modelId = selection.model;
   const maxOutputTokens = chatTurn.maxOutputTokens || DEFAULT_MAX_OUTPUT_TOKENS;
 
   const runMockStream = async (): Promise<{
@@ -187,7 +212,7 @@ router.get("/stream", async (req, res) => {
     finishReason: string;
   }> => {
     const promptTokens = chatTurn.promptTokens || estimatePromptTokens(chatTurn.system, chatTurn.userMessage);
-    const chunks = createMockResponseChunks(chatTurn.userMessage ?? "", chatTurn.model ?? "");
+    const chunks = createMockResponseChunks(chatTurn.userMessage ?? "", selection.composite);
     for (const chunk of chunks) {
       if (clientClosed) {
         throw new Error("client_closed");
@@ -210,7 +235,7 @@ router.get("/stream", async (req, res) => {
     try {
       result = await streamProviderChat(
         providerId,
-        chatTurn.model,
+        modelId,
         {
           system: chatTurn.system ?? "",
           message: chatTurn.userMessage,
@@ -227,7 +252,7 @@ router.get("/stream", async (req, res) => {
     } catch (providerError) {
       console.warn("[chat][stream] provider error, falling back to mock", {
         turnId: chatTurn.turnId,
-        provider: chatTurn.provider,
+        provider: selection.provider,
         error: providerError
       });
       result = await runMockStream();
@@ -242,8 +267,8 @@ router.get("/stream", async (req, res) => {
     await settleChatTurn({
       userId: chatTurn.userId,
       turnId: chatTurn.turnId,
-      provider: chatTurn.provider,
-      model: chatTurn.model,
+      provider: selection.provider,
+      model: modelId,
       conversationId: chatTurn.conversationId ?? undefined,
       chatTurnMongoId: chatTurn._id,
       tokensIn: result.tokensIn,
@@ -273,6 +298,8 @@ router.get("/stream", async (req, res) => {
     safeSendEvent("complete", { turnId: chatTurn.turnId });
     console.info("[chat][stream] turn completed", {
       turnId: chatTurn.turnId,
+      provider: selection.provider,
+      model: modelId,
       tokensIn: result.tokensIn,
       tokensOut: result.tokensOut,
       latencyMs
@@ -306,7 +333,12 @@ router.get("/stream", async (req, res) => {
     if (!clientClosed) {
       safeSendEvent("error", { message: "Failed to complete chat turn." });
     }
-    console.error("[chat][stream] turn failed", { turnId: chatTurn.turnId, error });
+    console.error("[chat][stream] turn failed", {
+      turnId: chatTurn.turnId,
+      provider: selection.provider,
+      model: modelId,
+      error
+    });
   } finally {
     if (!res.writableEnded) {
       res.end();

@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import type { ResponseStreamParams } from "openai/resources/responses/responses";
 import { env } from "../config/env";
 import { estimateTokens } from "../utils/tokenizer";
 import {
@@ -44,36 +45,86 @@ export class OpenAIProvider implements LLMProvider {
     handlers: ChatStreamHandlers
   ): Promise<ChatStreamResult> {
     const startedAt = Date.now();
-    const messages: Array<{ role: "system" | "user"; content: string }> = [];
-    if (params.system) {
-      messages.push({ role: "system", content: params.system });
+    const inputMessages: ResponseStreamParams["input"] = [];
+    if (params.system?.trim()) {
+      inputMessages.push({
+        role: "system",
+        content: [{ type: "text", text: params.system }]
+      });
     }
-    messages.push({ role: "user", content: params.message });
-
-    const response = await this.client.chat.completions.create({
-      model,
-      messages,
-      temperature: 0.7,
-      max_tokens: params.maxOutputTokens,
-      response_format: params.json ? { type: "json_object" } : undefined
+    inputMessages.push({
+      role: "user",
+      content: [{ type: "text", text: params.message }]
     });
 
-    const choice = response.choices[0];
-    const content = choice?.message?.content ?? "";
-    if (content) {
-      handlers.onDelta(content);
+    const streamParams: ResponseStreamParams = {
+      model,
+      input: inputMessages,
+      temperature: 0.7,
+      ...(typeof params.maxOutputTokens === "number"
+        ? { max_output_tokens: params.maxOutputTokens }
+        : {})
+    };
+
+    const stream = await this.client.responses.stream(streamParams, { signal: params.signal });
+
+    let aggregatedText = "";
+    let finishReason: string | undefined;
+
+    try {
+      for await (const event of stream) {
+        if (event.type === "response.output_text.delta") {
+          const delta = event.delta ?? "";
+          if (delta) {
+            handlers.onDelta?.(delta);
+            aggregatedText += delta;
+          }
+        } else if (event.type === "response.refusal.delta") {
+          const delta = event.delta ?? "";
+          if (delta) {
+            handlers.onDelta?.(delta);
+            aggregatedText += delta;
+          }
+        } else if (event.type === "response.completed") {
+          finishReason = event.response.status ?? "completed";
+        } else if (event.type === "response.error") {
+          throw new Error(event.error?.message ?? "OpenAI streaming error");
+        } else if (event.type === "response.failed") {
+          throw new Error(event.error?.message ?? "OpenAI streaming failed");
+        }
+        if (params.signal?.aborted) {
+          stream.abort();
+          break;
+        }
+      }
+    } catch (error) {
+      if (params.signal?.aborted) {
+        throw new Error("client_closed");
+      }
+      throw error;
     }
 
+    let finalResponse;
+    try {
+      finalResponse = await stream.finalResponse();
+    } catch (error) {
+      if (params.signal?.aborted) {
+        throw new Error("client_closed");
+      }
+      throw error;
+    }
+    const usage = finalResponse.usage;
+    const textOutput = finalResponse.output_text ?? aggregatedText;
     const tokensIn =
-      response.usage?.prompt_tokens ?? estimateTokens(`${params.system ?? ""}\n${params.message}`);
-    const tokensOut = response.usage?.completion_tokens ?? estimateTokens(content);
+      usage?.input_tokens ?? estimateTokens(`${params.system ?? ""}\n${params.message}`);
+    const tokensOut = usage?.output_tokens ?? estimateTokens(textOutput);
     const latencyMs = Date.now() - startedAt;
 
     return {
       tokensIn,
       tokensOut,
       latencyMs,
-      finishReason: choice?.finish_reason ?? undefined
+      finishReason: finishReason ?? finalResponse.status ?? "completed"
     };
   }
 }

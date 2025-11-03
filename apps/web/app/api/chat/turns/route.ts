@@ -32,12 +32,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const provider = payload.model.split(":")[0] ?? "openai";
+    const colonIndex = payload.model.indexOf(":");
+    const inferredProvider = colonIndex !== -1 ? payload.model.slice(0, colonIndex) : undefined;
+    const normalizedModel = colonIndex !== -1 ? payload.model.slice(colonIndex + 1) : payload.model;
+    const provider = inferredProvider || "openai";
     const upstreamPayload = {
       userId: session.user.id,
       conversationId: payload.sessionId,
       message: payload.message,
-      model: payload.model,
+      model: normalizedModel,
       provider,
       system: undefined,
       caps: undefined,
@@ -63,7 +66,8 @@ export async function POST(request: Request) {
     }
 
     const result = await upstreamResponse.json();
-    return NextResponse.json(result);
+    const nextStreamUrl = `/api/chat/stream?turnId=${encodeURIComponent(result.turnId)}`;
+    return NextResponse.json({ ...result, streamUrl: nextStreamUrl });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.flatten() }, { status: 422 });
