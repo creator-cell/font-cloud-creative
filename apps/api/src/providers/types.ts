@@ -25,6 +25,7 @@ export type ChatStreamResult = {
   tokensOut: number;
   latencyMs?: number;
   finishReason?: string;
+  text: string;
 };
 
 export interface LLMProvider {

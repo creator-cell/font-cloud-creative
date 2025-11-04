@@ -17,6 +17,67 @@ export type CreateTurnResponse = {
   streamUrl: string;
 };
 
+export type ChatHistoryTurn = {
+  turnId: string;
+  userMessage: string;
+  provider: string;
+  model: string;
+  modelSlug?: string | null;
+  projectId: string | null;
+  status: "running" | "completed" | "failed";
+  response: {
+    content: string;
+    finishReason: string | null;
+  };
+  usage: {
+    tokensIn?: number;
+    tokensOut?: number;
+    latencyMs?: number;
+    error?: string | null;
+  };
+  attachments: Array<
+    Pick<ChatAttachment, "id" | "name" | "size" | "type"> & {
+      dataUrl?: string;
+    }
+  >;
+  createdAt: string;
+  startedAt?: string | null;
+  finishedAt?: string | null;
+  error?: string | null;
+};
+
+export type ChatHistoryResponse = {
+  turns: ChatHistoryTurn[];
+  nextCursor: string | null;
+  hasMore: boolean;
+};
+
+export const fetchChatHistory = async (
+  params: {
+    projectId?: string | null;
+    cursor?: string | null;
+    limit?: number;
+  },
+  signal?: AbortSignal
+): Promise<ChatHistoryResponse> => {
+  const search = new URLSearchParams();
+  if (params.projectId) search.set("projectId", params.projectId);
+  if (params.cursor) search.set("cursor", params.cursor);
+  if (params.limit) search.set("limit", String(params.limit));
+
+  const response = await fetch(`/api/chat/turns?${search.toString()}`, {
+    method: "GET",
+    signal,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || "Unable to load chat history");
+  }
+
+  return (await response.json()) as ChatHistoryResponse;
+};
+
 export type ProviderStartEvent = {
   provider: string;
   model: string;

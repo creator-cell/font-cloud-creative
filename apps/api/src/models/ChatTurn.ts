@@ -11,6 +11,20 @@ const chatTurnSchema = new Schema(
     userMessage: { type: String, required: true },
     promptTokens: { type: Number, default: 0 },
     maxOutputTokens: { type: Number, default: 0 },
+    projectId: { type: Types.ObjectId, ref: "Project" },
+    attachments: [
+      {
+        id: { type: String, required: true },
+        name: { type: String, required: true },
+        size: { type: Number, required: true },
+        type: { type: String },
+        dataUrl: { type: String }
+      }
+    ],
+    response: {
+      content: { type: String, default: "" },
+      finishReason: { type: String }
+    },
     status: {
       type: String,
       enum: ["running", "completed", "failed"],
@@ -29,6 +43,7 @@ const chatTurnSchema = new Schema(
 );
 
 chatTurnSchema.index({ userId: 1, createdAt: -1 });
+chatTurnSchema.index({ userId: 1, projectId: 1, createdAt: -1 });
 
 export type ChatTurn = InferSchemaType<typeof chatTurnSchema>;
 export const ChatTurnModel =

@@ -45,19 +45,25 @@ export class OpenAIProvider implements LLMProvider {
   ): Promise<ChatStreamResult> {
     const startedAt = Date.now();
 
-    const stream = await this.client.chat.completions.create({
-      model,
-      messages: [
-        ...(params.system?.trim() ? [{ role: "system" as const, content: params.system }] : []),
-        { role: "user" as const, content: params.message }
-      ],
-      temperature: 0.7,
-      max_tokens: params.maxOutputTokens,
-      stream: true
-    }, { signal: params.signal });
+    const stream = await this.client.chat.completions.create(
+      {
+        model,
+        messages: [
+          ...(params.system?.trim() ? [{ role: "system" as const, content: params.system }] : []),
+          { role: "user" as const, content: params.message }
+        ],
+        temperature: 0.7,
+        max_tokens: params.maxOutputTokens,
+        stream: true,
+        stream_options: { include_usage: true }
+      },
+      { signal: params.signal }
+    );
 
     let aggregatedText = "";
     let finishReason: string | undefined;
+    let tokensIn = 0;
+    let tokensOut = 0;
 
     try {
       for await (const chunk of stream) {
@@ -69,7 +75,14 @@ export class OpenAIProvider implements LLMProvider {
         if (chunk.choices[0]?.finish_reason) {
           finishReason = chunk.choices[0].finish_reason;
         }
+        if (chunk.usage) {
+          tokensIn = chunk.usage.prompt_tokens ?? tokensIn;
+          tokensOut = chunk.usage.completion_tokens ?? tokensOut;
+        }
         if (params.signal?.aborted) {
+          if ("controller" in stream && typeof stream.controller?.abort === "function") {
+            stream.controller.abort();
+          }
           break;
         }
       }
@@ -80,15 +93,21 @@ export class OpenAIProvider implements LLMProvider {
       throw error;
     }
 
-    const tokensIn = estimateTokens(`${params.system ?? ""}\n${params.message}`);
-    const tokensOut = estimateTokens(aggregatedText);
+    if (!tokensIn) {
+      tokensIn = estimateTokens(`${params.system ?? ""}\n${params.message}`);
+    }
+    if (!tokensOut) {
+      tokensOut = estimateTokens(aggregatedText);
+    }
+
     const latencyMs = Date.now() - startedAt;
 
     return {
       tokensIn,
       tokensOut,
       latencyMs,
-      finishReason: finishReason ?? "completed"
+      finishReason: finishReason ?? "completed",
+      text: aggregatedText
     };
   }
 }

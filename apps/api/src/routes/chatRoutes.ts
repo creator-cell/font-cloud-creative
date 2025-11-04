@@ -52,6 +52,7 @@ const createTurnSchema = z.object({
   message: z.string().min(1),
   model: z.string().min(1),
   provider: z.string().min(1),
+  projectId: z.string().min(1).optional(),
   system: z.string().optional(),
   caps: z
     .object({
@@ -89,6 +90,10 @@ router.post(
     const payload = createTurnSchema.parse(req.body);
     const userObjectId = new Types.ObjectId(userSub);
     const selection = normalizeModelSelection(payload.provider, payload.model);
+    const projectObjectId =
+      payload.projectId && Types.ObjectId.isValid(payload.projectId)
+        ? new Types.ObjectId(payload.projectId)
+        : undefined;
 
     const conversationId =
       payload.conversationId && Types.ObjectId.isValid(payload.conversationId)
@@ -132,6 +137,14 @@ router.post(
       userMessage: payload.message,
       promptTokens,
       maxOutputTokens,
+      projectId: projectObjectId,
+      attachments: payload.attachments?.map((item) => ({
+        id: item.id,
+        name: item.name,
+        size: item.size,
+        type: item.type,
+        dataUrl: item.dataUrl
+      })) ?? [],
       status: "running",
       startedAt: new Date()
     });
@@ -140,7 +153,8 @@ router.post(
       turnId,
       userId: userObjectId.toHexString(),
       provider: selection.provider,
-      model: selection.model
+      model: selection.model,
+      projectId: projectObjectId?.toHexString()
     });
 
     const baseUrl = process.env.API_BASE_URL ?? `${req.protocol}://${req.get("host")}`;
@@ -148,6 +162,89 @@ router.post(
       turnId,
       streamUrl: `${baseUrl}/v1/chat/stream?turnId=${turnId}`
     });
+  })
+);
+
+router.get(
+  "/turns",
+  asyncHandler(async (req, res) => {
+    const authReq = req as AuthenticatedRequest;
+    const userSub = authReq.user?.sub;
+    if (!userSub || !Types.ObjectId.isValid(userSub)) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const userObjectId = new Types.ObjectId(userSub);
+    const projectIdParam = typeof req.query.projectId === "string" ? req.query.projectId : undefined;
+    const cursorParam = typeof req.query.cursor === "string" ? req.query.cursor : undefined;
+    const limitParam = Number.parseInt(typeof req.query.limit === "string" ? req.query.limit : "", 10);
+    const limit = Number.isFinite(limitParam) && limitParam > 0 ? Math.min(limitParam, 50) : 20;
+
+    const filter: Record<string, unknown> = { userId: userObjectId };
+    if (projectIdParam && Types.ObjectId.isValid(projectIdParam)) {
+      filter.projectId = new Types.ObjectId(projectIdParam);
+    }
+
+    if (cursorParam) {
+      const cursorDate = new Date(cursorParam);
+      if (!Number.isNaN(cursorDate.getTime())) {
+        filter.createdAt = { $lt: cursorDate };
+      }
+    }
+
+    const records = await ChatTurnModel.find(filter)
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .lean()
+      .exec();
+
+    const hasMore = records.length === limit;
+    const nextCursor = hasMore ? records[records.length - 1]?.createdAt?.toISOString?.() ?? null : null;
+
+    const turns = records
+      .reverse()
+      .map((record) => {
+        const projectId =
+          record.projectId instanceof Types.ObjectId
+            ? record.projectId.toHexString()
+            : typeof record.projectId === "string"
+              ? record.projectId
+              : null;
+
+        const modelSlug = typeof record.model === "string" ? record.model : "";
+        const modelFull = modelSlug.includes(":") ? modelSlug : `${record.provider}:${modelSlug}`;
+
+        return {
+          turnId: record.turnId,
+          userMessage: record.userMessage,
+          provider: record.provider,
+          model: modelFull,
+          modelSlug,
+          projectId,
+          status: record.status,
+          response: {
+            content: record.response?.content ?? "",
+            finishReason: record.response?.finishReason ?? null
+          },
+          usage: record.usage ?? { tokensIn: 0, tokensOut: 0, latencyMs: 0 },
+          attachments: Array.isArray(record.attachments)
+            ? record.attachments.map((attachment) => ({
+                id: attachment.id,
+                name: attachment.name,
+                size: attachment.size,
+                type: attachment.type,
+                dataUrl: attachment.dataUrl
+              }))
+            : [],
+          createdAt: record.createdAt?.toISOString?.() ?? new Date().toISOString(),
+          startedAt: record.startedAt?.toISOString?.() ?? record.createdAt?.toISOString?.(),
+          finishedAt: record.finishedAt?.toISOString?.() ?? null,
+          error: record.usage?.error ?? null
+        };
+      });
+
+    res.json({ turns, nextCursor, hasMore });
   })
 );
 
@@ -210,6 +307,7 @@ router.get("/stream", async (req, res) => {
     tokensOut: number;
     latencyMs: number;
     finishReason: string;
+    text: string;
   }> => {
     const promptTokens = chatTurn.promptTokens || estimatePromptTokens(chatTurn.system, chatTurn.userMessage);
     const chunks = createMockResponseChunks(chatTurn.userMessage ?? "", selection.composite);
@@ -226,7 +324,8 @@ router.get("/stream", async (req, res) => {
       tokensIn: promptTokens,
       tokensOut,
       latencyMs,
-      finishReason: "mock"
+      finishReason: "mock",
+      text
     };
   };
 
@@ -281,6 +380,10 @@ router.get("/stream", async (req, res) => {
       {
         status: "completed",
         finishedAt: new Date(),
+        response: {
+          content: result.text,
+          finishReason: result.finishReason ?? "stop"
+        },
         usage: {
           tokensIn: result.tokensIn,
           tokensOut: result.tokensOut,
@@ -321,6 +424,10 @@ router.get("/stream", async (req, res) => {
       {
         status: "failed",
         finishedAt: new Date(),
+        response: {
+          content: "",
+          finishReason: "error"
+        },
         usage: {
           tokensIn: 0,
           tokensOut: 0,

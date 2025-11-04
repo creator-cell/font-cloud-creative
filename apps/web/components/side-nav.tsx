@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { clsx } from "clsx";
@@ -23,6 +24,15 @@ type NavLink = {
   Icon: LucideIcon;
   allowedRoles?: string[];
   children?: NavLink[];
+};
+
+type UsageSummary = {
+  monthKey: string;
+  tokensIn: number;
+  tokensOut: number;
+  generations: number;
+  quota: number;
+  softWarned: boolean;
 };
 
 const navLinks: NavLink[] = [
@@ -50,6 +60,8 @@ const navLinks: NavLink[] = [
 export const SideNav = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const [usage, setUsage] = useState<UsageSummary | null>(null);
+  const [loadingUsage, setLoadingUsage] = useState(false);
   const roles = session?.user?.roles?.map((role) => role.toLowerCase()) ?? [];
 
   const visibleLinks = navLinks.filter(({ allowedRoles }) => {
@@ -57,6 +69,58 @@ export const SideNav = () => {
     if (!roles.length) return false;
     return allowedRoles.some((role) => roles.includes(role));
   });
+
+  useEffect(() => {
+    if (!session?.user) {
+      setUsage(null);
+      return;
+    }
+
+    const controller = new AbortController();
+    setLoadingUsage(true);
+
+    fetch("/api/usage/me", { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || "Failed to load usage");
+        }
+        return (await response.json()) as UsageSummary;
+      })
+      .then((data) => {
+        setUsage(data);
+      })
+      .catch((error) => {
+        if (controller.signal.aborted) return;
+        console.error("Failed to load usage summary", error);
+        setUsage(null);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setLoadingUsage(false);
+        }
+      });
+
+    return () => {
+      controller.abort();
+    };
+  }, [session?.user]);
+
+  const usageMetrics = useMemo(() => {
+    if (!usage) {
+      return {
+        used: null as number | null,
+        quota: null as number | null,
+        percent: 0,
+      };
+    }
+    const used = usage.tokensIn + usage.tokensOut;
+    const quota = usage.quota || 0;
+    const percent = quota > 0 ? Math.min(Math.max(used / quota, 0), 1) : 0;
+    return { used, quota, percent };
+  }, [usage]);
+
+  const planLabel = (session?.user?.plan ?? "starter").toUpperCase();
 
   return (
     <aside className="flex h-full w-full flex-col bg-white lg:sticky lg:top-0 lg:h-screen">
@@ -153,14 +217,29 @@ export const SideNav = () => {
       <div className="mt-auto border-t border-slate-200 bg-slate-50 px-6 py-6">
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Token Usage</p>
         <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/70">
-          <div className="h-full w-[18%] rounded-full bg-sky-500" />
+          <div
+            className="h-full rounded-full bg-sky-500 transition-all"
+            style={{ width: `${usageMetrics.percent * 100}%` }}
+          />
         </div>
         <div className="mt-3 flex items-center justify-between text-xs font-medium text-slate-600">
-          <span>21,370</span>
-          <span>300,000</span>
+          <span>
+            {usageMetrics.used !== null
+              ? usageMetrics.used.toLocaleString()
+              : loadingUsage
+                ? "…"
+                : "--"}
+          </span>
+          <span>
+            {usageMetrics.quota !== null
+              ? usageMetrics.quota.toLocaleString()
+              : loadingUsage
+                ? "…"
+                : "--"}
+          </span>
         </div>
         <span className="mt-4 inline-block rounded-full border border-sky-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-sky-600">
-          starter
+          {planLabel}
         </span>
       </div>
     </aside>

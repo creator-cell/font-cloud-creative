@@ -64,6 +64,20 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
           turns: state.session.turns.map((turn) => (turn.id === action.turn.id ? action.turn : turn)),
         },
       };
+    case "prepend-turns":
+      if (action.turns.length === 0) {
+        return state;
+      }
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          turns: [
+            ...action.turns,
+            ...state.session.turns.filter((existing) => !action.turns.some((incoming) => incoming.id === existing.id)),
+          ],
+        },
+      };
     case "append-answer-content":
       return {
         ...state,

@@ -30,7 +30,12 @@ import {
   type ChatTurn,
 } from "@/src/lib/chat/types";
 import { chatReducer, createInitialState, createPendingTurn } from "@/src/lib/chat/state";
-import { createChatTurn, openChatStream } from "@/src/lib/chat/api";
+import {
+  createChatTurn,
+  fetchChatHistory,
+  openChatStream,
+  type ChatHistoryTurn,
+} from "@/src/lib/chat/api";
 import { cn } from "@/lib/utils";
 
 const STREAM_TIMEOUT_MS = 45_000;
@@ -102,11 +107,19 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
   const [isDragActive, setIsDragActive] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(initialProjectId);
   const [showTips, setShowTips] = useState(false);
+  const [historyCursor, setHistoryCursor] = useState<string | null>(null);
+  const [hasMoreHistory, setHasMoreHistory] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const controllersRef = useRef<StreamControllers>({ source: null, timeout: null });
   const activeTurnRef = useRef<string | null>(null);
+  const historyAbortRef = useRef<AbortController | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const dragCounter = useRef(0);
   const chatScrollRef = useRef<HTMLDivElement | null>(null);
+  const topSentinelRef = useRef<HTMLDivElement | null>(null);
+  const lastModelIdRef = useRef(state.session.lastModelId);
+  const isLoadingHistoryRef = useRef(false);
+  const skipAutoScrollRef = useRef(false);
 
   const projectMap = useMemo(() => {
     const map = new Map<string, ProjectSummary>();
@@ -115,6 +128,125 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
   }, [projects]);
 
   const hasTurns = state.session.turns.length > 0;
+
+  const mapHistoryTurn = useCallback(
+    (item: ChatHistoryTurn): ChatTurn => {
+      const modelCandidate = item.model?.includes(":")
+        ? item.model
+        : `${item.provider}:${item.model}`;
+      const modelId = modelCandidate || `${item.provider}:${item.modelSlug ?? ""}`;
+      const startedAtMs = item.startedAt ? Date.parse(item.startedAt) : Date.parse(item.createdAt);
+      const completedAtMs = item.finishedAt ? Date.parse(item.finishedAt) : undefined;
+      const safeStartedAt = Number.isFinite(startedAtMs) ? startedAtMs : Date.now();
+      const safeCompletedAt = completedAtMs && Number.isFinite(completedAtMs) ? completedAtMs : undefined;
+
+      const status: ChatTurn["answer"]["status"] =
+        item.status === "completed" ? "complete" : item.status === "failed" ? "error" : "idle";
+
+      return {
+        id: item.turnId,
+        userMessage: item.userMessage,
+        createdAt: safeStartedAt,
+        projectId: item.projectId ?? undefined,
+        attachments:
+          item.attachments?.map((attachment) => ({
+            id: attachment.id,
+            name: attachment.name,
+            size: attachment.size,
+            type: attachment.type ?? "application/octet-stream",
+            dataUrl: attachment.dataUrl,
+          })) ?? [],
+        answer: {
+          turnId: item.turnId,
+          provider: getProviderFromModel(modelId),
+          model: modelId,
+          content: item.response?.content ?? "",
+          status,
+          tokensIn: item.usage?.tokensIn,
+          tokensOut: item.usage?.tokensOut,
+          latencyMs: item.usage?.latencyMs,
+          finishReason: item.response?.finishReason ?? undefined,
+          errorMessage: item.usage?.error ?? item.error ?? undefined,
+          startedAt: safeStartedAt,
+          completedAt: safeCompletedAt,
+        },
+      };
+    },
+    []
+  );
+
+  const loadHistory = useCallback(
+    async ({ projectId, cursor, mode }: { projectId: string; cursor?: string | null; mode: "reset" | "prepend" }) => {
+      if (!projectId) return;
+      if (mode === "prepend" && isLoadingHistoryRef.current) return;
+
+      const controller = new AbortController();
+      historyAbortRef.current?.abort();
+      historyAbortRef.current = controller;
+      isLoadingHistoryRef.current = true;
+      setIsLoadingHistory(true);
+
+      const preserveScroll = mode === "prepend";
+      const container = chatScrollRef.current;
+      const previousScrollHeight = preserveScroll && container ? container.scrollHeight : 0;
+      const previousScrollTop = preserveScroll && container ? container.scrollTop : 0;
+
+      try {
+        const response = await fetchChatHistory(
+          {
+            projectId,
+            cursor: cursor ?? undefined,
+            limit: 20,
+          },
+          controller.signal
+        );
+
+        const mappedTurns = response.turns.map(mapHistoryTurn);
+        setHistoryCursor(response.nextCursor);
+        setHasMoreHistory(response.hasMore);
+
+        if (mode === "reset") {
+          const newSessionId =
+            typeof crypto !== "undefined" && "randomUUID" in crypto
+              ? crypto.randomUUID()
+              : `session-${Date.now()}`;
+          dispatch({
+            type: "set-session",
+            session: {
+              id: newSessionId,
+              turns: mappedTurns,
+              activeProjectId: projectId,
+              lastModelId: lastModelIdRef.current,
+            },
+          });
+          dispatch({ type: "set-streaming", value: false });
+          setStatusMessage(null);
+          skipAutoScrollRef.current = false;
+        } else if (mappedTurns.length > 0) {
+          dispatch({ type: "prepend-turns", turns: mappedTurns });
+          skipAutoScrollRef.current = true;
+          if (preserveScroll && container) {
+            requestAnimationFrame(() => {
+              const target = chatScrollRef.current;
+              if (!target) return;
+              const heightDelta = target.scrollHeight - previousScrollHeight;
+              target.scrollTop = previousScrollTop + heightDelta;
+            });
+          }
+        }
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.error("Failed to load chat history", error);
+          setStatusMessage("Unable to load previous messages.");
+        }
+      } finally {
+        isLoadingHistoryRef.current = false;
+        setIsLoadingHistory(false);
+        historyAbortRef.current = null;
+      }
+    },
+    [dispatch, mapHistoryTurn]
+  );
 
   useEffect(() => {
     const isKnownModel = PROVIDER_MODELS.some((model) => model.id === state.session.lastModelId);
@@ -126,6 +258,10 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
   useEffect(() => {
     if (typeof window === "undefined") return;
     window.localStorage.setItem(STORAGE_KEY, state.session.lastModelId);
+  }, [state.session.lastModelId]);
+
+  useEffect(() => {
+    lastModelIdRef.current = state.session.lastModelId;
   }, [state.session.lastModelId]);
 
   useEffect(() => {
@@ -150,6 +286,30 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
   }, [selectedProjectId]);
 
   useEffect(() => {
+    if (!selectedProjectId) {
+      const emptySessionId =
+        typeof crypto !== "undefined" && "randomUUID" in crypto
+          ? crypto.randomUUID()
+          : `session-${Date.now()}`;
+      dispatch({
+        type: "set-session",
+        session: {
+          id: emptySessionId,
+          activeProjectId: null,
+          lastModelId: lastModelIdRef.current,
+          turns: [],
+        },
+      });
+      setHistoryCursor(null);
+      setHasMoreHistory(false);
+      return;
+    }
+    setHistoryCursor(null);
+    setHasMoreHistory(false);
+    void loadHistory({ projectId: selectedProjectId, mode: "reset" });
+  }, [dispatch, loadHistory, selectedProjectId]);
+
+  useEffect(() => {
     return () => {
       if (controllersRef.current.source) {
         controllersRef.current.source.close();
@@ -159,6 +319,35 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
       }
     };
   }, []);
+
+  useEffect(() => () => historyAbortRef.current?.abort(), []);
+
+  useEffect(() => {
+    const container = chatScrollRef.current;
+    const sentinel = topSentinelRef.current;
+    if (!container || !sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (!entry?.isIntersecting) return;
+        if (!selectedProjectId) return;
+        if (!hasMoreHistory) return;
+        if (isLoadingHistoryRef.current) return;
+        void loadHistory({ projectId: selectedProjectId, cursor: historyCursor, mode: "prepend" });
+      },
+      {
+        root: container,
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(sentinel);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasMoreHistory, historyCursor, loadHistory, selectedProjectId]);
 
   const handleModelChange = (value: string) => {
     dispatch({ type: "update-last-model", modelId: value });
@@ -197,64 +386,6 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
       resetStreaming();
     },
     [resetStreaming]
-  );
-
-  const beginStreaming = useCallback(
-    (turn: ChatTurn, streamUrl: string) => {
-      activeTurnRef.current = turn.id;
-      dispatch({ type: "append-turn", turn });
-
-      controllersRef.current.timeout = window.setTimeout(() => handleStreamTimeout(turn.id), STREAM_TIMEOUT_MS);
-
-      controllersRef.current.source = openChatStream(streamUrl, {
-        onStart: (event) => {
-          dispatch({
-            type: "update-answer",
-            turnId: turn.id,
-            patch: {
-              provider: getProviderFromModel(event.model),
-              model: event.model,
-              status: "streaming",
-            },
-          });
-        },
-        onDelta: (event) => {
-          dispatch({
-            type: "append-answer-content",
-            turnId: turn.id,
-            delta: event.text_delta,
-          });
-        },
-        onEnd: (event) => {
-          dispatch({
-            type: "update-answer",
-            turnId: turn.id,
-            patch: {
-              status: "complete",
-              tokensIn: event.tokens_in,
-              tokensOut: event.tokens_out,
-              costCents: event.cost_cents,
-              latencyMs: event.latency_ms,
-              finishReason: event.finish_reason,
-              completedAt: Date.now(),
-            },
-          });
-        },
-        onError: (event) => {
-          dispatch({
-            type: "update-answer",
-            turnId: turn.id,
-            patch: { status: "error", errorMessage: event.message },
-          });
-          setStatusMessage(event.message);
-          resetStreaming();
-        },
-        onComplete: () => {
-          resetStreaming();
-        },
-      });
-    },
-    [handleStreamTimeout, resetStreaming]
   );
 
   const serializeAttachments = useCallback(async () => {
@@ -297,6 +428,83 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
       setStatusMessage(null);
     },
     []
+  );
+
+  const scrollChatToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
+    const container = chatScrollRef.current;
+    if (!container) return;
+    requestAnimationFrame(() => {
+      const target = chatScrollRef.current;
+      if (!target) return;
+      target.scrollTo({
+        top: target.scrollHeight,
+        behavior,
+      });
+    });
+  }, []);
+
+  const beginStreaming = useCallback(
+    (turn: ChatTurn, streamUrl: string) => {
+      activeTurnRef.current = turn.id;
+      dispatch({ type: "append-turn", turn });
+      skipAutoScrollRef.current = false;
+      scrollChatToBottom("auto");
+
+      controllersRef.current.timeout = window.setTimeout(() => handleStreamTimeout(turn.id), STREAM_TIMEOUT_MS);
+
+      controllersRef.current.source = openChatStream(streamUrl, {
+        onStart: (event) => {
+          dispatch({
+            type: "update-answer",
+            turnId: turn.id,
+            patch: {
+              provider: getProviderFromModel(event.model),
+              model: event.model,
+              status: "streaming",
+            },
+          });
+        },
+        onDelta: (event) => {
+          dispatch({
+            type: "append-answer-content",
+            turnId: turn.id,
+            delta: event.text_delta,
+          });
+          scrollChatToBottom("auto");
+        },
+        onEnd: (event) => {
+          dispatch({
+            type: "update-answer",
+            turnId: turn.id,
+            patch: {
+              status: "complete",
+              tokensIn: event.tokens_in,
+              tokensOut: event.tokens_out,
+              costCents: event.cost_cents,
+              latencyMs: event.latency_ms,
+              finishReason: event.finish_reason,
+              completedAt: Date.now(),
+            },
+          });
+          scrollChatToBottom("smooth");
+        },
+        onError: (event) => {
+          dispatch({
+            type: "update-answer",
+            turnId: turn.id,
+            patch: { status: "error", errorMessage: event.message },
+          });
+          setStatusMessage(event.message);
+          resetStreaming();
+          scrollChatToBottom("smooth");
+        },
+        onComplete: () => {
+          resetStreaming();
+          scrollChatToBottom("smooth");
+        },
+      });
+    },
+    [handleStreamTimeout, resetStreaming, scrollChatToBottom]
   );
 
   const sendMessage = useCallback(
@@ -436,20 +644,12 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
     handleFilesAdded(files);
   };
 
-  const scrollChatToBottom = useCallback(
-    (behavior: ScrollBehavior = "smooth") => {
-      const container = chatScrollRef.current;
-      if (!container) return;
-      container.scrollTo({
-        top: container.scrollHeight,
-        behavior,
-      });
-    },
-    []
-  );
-
   useEffect(() => {
     if (state.session.turns.length === 0) return;
+    if (skipAutoScrollRef.current) {
+      skipAutoScrollRef.current = false;
+      return;
+    }
     scrollChatToBottom(state.isStreaming ? "auto" : "smooth");
   }, [state.session.turns, state.isStreaming, scrollChatToBottom]);
 
@@ -528,24 +728,6 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Button
-            type="button"
-            variant="secondary"
-            className="gap-2 py-2"
-            onClick={() => fileInputRef.current?.click()}
-            aria-label="Upload files for analysis"
-          >
-            <Paperclip className="h-4 w-4" aria-hidden="true" />
-            Upload files
-          </Button>
-          {pendingAttachments.length > 0 && (
-            <span className="text-xs font-medium text-slate-500">
-              {pendingAttachments.length} file{pendingAttachments.length > 1 ? "s" : ""} ready
-            </span>
-          )}
-        </div>
-
         {pendingAttachments.length > 0 && (
           <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/70 p-3">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Files to analyze</p>
@@ -585,6 +767,12 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
               hasTurns ? "overflow-y-auto" : "overflow-visible"
             )}
           >
+            <div ref={topSentinelRef} aria-hidden="true" />
+            {isLoadingHistory && hasMoreHistory ? (
+              <div className="flex items-center justify-center py-2 text-xs text-slate-500">
+                Loading previous messages…
+              </div>
+            ) : null}
             <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-600 shadow-sm">
               <button
                 type="button"

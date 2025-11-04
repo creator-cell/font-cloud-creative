@@ -67,7 +67,8 @@ export type ChatAction =
   | { type: "set-session"; session: ChatSession }
   | { type: "update-last-model"; modelId: string }
   | { type: "set-active-project"; projectId: string | null }
-  | { type: "replace-turn"; turn: ChatTurn };
+  | { type: "replace-turn"; turn: ChatTurn }
+  | { type: "prepend-turns"; turns: ChatTurn[] };
 
 export const PROVIDER_MODELS: ProviderModel[] = [
   {

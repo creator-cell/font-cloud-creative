@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/session";
 
@@ -22,6 +22,40 @@ const createTurnSchema = z.object({
     )
     .optional(),
 });
+
+export async function GET(request: NextRequest) {
+  const session = await auth();
+  if (!session?.apiToken) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const projectId = request.nextUrl.searchParams.get("projectId");
+  const cursor = request.nextUrl.searchParams.get("cursor");
+  const limit = request.nextUrl.searchParams.get("limit");
+
+  const params = new URLSearchParams();
+  if (projectId) params.set("projectId", projectId);
+  if (cursor) params.set("cursor", cursor);
+  if (limit) params.set("limit", limit);
+
+  const upstreamResponse = await fetch(`${apiBaseUrl}/v1/chat/turns?${params.toString()}`, {
+    headers: {
+      Authorization: `Bearer ${session.apiToken}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!upstreamResponse.ok) {
+    const errorBody = await upstreamResponse.text();
+    return NextResponse.json(
+      { error: errorBody || "Unable to load chat turns" },
+      { status: upstreamResponse.status }
+    );
+  }
+
+  const result = await upstreamResponse.json();
+  return NextResponse.json(result);
+}
 
 export async function POST(request: Request) {
   try {
