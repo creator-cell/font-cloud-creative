@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createCheckoutSession, createPortalSession } from "@/lib/api/endpoints";
+import { createCheckoutSession, createPortalSession, rechargeWallet } from "@/lib/api/endpoints";
 import { Button } from "@/components/ui/button";
 
 export const BillingActions = ({ token, plan }: { token: string; plan: string }) => {
@@ -33,10 +33,32 @@ export const BillingActions = ({ token, plan }: { token: string; plan: string })
     }
   };
 
+  const recharge = async () => {
+    setLoading("recharge");
+    try {
+      await rechargeWallet(token, { tokens: 15000 });
+      alert("Wallet recharged with 15,000 tokens.");
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+      alert("Unable to recharge wallet. Try again later.");
+    } finally {
+      setLoading(null);
+    }
+  };
+
   return (
     <div className="space-y-3">
       <Button onClick={openPortal} disabled={loading === "portal"} className="w-full">
         {loading === "portal" ? "Opening portal..." : "Open billing portal"}
+      </Button>
+      <Button
+        variant="secondary"
+        onClick={recharge}
+        disabled={loading === "recharge"}
+        className="w-full"
+      >
+        {loading === "recharge" ? "Processing..." : "Recharge 15,000 tokens"}
       </Button>
       {plan === "free" && (
         <div className="grid gap-2 md:grid-cols-3">

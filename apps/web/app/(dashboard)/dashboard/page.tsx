@@ -21,6 +21,13 @@ type UsageResponse = {
   generations: number;
   quota: number;
   softWarned: boolean;
+  availableTokens: number;
+  holdTokens: number;
+  totalAllocatedTokens: number;
+  rechargeCount: number;
+  rechargeTokens: number;
+  tokenBalance: number;
+  walletCurrency: string;
 };
 
 const quickActions = [
@@ -82,9 +89,10 @@ export default async function DashboardPage() {
     throw err;
   }
 
-  const totalTokens = usage.tokensIn + usage.tokensOut;
-  const quota = usage.quota || 1;
-  const usagePercent = Math.min(totalTokens / quota, 1);
+  const tokensUsed = usage.tokensIn + usage.tokensOut;
+  const totalAllocated = usage.totalAllocatedTokens || usage.quota || 1;
+  const availableTokens = usage.availableTokens ?? Math.max(totalAllocated - tokensUsed, 0);
+  const usagePercent = totalAllocated > 0 ? Math.min(tokensUsed / totalAllocated, 1) : 0;
 
   const statCards = [
     {
@@ -95,8 +103,8 @@ export default async function DashboardPage() {
     },
     {
       title: "Tokens Used",
-      value: compactNumber.format(totalTokens),
-      meta: "7.1% from last month",
+      value: compactNumber.format(tokensUsed),
+      meta: `${compactNumber.format(availableTokens)} tokens available`,
       Icon: BarChart3
     },
     {
@@ -146,7 +154,7 @@ export default async function DashboardPage() {
               <div className="flex items-center justify-between text-sm font-semibold text-slate-700">
                 <span>Usage</span>
                 <span>
-                  {totalTokens.toLocaleString()} / {quota.toLocaleString()}
+                  {availableTokens.toLocaleString()} / {totalAllocated.toLocaleString()}
                 </span>
               </div>
               <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-slate-200">

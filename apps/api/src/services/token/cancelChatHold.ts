@@ -32,7 +32,9 @@ export async function cancelChatHold(userId: Types.ObjectId, turnId: string): Pr
       return { releasedTokens: 0, hadHold: false };
     }
 
-    const releaseTokens = Math.min(wallet.holdAmount, holdTxn.amountTokens);
+    const balanceBefore = wallet.tokenBalance ?? 0;
+    const holdAmountBefore = wallet.holdAmount ?? 0;
+    const releaseTokens = Math.min(holdAmountBefore, holdTxn.amountTokens);
 
     if (releaseTokens > 0) {
       await WalletModel.updateOne(
@@ -57,7 +59,11 @@ export async function cancelChatHold(userId: Types.ObjectId, turnId: string): Pr
           currency: wallet.currency,
           meta: {
             releasedTokens: releaseTokens,
-            reason: "cancelled"
+            reason: "cancelled",
+            balanceBefore,
+            balanceAfter: balanceBefore,
+            holdAmountBefore,
+            holdAmountAfter: Math.max(holdAmountBefore - releaseTokens, 0)
           }
         }
       },

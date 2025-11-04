@@ -9,7 +9,8 @@ interface UsageProps {
 
 export const UsageMeter = ({ tokensIn, tokensOut, quota, warnings = [] }: UsageProps) => {
   const total = tokensIn + tokensOut;
-  const percent = Math.min(100, Math.round((total / quota) * 100));
+  const safeQuota = quota > 0 ? quota : 1;
+  const percent = Math.min(100, Math.round((total / safeQuota) * 100));
   const barColor = percent > 90 ? "bg-rose-500" : percent > 75 ? "bg-amber-400" : "bg-emerald-500";
 
   return (
@@ -22,7 +23,7 @@ export const UsageMeter = ({ tokensIn, tokensOut, quota, warnings = [] }: UsageP
         <div className={`h-2 rounded-full ${barColor}`} style={{ width: `${percent}%` }} />
       </div>
       <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-        {total.toLocaleString()} / {quota.toLocaleString()} tokens
+        {total.toLocaleString()} / {safeQuota.toLocaleString()} tokens
       </p>
       {warnings.length > 0 && (
         <ul className="mt-2 space-y-1 text-xs text-amber-600 dark:text-amber-300">

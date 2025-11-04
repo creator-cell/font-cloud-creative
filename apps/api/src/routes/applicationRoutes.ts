@@ -4,6 +4,7 @@ import { createProject, listBrandVoices, listProjects } from "../controllers/pro
 import { buildBrandVoice } from "../controllers/brandVoiceController";
 import { generate } from "../controllers/generationController";
 import { getMyUsage } from "../controllers/usageController";
+import { listWalletTransactions, rechargeWallet } from "../controllers/walletController";
 import { requireAuth } from "../middleware/requireAuth";
 import { usageLimiter } from "../middleware/usageLimiter";
 
@@ -18,4 +19,6 @@ export const registerApplicationRoutes = (router: Router): void => {
 
   router.post("/generate", requireAuth, usageLimiter, generate);
   router.get("/usage/me", requireAuth, getMyUsage);
+  router.get("/wallet/transactions", requireAuth, listWalletTransactions);
+  router.post("/wallet/recharge", requireAuth, rechargeWallet);
 };

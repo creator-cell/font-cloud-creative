@@ -80,6 +80,8 @@ export async function settleChatTurn(input: SettleChatTurnInput): Promise<Settle
       .lean()
       .exec();
 
+    const balanceBefore = wallet.tokenBalance ?? 0;
+    const holdAmountBefore = wallet.holdAmount ?? 0;
     const holdTokens = holdTxn?.amountTokens ?? totalTokens;
     const safeCapExceeded =
       Boolean(
@@ -87,10 +89,12 @@ export async function settleChatTurn(input: SettleChatTurnInput): Promise<Settle
           typeof holdTxn.meta === "object" &&
           (holdTxn.meta as Record<string, unknown>).safeCapExceeded
       );
-    const heldAmount = wallet.holdAmount;
+    const heldAmount = holdAmountBefore;
     const releaseTokens = Math.min(holdTokens, heldAmount);
 
-    const resultingBalance = wallet.tokenBalance - totalTokens;
+    const resultingBalance = balanceBefore - totalTokens;
+    const balanceAfter = resultingBalance;
+    const holdAmountAfter = Math.max(holdAmountBefore - releaseTokens, 0);
 
     await WalletModel.updateOne(
       { userId: input.userId },
@@ -134,6 +138,8 @@ export async function settleChatTurn(input: SettleChatTurnInput): Promise<Settle
             pricingCurrency: price.currency,
             pricingNeedsFx: price.currency !== walletCurrency,
             priceSourceId: price.sourceId?.toHexString(),
+            balanceBefore,
+            balanceAfter,
             ...(safeCapExceeded ? { safeCapExceeded: true } : {})
           }
         }
@@ -154,7 +160,13 @@ export async function settleChatTurn(input: SettleChatTurnInput): Promise<Settle
           provider: input.provider,
           model: input.model,
           currency: wallet.currency,
-          meta: { releasedTokens: releaseTokens }
+          meta: {
+            releasedTokens: releaseTokens,
+            balanceBefore,
+            balanceAfter,
+            holdAmountBefore,
+            holdAmountAfter
+          }
         }
       },
       {

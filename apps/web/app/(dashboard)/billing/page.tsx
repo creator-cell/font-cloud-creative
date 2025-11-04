@@ -17,6 +17,8 @@ export default async function BillingPage() {
     tokensOut: number;
     quota: number;
     softWarned: boolean;
+    availableTokens: number;
+    totalAllocatedTokens: number;
   }>("/usage/me", session.apiToken);
 
   return (

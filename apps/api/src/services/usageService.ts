@@ -1,6 +1,12 @@
 import { Types } from "mongoose";
 import { env } from "../config/env";
-import { UsageModel, type UsageDocument, TokenPolicyOverrideModel } from "../models";
+import {
+  UsageModel,
+  type UsageDocument,
+  TokenPolicyOverrideModel,
+  WalletModel,
+  TokenTransactionModel
+} from "../models";
 import type { PlanTier } from "../constants/plans";
 
 export const getMonthKey = (date: Date = new Date()): string =>
@@ -76,15 +82,57 @@ export const getUsageSummary = async (
   generations: number;
   quota: number;
   softWarned: boolean;
+  availableTokens: number;
+  holdTokens: number;
+  totalAllocatedTokens: number;
+  rechargeCount: number;
+  rechargeTokens: number;
+  tokenBalance: number;
+  walletCurrency: string;
 }> => {
   const usage = await getUsageForUser(userId);
-  const quota = await getEffectiveQuota(userId, plan, usage.monthKey);
+  const userObjectId = new Types.ObjectId(userId);
+  const [quota, wallet, rechargeAgg] = await Promise.all([
+    getEffectiveQuota(userId, plan, usage.monthKey),
+    WalletModel.findOne({ userId: userObjectId }).lean().exec(),
+    TokenTransactionModel.aggregate<{ total: number; count: number }>([
+      {
+        $match: {
+          userId: userObjectId,
+          type: "grant",
+          source: "recharge"
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$amountTokens" },
+          count: { $sum: 1 }
+        }
+      }
+    ])
+  ]);
+
+  const tokensIn = usage.tokensIn;
+  const tokensOut = usage.tokensOut;
+  const tokenBalance = wallet?.tokenBalance ?? 0;
+  const holdTokens = wallet?.holdAmount ?? 0;
+  const totalAllocatedTokens = tokenBalance + holdTokens + tokensIn + tokensOut;
+  const rechargeStats = rechargeAgg[0] ?? { total: 0, count: 0 };
+
   return {
     monthKey: usage.monthKey,
-    tokensIn: usage.tokensIn,
-    tokensOut: usage.tokensOut,
+    tokensIn,
+    tokensOut,
     generations: usage.generations,
-    quota,
-    softWarned: usage.softWarned
+    quota: totalAllocatedTokens || quota,
+    softWarned: usage.softWarned,
+    availableTokens: tokenBalance,
+    holdTokens,
+    totalAllocatedTokens: totalAllocatedTokens || quota,
+    rechargeCount: rechargeStats.count ?? 0,
+    rechargeTokens: rechargeStats.total ?? 0,
+    tokenBalance,
+    walletCurrency: wallet?.currency ?? "INR"
   };
 };

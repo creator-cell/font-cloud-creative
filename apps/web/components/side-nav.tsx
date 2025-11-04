@@ -15,6 +15,7 @@ import {
   CreditCard,
   Settings,
   ChevronDown,
+  Wallet as WalletIcon,
   type LucideIcon,
 } from "lucide-react";
 
@@ -33,6 +34,8 @@ type UsageSummary = {
   generations: number;
   quota: number;
   softWarned: boolean;
+  availableTokens: number;
+  totalAllocatedTokens: number;
 };
 
 const navLinks: NavLink[] = [
@@ -53,6 +56,7 @@ const navLinks: NavLink[] = [
     ],
   },
   { href: "/generate", label: "Generate", Icon: Sparkles },
+  { href: "/wallet", label: "Wallet", Icon: WalletIcon },
   { href: "/billing", label: "Billing", Icon: CreditCard },
   { href: "/settings", label: "Settings", Icon: Settings },
 ];
@@ -111,13 +115,15 @@ export const SideNav = () => {
       return {
         used: null as number | null,
         quota: null as number | null,
+        available: null as number | null,
         percent: 0,
       };
     }
     const used = usage.tokensIn + usage.tokensOut;
-    const quota = usage.quota || 0;
+    const quota = usage.totalAllocatedTokens ?? usage.quota ?? 0;
+    const available = usage.availableTokens ?? quota - used;
     const percent = quota > 0 ? Math.min(Math.max(used / quota, 0), 1) : 0;
-    return { used, quota, percent };
+    return { used, quota, available: Math.max(available, 0), percent };
   }, [usage]);
 
   const planLabel = (session?.user?.plan ?? "starter").toUpperCase();
@@ -224,8 +230,8 @@ export const SideNav = () => {
         </div>
         <div className="mt-3 flex items-center justify-between text-xs font-medium text-slate-600">
           <span>
-            {usageMetrics.used !== null
-              ? usageMetrics.used.toLocaleString()
+            {usageMetrics.available !== null
+              ? usageMetrics.available.toLocaleString()
               : loadingUsage
                 ? "…"
                 : "--"}

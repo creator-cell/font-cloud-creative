@@ -143,6 +143,9 @@ export async function startChatHold(input: StartChatHoldInput): Promise<StartCha
       };
     }
 
+    const balanceBefore = wallet.tokenBalance;
+    const holdAmountBefore = wallet.holdAmount;
+
     await WalletModel.updateOne(
       { userId: input.userId },
       { $inc: { holdAmount: holdTokens } },
@@ -151,7 +154,11 @@ export async function startChatHold(input: StartChatHoldInput): Promise<StartCha
 
     const holdMeta: Record<string, unknown> = {
       promptTokens: input.promptTokens,
-      maxOutputTokens: input.maxOutputTokens
+      maxOutputTokens: input.maxOutputTokens,
+      balanceBefore,
+      balanceAfter: balanceBefore,
+      holdAmountBefore,
+      holdAmountAfter: holdAmountBefore + holdTokens
     };
     if (safeCapExceeded) {
       holdMeta.safeCapExceeded = true;

@@ -87,7 +87,7 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
   const planSnapshot = resolvePlanSnapshot(payload.plan);
   const userObjectId = new Types.ObjectId(claims.sub);
 
-  const allocation = await allocateOnRegistration(userObjectId, planSnapshot);
+  const allocation = await allocateOnRegistration(userObjectId, planSnapshot, payment.reference);
   await PurchaseModel.create({ userId: userObjectId, planSnapshot });
 
   res.status(201).json({
@@ -144,6 +144,10 @@ export const completePlanSelection = asyncHandler(
 
     const payment = await simulatePayment();
     await UserModel.findByIdAndUpdate(req.user.sub, { plan: payload.plan });
+    const planSnapshot = resolvePlanSnapshot(payload.plan);
+    const userObjectId = new Types.ObjectId(req.user.sub);
+    const allocation = await allocateOnRegistration(userObjectId, planSnapshot, payment.reference, "plan-upgrade");
+    await PurchaseModel.create({ userId: userObjectId, planSnapshot });
     const { token, claims } = await issueUserToken({
       userId: req.user.sub,
       email: req.user.email,
@@ -160,6 +164,10 @@ export const completePlanSelection = asyncHandler(
         email: claims.email,
         plan: claims.plan,
         roles: claims.roles
+      },
+      wallet: {
+        credited: allocation.credited,
+        balance: allocation.balance
       }
     });
   }

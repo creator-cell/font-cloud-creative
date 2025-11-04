@@ -78,6 +78,7 @@ export const completePlanSelection = (token: string, plan: "starter" | "pro" | "
     payment: { status: string; reference: string; gateway: string };
     token: string;
     user: { id: string; email: string; plan: string; roles: string[] };
+    wallet: { credited: number; balance: number };
   }>("/auth/complete-plan", {
     token,
     method: "POST",
@@ -109,3 +110,51 @@ export const deleteProject = (token: string, projectId: string) =>
 
 export const fetchBrandVoices = (token: string) =>
   apiFetch<{ brandVoices: BrandVoiceSummary[] }>("/brand-voice", { token });
+
+export const rechargeWallet = (
+  token: string,
+  payload: { tokens: number; currency?: string; amountCents?: number; reference?: string }
+) =>
+  apiFetch<{ credited: number; balance: number; idempotent: boolean }>("/wallet/recharge", {
+    token,
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+
+export const fetchWalletTransactions = (
+  token: string,
+  params: {
+    cursor?: string;
+    limit?: number;
+    kind?: "all" | "credit" | "debit" | "hold";
+    type?: string;
+    source?: string;
+  } = {}
+) => {
+  const search = new URLSearchParams();
+  if (params.cursor) search.set("cursor", params.cursor);
+  if (params.limit) search.set("limit", String(params.limit));
+  if (params.kind && params.kind !== "all") search.set("kind", params.kind);
+  if (params.type) search.set("type", params.type);
+  if (params.source) search.set("source", params.source);
+
+  const query = search.toString();
+
+  return apiFetch<{
+    items: Array<{
+      id: string;
+      type: string;
+      direction: "credit" | "debit" | "hold";
+      amountTokens: number;
+      currency: string | null;
+      amountFiatCents: number | null;
+      source: string | null;
+      refId: string | null;
+      provider: string | null;
+      model: string | null;
+      meta: Record<string, unknown>;
+      createdAt: string;
+    }>;
+    nextCursor: string | null;
+  }>(`/wallet/transactions${query ? `?${query}` : ""}`, { token });
+};
