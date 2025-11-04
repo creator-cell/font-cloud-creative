@@ -13,6 +13,7 @@ import {
   Sparkles,
   Wand2
 } from "lucide-react";
+import type { BrandVoiceSummary, ProjectSummary } from "@/lib/api/endpoints";
 
 type UsageResponse = {
   monthKey: string;
@@ -51,24 +52,25 @@ const quickActions = [
   }
 ] as const;
 
-const recentActivity = [
-  {
-    id: 1,
-    title: "Ad Generation",
-    model: "gpt-4o",
-    tokens: 87,
-    provider: "openai",
-    date: "20/02/2024"
-  },
-  {
-    id: 2,
-    title: "Blog Generation",
-    model: "claude-3.5-sonnet",
-    tokens: 1456,
-    provider: "anthropic",
-    date: "18/02/2024"
-  }
-] as const;
+type WalletTransaction = {
+  id: string;
+  type: string;
+  direction: "credit" | "debit" | "hold";
+  amountTokens: number;
+  currency: string | null;
+  amountFiatCents: number | null;
+  source: string | null;
+  refId: string | null;
+  provider: string | null;
+  model: string | null;
+  meta: Record<string, unknown>;
+  createdAt: string;
+};
+
+type WalletTransactionsResponse = {
+  items: WalletTransaction[];
+  nextCursor: string | null;
+};
 
 const compactNumber = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
 
@@ -79,8 +81,16 @@ export default async function DashboardPage() {
   }
 
   let usage: UsageResponse;
+  let walletActivity: WalletTransactionsResponse;
+  let projects: { projects: ProjectSummary[] };
+  let brandVoices: { brandVoices: BrandVoiceSummary[] };
   try {
-    usage = await serverApiFetch<UsageResponse>("/usage/me", session.apiToken);
+    [usage, walletActivity, projects, brandVoices] = await Promise.all([
+      serverApiFetch<UsageResponse>("/usage/me", session.apiToken),
+      serverApiFetch<WalletTransactionsResponse>("/wallet/transactions?limit=3", session.apiToken),
+      serverApiFetch<{ projects: ProjectSummary[] }>("/projects", session.apiToken),
+      serverApiFetch<{ brandVoices: BrandVoiceSummary[] }>("/brand-voice", session.apiToken)
+    ]);
   } catch (err) {
     const status = (err as Error & { status?: number }).status;
     if (status === 401) {
@@ -93,12 +103,18 @@ export default async function DashboardPage() {
   const totalAllocated = usage.totalAllocatedTokens || usage.quota || 1;
   const availableTokens = usage.availableTokens ?? Math.max(totalAllocated - tokensUsed, 0);
   const usagePercent = totalAllocated > 0 ? Math.min(tokensUsed / totalAllocated, 1) : 0;
+  const activeProjects = projects.projects.length;
+  const brandVoiceCount = brandVoices.brandVoices.length;
+  const walletItems = walletActivity.items.slice(0, 3);
 
   const statCards = [
     {
       title: "Generations This Month",
       value: usage.generations.toLocaleString(),
-      meta: "+12% from last month",
+      meta:
+        usage.generations === 1
+          ? "1 generation completed"
+          : `${usage.generations.toLocaleString()} generations completed`,
       Icon: Wand2
     },
     {
@@ -109,14 +125,18 @@ export default async function DashboardPage() {
     },
     {
       title: "Active Projects",
-      value: "3",
-      meta: "+1 from last month",
+      value: activeProjects.toLocaleString(),
+      meta:
+        activeProjects === 1 ? "1 project currently active" : `${activeProjects.toLocaleString()} projects active`,
       Icon: FileText
     },
     {
       title: "Brand Voices",
-      value: "2",
-      meta: "Active this month",
+      value: brandVoiceCount.toLocaleString(),
+      meta:
+        brandVoiceCount === 1
+          ? "1 brand voice available"
+          : `${brandVoiceCount.toLocaleString()} brand voices available`,
       Icon: Layers3
     }
   ] as const;
@@ -183,37 +203,52 @@ export default async function DashboardPage() {
           <CardHeader className="mb-6">
             <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
               <Sparkles className="h-4 w-4 text-sky-500" />
-              Recent Activity
+              Recent Wallet Activity
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
-              {recentActivity.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-semibold text-slate-900">{item.title}</p>
-                      <p className="text-xs text-slate-500">
-                        {item.model} • {item.tokens} tokens
-                      </p>
-                    </div>
-                    <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">{item.provider}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-xs text-slate-500">
-                    <span>{item.date}</span>
-                    <ArrowUpRight className="h-4 w-4 text-slate-300" />
-                  </div>
+              {walletItems.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-6 text-center text-sm text-slate-500">
+                  No wallet transactions yet.
                 </div>
-              ))}
+              ) : (
+                walletItems.map((item) => {
+                  const amountPrefix = item.direction === "debit" ? "-" : item.direction === "credit" ? "+" : "";
+                  const amountDisplay = `${amountPrefix}${item.amountTokens.toLocaleString()} tokens`;
+                  const timestamp = new Date(item.createdAt);
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-slate-900">{item.type.replace(/_/g, " ")}</p>
+                          <p className="text-xs text-slate-500">
+                            {amountDisplay}
+                            {item.source ? ` • ${item.source}` : ""}
+                          </p>
+                        </div>
+                        <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                          {timestamp.toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs text-slate-500">
+                        <span>{timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+                        <ArrowUpRight className="h-4 w-4 text-slate-300" />
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
             <Button
+              asChild
               variant="secondary"
               className="w-full justify-center border border-slate-200 bg-white text-slate-600 hover:border-sky-200 hover:text-slate-700"
             >
-              View All Generations
+              <Link href="/wallet">View All Wallet Transactions</Link>
             </Button>
           </CardContent>
         </Card>
