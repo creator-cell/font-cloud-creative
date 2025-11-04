@@ -39,6 +39,13 @@ const getOrCreateUsage = async (userId: string, monthKey: string): Promise<Usage
 export const getUsageForUser = async (userId: string, monthKey = getMonthKey()): Promise<UsageDocument> =>
   getOrCreateUsage(userId, monthKey);
 
+const getMonthDateRange = (monthKey: string): { start: Date; end: Date } => {
+  const [year, month] = monthKey.split("-").map((value) => Number.parseInt(value, 10));
+  const start = new Date(Date.UTC(year, (month || 1) - 1, 1, 0, 0, 0, 0));
+  const end = new Date(Date.UTC(year, (month || 1), 1, 0, 0, 0, 0));
+  return { start, end };
+};
+
 export const bumpUsage = async (
   userId: string,
   plan: PlanTier,
@@ -92,15 +99,33 @@ export const getUsageSummary = async (
 }> => {
   const usage = await getUsageForUser(userId);
   const userObjectId = new Types.ObjectId(userId);
-  const [quota, wallet, rechargeAgg] = await Promise.all([
+  const { start, end } = getMonthDateRange(usage.monthKey);
+
+  const [quota, wallet, monthlyGrantAgg, monthlyRechargeAgg] = await Promise.all([
     getEffectiveQuota(userId, plan, usage.monthKey),
     WalletModel.findOne({ userId: userObjectId }).lean().exec(),
+    TokenTransactionModel.aggregate<{ total: number }>([
+      {
+        $match: {
+          userId: userObjectId,
+          type: "grant",
+          createdAt: { $gte: start, $lt: end }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$amountTokens" }
+        }
+      }
+    ]),
     TokenTransactionModel.aggregate<{ total: number; count: number }>([
       {
         $match: {
           userId: userObjectId,
           type: "grant",
-          source: "recharge"
+          source: "recharge",
+          createdAt: { $gte: start, $lt: end }
         }
       },
       {
@@ -117,8 +142,9 @@ export const getUsageSummary = async (
   const tokensOut = usage.tokensOut;
   const tokenBalance = wallet?.tokenBalance ?? 0;
   const holdTokens = wallet?.holdAmount ?? 0;
-  const totalAllocatedTokens = tokenBalance + holdTokens + tokensIn + tokensOut;
-  const rechargeStats = rechargeAgg[0] ?? { total: 0, count: 0 };
+  const totalAllocatedTokens = monthlyGrantAgg[0]?.total ?? quota;
+  const rechargeStats = monthlyRechargeAgg[0] ?? { total: 0, count: 0 };
+  const availableTokens = tokenBalance;
 
   return {
     monthKey: usage.monthKey,
@@ -127,7 +153,7 @@ export const getUsageSummary = async (
     generations: usage.generations,
     quota: totalAllocatedTokens || quota,
     softWarned: usage.softWarned,
-    availableTokens: tokenBalance,
+    availableTokens,
     holdTokens,
     totalAllocatedTokens: totalAllocatedTokens || quota,
     rechargeCount: rechargeStats.count ?? 0,
