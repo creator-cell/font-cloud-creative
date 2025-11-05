@@ -142,34 +142,34 @@ export default async function DashboardPage() {
   ] as const;
 
   return (
-    <div className="space-y-8">
-      <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+    <div className="space-y-3 pb-4">
+      <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
         {statCards.map(({ title, value, meta, Icon }) => (
-          <Card key={title} className="rounded-2xl border-slate-200 p-6 shadow-sm">
+          <Card key={title} className="rounded-2xl border-slate-200 p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{title}</p>
-                <p className="mt-3 text-3xl font-semibold text-slate-900">{value}</p>
-                <p className="mt-2 text-xs font-medium text-slate-500">{meta}</p>
+                <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
+                <p className="mt-1 text-[0.7rem] font-medium text-slate-500">{meta}</p>
               </div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 text-sky-500">
-                <Icon className="h-5 w-5" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-sky-50 text-sky-500">
+                <Icon className="h-4 w-4" />
               </div>
             </div>
           </Card>
         ))}
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <Card className="rounded-2xl border-slate-200 p-6 shadow-sm">
-          <CardHeader className="mb-6">
+      <section className="grid gap-3 lg:grid-cols-[minmax(0,1.8fr)_minmax(0,1fr)]">
+        <Card className="rounded-2xl border-slate-200 p-4 shadow-sm">
+          <CardHeader className="mb-3">
             <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
               <BarChart3 className="h-4 w-4 text-sky-500" />
               Usage Overview
             </div>
             <CardTitle className="text-sm font-medium text-slate-500">Monthly Token Usage</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6 text-slate-600">
+          <CardContent className="space-y-4 text-slate-600">
             <div>
               <div className="flex items-center justify-between text-sm font-semibold text-slate-700">
                 <span>Usage</span>
@@ -177,18 +177,26 @@ export default async function DashboardPage() {
                   {availableTokens.toLocaleString()} / {totalAllocated.toLocaleString()}
                 </span>
               </div>
-              <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-slate-200">
+              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-200">
                 <div className="h-full rounded-full bg-sky-500" style={{ width: `${usagePercent * 100}%` }} />
               </div>
             </div>
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="grid gap-5 sm:grid-cols-2">
               <div>
                 <p className="text-xs uppercase tracking-wide text-slate-500">Input Tokens</p>
-                <p className="mt-2 text-2xl font-semibold text-slate-900">{usage.tokensIn.toLocaleString()}</p>
+                <p className="mt-1 text-xl font-semibold text-slate-900">
+                  {usage.tokensIn.toLocaleString()}{" "}
+                  <span className="text-sm font-normal text-slate-500">tokens</span>
+                </p>
+                <p className="text-xs text-slate-500">Total input tokens processed this month.</p>
               </div>
               <div>
                 <p className="text-xs uppercase tracking-wide text-slate-500">Output Tokens</p>
-                <p className="mt-2 text-2xl font-semibold text-slate-900">{usage.tokensOut.toLocaleString()}</p>
+                <p className="mt-1 text-xl font-semibold text-slate-900">
+                  {usage.tokensOut.toLocaleString()}{" "}
+                  <span className="text-sm font-normal text-slate-500">tokens</span>
+                </p>
+                <p className="text-xs text-slate-500">Total output tokens generated this month.</p>
               </div>
             </div>
             {usage.softWarned && (
@@ -199,17 +207,17 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-slate-200 p-6 shadow-sm">
-          <CardHeader className="mb-6">
+        <Card className="rounded-2xl border-slate-200 p-4 shadow-sm">
+          <CardHeader className="mb-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
               <Sparkles className="h-4 w-4 text-sky-500" />
               Recent Wallet Activity
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-3">
+          <CardContent className="space-y-3">
+            <div className="space-y-2.5">
               {walletItems.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-6 text-center text-sm text-slate-500">
+                <div className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-5 text-center text-sm text-slate-500">
                   No wallet transactions yet.
                 </div>
               ) : (
@@ -220,7 +228,7 @@ export default async function DashboardPage() {
                   return (
                     <div
                       key={item.id}
-                      className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                      className="flex flex-col gap-2.5 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
                     >
                       <div className="flex items-center justify-between">
                         <div>
@@ -246,7 +254,7 @@ export default async function DashboardPage() {
             <Button
               asChild
               variant="secondary"
-              className="w-full justify-center border border-slate-200 bg-white text-slate-600 hover:border-sky-200 hover:text-slate-700"
+              className="w-full justify-center border border-slate-200 bg-white text-sm text-slate-600 hover:border-sky-200 hover:text-slate-700"
             >
               <Link href="/wallet">View All Wallet Transactions</Link>
             </Button>
@@ -254,9 +262,9 @@ export default async function DashboardPage() {
         </Card>
       </section>
 
-      <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {quickActions.map(({ title, description, href, Icon }) => (
-          <Card key={title} className="rounded-2xl border-slate-200 p-6 shadow-sm transition hover:shadow-md">
+          <Card key={title} className="rounded-2xl border-slate-200 p-5 shadow-sm transition hover:shadow-md">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-base font-semibold text-slate-900">{title}</h3>
@@ -268,7 +276,7 @@ export default async function DashboardPage() {
             </div>
             <Link
               href={href}
-              className="mt-6 inline-flex w-fit items-center rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-sky-200 hover:text-sky-600"
+              className="mt-4 inline-flex w-fit items-center rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-slate-600 transition hover:border-sky-200 hover:text-sky-600"
             >
               Open
             </Link>
