@@ -5,7 +5,8 @@ import {
   type UsageDocument,
   TokenPolicyOverrideModel,
   WalletModel,
-  TokenTransactionModel
+  TokenTransactionModel,
+  TokenUsageModel
 } from "../models";
 import type { PlanTier } from "../constants/plans";
 
@@ -101,7 +102,7 @@ export const getUsageSummary = async (
   const userObjectId = new Types.ObjectId(userId);
   const { start, end } = getMonthDateRange(usage.monthKey);
 
-  const [quota, wallet, monthlyGrantAgg, monthlyRechargeAgg] = await Promise.all([
+  const [quota, wallet, monthlyGrantAgg, monthlyRechargeAgg, tokenUsageAgg] = await Promise.all([
     getEffectiveQuota(userId, plan, usage.monthKey),
     WalletModel.findOne({ userId: userObjectId }).lean().exec(),
     TokenTransactionModel.aggregate<{ total: number }>([
@@ -135,11 +136,27 @@ export const getUsageSummary = async (
           count: { $sum: 1 }
         }
       }
+    ]),
+    TokenUsageModel.aggregate<{ tokensIn: number; tokensOut: number }>([
+      {
+        $match: {
+          userId: userObjectId,
+          createdAt: { $gte: start, $lt: end }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          tokensIn: { $sum: "$tokensIn" },
+          tokensOut: { $sum: "$tokensOut" }
+        }
+      }
     ])
   ]);
 
-  const tokensIn = usage.tokensIn;
-  const tokensOut = usage.tokensOut;
+  const aggregatedUsage = tokenUsageAgg[0] ?? { tokensIn: 0, tokensOut: 0 };
+  const tokensIn = aggregatedUsage.tokensIn ?? usage.tokensIn;
+  const tokensOut = aggregatedUsage.tokensOut ?? usage.tokensOut;
   const tokenBalance = wallet?.tokenBalance ?? 0;
   const holdTokens = wallet?.holdAmount ?? 0;
   const totalAllocatedTokens = monthlyGrantAgg[0]?.total ?? quota;
