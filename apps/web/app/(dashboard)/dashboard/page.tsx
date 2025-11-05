@@ -80,23 +80,72 @@ export default async function DashboardPage() {
     redirect("/api/auth/signin");
   }
 
-  let usage: UsageResponse;
-  let walletActivity: WalletTransactionsResponse;
-  let projects: { projects: ProjectSummary[] };
-  let brandVoices: { brandVoices: BrandVoiceSummary[] };
-  try {
-    [usage, walletActivity, projects, brandVoices] = await Promise.all([
-      serverApiFetch<UsageResponse>("/usage/me", session.apiToken),
-      serverApiFetch<WalletTransactionsResponse>("/wallet/transactions?limit=3", session.apiToken),
-      serverApiFetch<{ projects: ProjectSummary[] }>("/projects", session.apiToken),
-      serverApiFetch<{ brandVoices: BrandVoiceSummary[] }>("/brand-voice", session.apiToken)
-    ]);
-  } catch (err) {
-    const status = (err as Error & { status?: number }).status;
-    if (status === 401) {
+  const [
+    usageResult,
+    walletResult,
+    projectsResult,
+    brandVoicesResult
+  ] = await Promise.allSettled([
+    serverApiFetch<UsageResponse>("/usage/me", session.apiToken),
+    serverApiFetch<WalletTransactionsResponse>("/wallet/transactions?limit=3", session.apiToken),
+    serverApiFetch<{ projects: ProjectSummary[] }>("/projects", session.apiToken),
+    serverApiFetch<{ brandVoices: BrandVoiceSummary[] }>("/brand-voice", session.apiToken)
+  ]);
+
+  if (usageResult.status === "rejected") {
+    const err = usageResult.reason as Error & { status?: number };
+    if (err.status === 401) {
       redirect("/api/auth/signin");
     }
-    throw err;
+    throw usageResult.reason;
+  }
+
+  const usage = usageResult.value;
+
+  if (walletResult.status === "rejected") {
+    const err = walletResult.reason as Error & { status?: number };
+    if (err?.status === 401) {
+      redirect("/api/auth/signin");
+    }
+  }
+
+  if (projectsResult.status === "rejected") {
+    const err = projectsResult.reason as Error & { status?: number };
+    if (err?.status === 401) {
+      redirect("/api/auth/signin");
+    }
+  }
+
+  if (brandVoicesResult.status === "rejected") {
+    const err = brandVoicesResult.reason as Error & { status?: number };
+    if (err?.status === 401) {
+      redirect("/api/auth/signin");
+    }
+  }
+
+  const walletActivity =
+    walletResult.status === "fulfilled"
+      ? walletResult.value
+      : { items: [], nextCursor: null };
+
+  const projects =
+    projectsResult.status === "fulfilled"
+      ? projectsResult.value
+      : { projects: [] };
+
+  const brandVoices =
+    brandVoicesResult.status === "fulfilled"
+      ? brandVoicesResult.value
+      : { brandVoices: [] };
+
+  if (walletResult.status === "rejected") {
+    console.error("Failed to load wallet transactions for dashboard", walletResult.reason);
+  }
+  if (projectsResult.status === "rejected") {
+    console.error("Failed to load projects for dashboard", projectsResult.reason);
+  }
+  if (brandVoicesResult.status === "rejected") {
+    console.error("Failed to load brand voices for dashboard", brandVoicesResult.reason);
   }
 
   const totalAllocated = usage.totalAllocatedTokens || usage.quota || 1;
@@ -142,34 +191,34 @@ export default async function DashboardPage() {
   ] as const;
 
   return (
-    <div className="space-y-3 pb-4">
-      <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+    <div className="space-y-2 pb-3">
+      <section className="grid gap-2.5 md:grid-cols-2 xl:grid-cols-4">
         {statCards.map(({ title, value, meta, Icon }) => (
-          <Card key={title} className="rounded-2xl border-slate-200 p-4 shadow-sm">
+          <Card key={title} className="rounded-2xl border-slate-200 p-3.5 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{title}</p>
-                <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
+                <p className="mt-1 text-xl font-semibold text-slate-900">{value}</p>
                 <p className="mt-1 text-[0.7rem] font-medium text-slate-500">{meta}</p>
               </div>
-              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-sky-50 text-sky-500">
-                <Icon className="h-4 w-4" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-2xl bg-sky-50 text-sky-500">
+                <Icon className="h-3.5 w-3.5" />
               </div>
             </div>
           </Card>
         ))}
       </section>
 
-      <section className="grid gap-3 lg:grid-cols-[minmax(0,1.8fr)_minmax(0,1fr)]">
-        <Card className="rounded-2xl border-slate-200 p-4 shadow-sm">
-          <CardHeader className="mb-3">
+      <section className="grid gap-2.5 lg:grid-cols-[minmax(0,1.8fr)_minmax(0,1fr)]">
+        <Card className="rounded-2xl border-slate-200 p-3.5 shadow-sm">
+          <CardHeader className="mb-2.5">
             <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
               <BarChart3 className="h-4 w-4 text-sky-500" />
               Usage Overview
             </div>
             <CardTitle className="text-sm font-medium text-slate-500">Monthly Token Usage</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-600">
+          <CardContent className="space-y-3.5 text-slate-600">
             <div>
               <div className="flex items-center justify-between text-sm font-semibold text-slate-700">
                 <span>Usage</span>
@@ -177,14 +226,14 @@ export default async function DashboardPage() {
                   {availableTokens.toLocaleString()} / {totalAllocated.toLocaleString()}
                 </span>
               </div>
-              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+              <div className="mt-2.5 h-2 w-full overflow-hidden rounded-full bg-slate-200">
                 <div className="h-full rounded-full bg-sky-500" style={{ width: `${usagePercent * 100}%` }} />
               </div>
             </div>
-            <div className="grid gap-5 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <p className="text-xs uppercase tracking-wide text-slate-500">Input Tokens</p>
-                <p className="mt-1 text-xl font-semibold text-slate-900">
+                <p className="mt-1 text-lg font-semibold text-slate-900">
                   {usage.tokensIn.toLocaleString()}{" "}
                   <span className="text-sm font-normal text-slate-500">tokens</span>
                 </p>
@@ -192,7 +241,7 @@ export default async function DashboardPage() {
               </div>
               <div>
                 <p className="text-xs uppercase tracking-wide text-slate-500">Output Tokens</p>
-                <p className="mt-1 text-xl font-semibold text-slate-900">
+                <p className="mt-1 text-lg font-semibold text-slate-900">
                   {usage.tokensOut.toLocaleString()}{" "}
                   <span className="text-sm font-normal text-slate-500">tokens</span>
                 </p>
@@ -207,15 +256,15 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-slate-200 p-4 shadow-sm">
-          <CardHeader className="mb-4">
+        <Card className="rounded-2xl border-slate-200 p-3.5 shadow-sm">
+          <CardHeader className="mb-3">
             <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
               <Sparkles className="h-4 w-4 text-sky-500" />
               Recent Wallet Activity
             </div>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="space-y-2.5">
+          <CardContent className="space-y-2.5">
+            <div className="space-y-2">
               {walletItems.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-5 text-center text-sm text-slate-500">
                   No wallet transactions yet.
@@ -228,7 +277,7 @@ export default async function DashboardPage() {
                   return (
                     <div
                       key={item.id}
-                      className="flex flex-col gap-2.5 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                      className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white px-3.5 py-2.5 shadow-sm"
                     >
                       <div className="flex items-center justify-between">
                         <div>
@@ -262,21 +311,21 @@ export default async function DashboardPage() {
         </Card>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {quickActions.map(({ title, description, href, Icon }) => (
-          <Card key={title} className="rounded-2xl border-slate-200 p-5 shadow-sm transition hover:shadow-md">
+          <Card key={title} className="rounded-2xl border-slate-200 p-4 shadow-sm transition hover:shadow-md">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-base font-semibold text-slate-900">{title}</h3>
                 <p className="mt-2 text-sm text-slate-500">{description}</p>
               </div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-50 text-sky-500">
-                <Icon className="h-5 w-5" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-50 text-sky-500">
+                <Icon className="h-4 w-4" />
               </div>
             </div>
             <Link
               href={href}
-              className="mt-4 inline-flex w-fit items-center rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-slate-600 transition hover:border-sky-200 hover:text-sky-600"
+              className="mt-3 inline-flex w-fit items-center rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-slate-600 transition hover:border-sky-200 hover:text-sky-600"
             >
               Open
             </Link>

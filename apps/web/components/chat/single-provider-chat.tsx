@@ -654,9 +654,9 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
   }, [state.session.turns, state.isStreaming, scrollChatToBottom]);
 
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div className="flex w-full flex-col gap-3">
       <header className="flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold text-slate-900">AI Analytics</h1>
+        <h1 className="text-xl font-semibold text-slate-900">AI Analytics</h1>
         <p className="text-sm text-slate-500">
           Upload datasets, briefs, or research files and ask the model to analyze them with your commands.
         </p>
@@ -664,7 +664,7 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
 
       <section
         className={cn(
-          "relative mb-4 flex min-h-0 flex-1 flex-col gap-3 rounded-2xl border border-slate-200 bg-white/80 px-4 pt-4 pb-5 shadow-sm backdrop-blur transition xl:flex-1",
+          "relative mb-2 flex min-h-0 flex-1 flex-col gap-2 rounded-xl border border-slate-200 bg-white/80 px-3 pt-3 pb-4 shadow-sm backdrop-blur transition xl:flex-1",
           isDragActive && "border-sky-300 ring-2 ring-inset ring-sky-300/60"
         )}
         onDragEnter={handleDragEnter}
@@ -679,13 +679,13 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
             <p className="text-xs text-sky-500">They’ll be added to this analysis request.</p>
           </div>
         )}
-        <div className="flex flex-col gap-3 xl:grid xl:grid-cols-[minmax(0,18rem)_minmax(0,18rem)] xl:items-start xl:gap-5">
-          <div className="flex w-full flex-col gap-2 xl:max-w-sm">
-            <label htmlFor="model" className="text-sm font-medium text-slate-700">
+        <div className="flex flex-col gap-2 lg:grid lg:grid-cols-[minmax(0,14rem)_minmax(0,14rem)] lg:items-start lg:gap-3">
+          <div className="flex w-full flex-col gap-1.5">
+            <label htmlFor="model" className="text-xs font-medium text-slate-700">
               Model
             </label>
             <Select value={state.session.lastModelId} onValueChange={handleModelChange}>
-              <SelectTrigger id="model" aria-label="Select AI model">
+              <SelectTrigger id="model" aria-label="Select AI model" className="h-8 text-sm">
                 <SelectValue placeholder="Choose a model" />
               </SelectTrigger>
               <SelectContent>
@@ -698,8 +698,8 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
             </Select>
           </div>
 
-          <div className="flex w-full flex-col gap-2 xl:max-w-sm">
-            <label htmlFor="project" className="text-sm font-medium text-slate-700">
+          <div className="flex w-full flex-col gap-1.5">
+            <label htmlFor="project" className="text-xs font-medium text-slate-700">
               Project
             </label>
             <Select
@@ -707,7 +707,7 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
               onValueChange={handleProjectChange}
               disabled={projects.length === 0}
             >
-              <SelectTrigger id="project" aria-label="Select project">
+              <SelectTrigger id="project" aria-label="Select project" className="h-8 text-sm">
                 <SelectValue
                   placeholder={projects.length === 0 ? "No projects available" : "Choose a project"}
                 />
@@ -720,7 +720,7 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-xs text-slate-500">
+            <p className="text-[11px] text-slate-500">
               {projects.length === 0
                 ? "Create a project first from the Projects section."
                 : "Every conversation will be tagged to this project."}
@@ -901,11 +901,6 @@ const ChatTurnView = ({ turn, projectLabel, onCopy, onRetry }: ChatTurnViewProps
       <div className="flex justify-end">
         <div className="max-w-[70%] rounded-2xl bg-sky-500 px-4 py-3 text-sm text-white shadow-sm">
           <p className="whitespace-pre-wrap break-words">{turn.userMessage}</p>
-          {projectLabel && (
-            <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-white">
-              Project: {projectLabel}
-            </span>
-          )}
           {turn.attachments.length > 0 && (
             <AttachmentList attachments={turn.attachments} alignment="right" />
           )}
@@ -913,11 +908,6 @@ const ChatTurnView = ({ turn, projectLabel, onCopy, onRetry }: ChatTurnViewProps
       </div>
       <Card className="rounded-2xl border-slate-200/80 bg-white p-5 shadow-md dark:border-slate-800/60">
         <div className="space-y-4">
-          {projectLabel && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-              Project: {projectLabel}
-            </span>
-          )}
           <MarkdownPreview markdown={turn.answer.content} isStreaming={isStreaming} />
           {turn.attachments.length > 0 && (
             <AttachmentList attachments={turn.attachments} alignment="left" heading="Referenced files" compact />
@@ -937,7 +927,6 @@ const ChatTurnView = ({ turn, projectLabel, onCopy, onRetry }: ChatTurnViewProps
             {typeof turn.answer.costCents === "number" && (
               <Metric label="Cost" value={formatCurrency(turn.answer.costCents)} />
             )}
-            {turn.answer.finishReason && <Metric label="Finish" value={turn.answer.finishReason} />}
           </div>
           <div className="flex items-center gap-2">
             <Button variant="ghost" className="gap-2 text-xs" onClick={onCopy} aria-label="Copy response">

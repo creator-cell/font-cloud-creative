@@ -133,16 +133,16 @@ export const SideNav = () => {
   return (
     <aside className="flex h-full w-full flex-col bg-white lg:sticky lg:top-0 lg:h-screen">
       <div className="flex flex-1 flex-col">
-        <div className="flex items-center gap-3 px-6 pb-6 pt-6">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-50">
-            <Image src="/logo.svg" alt="Front Cloud Creative" width={28} height={28} />
+        <div className="flex items-center gap-2 px-4 pb-4 pt-4">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50">
+            <Image src="/logo.svg" alt="Front Cloud Creative" width={22} height={22} />
           </div>
           <div>
             <p className="text-sm font-semibold text-slate-900">Front Cloud</p>
-            <p className="text-xs text-slate-500">Creative AI Platform</p>
+            <p className="text-[11px] text-slate-500">Creative AI Platform</p>
           </div>
         </div>
-        <nav className="flex flex-col gap-1 px-3">
+        <nav className="flex flex-col gap-0.5 px-2">
           {visibleLinks.map(({ href, label, Icon, children }) => {
             if (children && children.length > 0) {
               const visibleChildren = children.filter(({ allowedRoles: childRoles }) => {

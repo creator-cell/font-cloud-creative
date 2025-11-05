@@ -28,7 +28,7 @@ const FooterSection = ({ copy }: any) => {
   ];
 
   return (
-    <footer className="-mx-6 space-y-10 border-t border-sky-100 bg-white px-6 py-8 text-sm text-slate-600 shadow-inner md:-mx-10 md:px-10 lg:-mx-16 lg:px-16 xl:-mx-24 xl:px-24">
+    <footer className="mt-12 md:mt-16 -mx-6 space-y-10 border-t border-sky-100 bg-white px-6 py-8 text-sm text-slate-600 shadow-inner md:-mx-10 md:px-10 lg:-mx-16 lg:px-16 xl:-mx-24 xl:px-24">
       {/* Top Section */}
       <div className="flex flex-col md:flex-row md:items-start md:justify-between mt-5 gap-10 md:gap-16">
         {/* Logo & Socials */}
