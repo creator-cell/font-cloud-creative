@@ -99,9 +99,9 @@ export default async function DashboardPage() {
     throw err;
   }
 
-  const tokensUsed = usage.tokensIn + usage.tokensOut;
   const totalAllocated = usage.totalAllocatedTokens || usage.quota || 1;
-  const availableTokens = usage.availableTokens ?? Math.max(totalAllocated - tokensUsed, 0);
+  const availableTokens = usage.tokenBalance ?? usage.availableTokens ?? Math.max(totalAllocated - (usage.tokensIn + usage.tokensOut), 0);
+  const tokensUsed = Math.max(totalAllocated - availableTokens, 0);
   const usagePercent = totalAllocated > 0 ? Math.min(tokensUsed / totalAllocated, 1) : 0;
   const activeProjects = projects.projects.length;
   const brandVoiceCount = brandVoices.brandVoices.length;
