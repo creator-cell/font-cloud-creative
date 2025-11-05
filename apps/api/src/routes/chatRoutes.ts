@@ -1,6 +1,7 @@
 import type { Response } from "express";
 import { Router } from "express";
 import { randomUUID } from "crypto";
+import { Buffer } from "node:buffer";
 import { z } from "zod";
 import { Types } from "mongoose";
 import { asyncHandler } from "../utils/asyncHandler";
@@ -23,6 +24,24 @@ const estimatePromptTokens = (system?: string, user?: string): number => {
 };
 
 const router = Router();
+
+const encodeText = (value?: string | null): string | undefined => {
+  if (typeof value !== "string") return value ?? undefined;
+  return Buffer.from(value, "utf8").toString("base64");
+};
+
+const decodeText = (value?: string | null): string | undefined => {
+  if (typeof value !== "string") return value ?? undefined;
+  try {
+    const decoded = Buffer.from(value, "base64").toString("utf8");
+    if (Buffer.from(decoded, "utf8").toString("base64") === value.replace(/\s+/g, "")) {
+      return decoded;
+    }
+  } catch {
+    return value;
+  }
+  return value;
+};
 
 const normalizeModelSelection = (provider: string, model: string) => {
   let normalizedProvider = provider;
@@ -127,14 +146,17 @@ router.post(
       }
     }
 
+    const encodedUserMessage = encodeText(payload.message) ?? "";
+    const encodedSystemMessage = encodeText(payload.system) ?? undefined;
+
     await ChatTurnModel.create({
       userId: userObjectId,
       conversationId,
       turnId,
       provider: selection.provider,
       model: selection.model,
-      system: payload.system,
-      userMessage: payload.message,
+      system: encodedSystemMessage,
+      userMessage: encodedUserMessage,
       promptTokens,
       maxOutputTokens,
       projectId: projectObjectId,
@@ -214,17 +236,19 @@ router.get(
 
         const modelSlug = typeof record.model === "string" ? record.model : "";
         const modelFull = modelSlug.includes(":") ? modelSlug : `${record.provider}:${modelSlug}`;
+        const decodedMessage = decodeText(record.userMessage) ?? "";
+        const decodedResponse = decodeText(record.response?.content) ?? "";
 
         return {
           turnId: record.turnId,
-          userMessage: record.userMessage,
+          userMessage: decodedMessage,
           provider: record.provider,
           model: modelFull,
           modelSlug,
           projectId,
           status: record.status,
           response: {
-            content: record.response?.content ?? "",
+            content: decodedResponse,
             finishReason: record.response?.finishReason ?? null
           },
           usage: record.usage ?? { tokensIn: 0, tokensOut: 0, latencyMs: 0 },
@@ -237,10 +261,10 @@ router.get(
                 dataUrl: attachment.dataUrl
               }))
             : [],
-          createdAt: record.createdAt?.toISOString?.() ?? new Date().toISOString(),
-          startedAt: record.startedAt?.toISOString?.() ?? record.createdAt?.toISOString?.(),
-          finishedAt: record.finishedAt?.toISOString?.() ?? null,
-          error: record.usage?.error ?? null
+        createdAt: record.createdAt?.toISOString?.() ?? new Date().toISOString(),
+        startedAt: record.startedAt?.toISOString?.() ?? record.createdAt?.toISOString?.(),
+        finishedAt: record.finishedAt?.toISOString?.() ?? null,
+        error: record.usage?.error ?? null
         };
       });
 
@@ -268,6 +292,9 @@ router.get("/stream", async (req, res) => {
     res.status(404).json({ error: "Turn not found" });
     return;
   }
+
+  const decodedUserMessage = decodeText(chatTurn.userMessage) ?? "";
+  const decodedSystemMessage = decodeText(chatTurn.system) ?? undefined;
 
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache, no-transform");
@@ -309,8 +336,8 @@ router.get("/stream", async (req, res) => {
     finishReason: string;
     text: string;
   }> => {
-    const promptTokens = chatTurn.promptTokens || estimatePromptTokens(chatTurn.system, chatTurn.userMessage);
-    const chunks = createMockResponseChunks(chatTurn.userMessage ?? "", selection.composite);
+    const promptTokens = chatTurn.promptTokens || estimatePromptTokens(decodedSystemMessage, decodedUserMessage);
+    const chunks = createMockResponseChunks(decodedUserMessage ?? "", selection.composite);
     for (const chunk of chunks) {
       if (clientClosed) {
         throw new Error("client_closed");
@@ -336,8 +363,8 @@ router.get("/stream", async (req, res) => {
         providerId,
         modelId,
         {
-          system: chatTurn.system ?? "",
-          message: chatTurn.userMessage,
+          system: decodedSystemMessage ?? "",
+          message: decodedUserMessage,
           maxOutputTokens,
           signal: abortController.signal
         },
@@ -362,6 +389,7 @@ router.get("/stream", async (req, res) => {
     }
 
     const latencyMs = result.latencyMs ?? Date.now() - startTime;
+    const encodedResponseContent = encodeText(result.text ?? "") ?? "";
 
     await settleChatTurn({
       userId: chatTurn.userId,
@@ -381,7 +409,7 @@ router.get("/stream", async (req, res) => {
         status: "completed",
         finishedAt: new Date(),
         response: {
-          content: result.text,
+          content: encodedResponseContent,
           finishReason: result.finishReason ?? "stop"
         },
         usage: {

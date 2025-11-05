@@ -66,6 +66,7 @@ export const SideNav = () => {
   const { data: session } = useSession();
   const [usage, setUsage] = useState<UsageSummary | null>(null);
   const [loadingUsage, setLoadingUsage] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
   const roles = session?.user?.roles?.map((role) => role.toLowerCase()) ?? [];
 
   const visibleLinks = navLinks.filter(({ allowedRoles }) => {
@@ -152,6 +153,12 @@ export const SideNav = () => {
               if (visibleChildren.length === 0) return null;
 
               const isGroupActive = visibleChildren.some((child) => pathname === child.href);
+              const isExpanded = expandedGroups[label] ?? isGroupActive;
+              const toggleGroup = () =>
+                setExpandedGroups((previous) => ({
+                  ...previous,
+                  [label]: !(previous[label] ?? isGroupActive),
+                }));
 
               return (
                 <div key={label} className="flex flex-col">
@@ -160,14 +167,35 @@ export const SideNav = () => {
                       "flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-600",
                       isGroupActive && "bg-sky-50 text-sky-600"
                     )}
+                    onClick={toggleGroup}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        toggleGroup();
+                      }
+                    }}
+                    role="button"
+                    aria-expanded={isExpanded}
+                    tabIndex={0}
                   >
                     <div className="flex items-center gap-3">
                       <Icon className="h-4 w-4 text-slate-400" />
                       {label}
                     </div>
-                    <ChevronDown className="h-4 w-4 text-slate-400" />
+                    <ChevronDown
+                      className={clsx(
+                        "h-4 w-4 text-slate-400 transition-transform duration-500 ease-in-out",
+                        isExpanded ? "rotate-180" : "rotate-0"
+                      )}
+                    />
                   </div>
-                  <div className="ml-9 mt-1 flex flex-col gap-1">
+                  <div
+                    className={clsx(
+                      "ml-9 flex flex-col gap-1 overflow-hidden transition-all duration-500 ease-in-out",
+                      isExpanded ? "mt-1 max-h-72 opacity-100" : "max-h-0 opacity-0 pointer-events-none"
+                    )}
+                    aria-hidden={!isExpanded}
+                  >
                     {visibleChildren.map(({ href: childHref, label: childLabel, Icon: ChildIcon }) => {
                       const isActive = pathname === childHref;
                       return (
@@ -183,7 +211,7 @@ export const SideNav = () => {
                         >
                           <ChildIcon
                             className={clsx(
-                              "h-4 w-4 transition-colors",
+                              "h-4 w-4 transition-colors duration-300",
                               isActive ? "text-sky-500" : "text-slate-400 group-hover:text-slate-600"
                             )}
                           />
