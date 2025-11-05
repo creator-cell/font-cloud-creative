@@ -120,9 +120,10 @@ export const SideNav = () => {
         percent: 0,
       };
     }
-    const used = usage.tokensIn + usage.tokensOut;
     const quota = usage.totalAllocatedTokens ?? usage.quota ?? 0;
-    const available = usage.availableTokens ?? quota - used;
+    const available =
+      usage.tokenBalance ?? usage.availableTokens ?? Math.max(quota - (usage.tokensIn + usage.tokensOut), 0);
+    const used = Math.max(quota - available, 0);
     const percent = quota > 0 ? Math.min(Math.max(used / quota, 0), 1) : 0;
     return { used, quota, available: Math.max(available, 0), percent };
   }, [usage]);
