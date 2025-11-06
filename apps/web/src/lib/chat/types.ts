@@ -77,6 +77,16 @@ export const PROVIDER_MODELS: ProviderModel[] = [
     provider: Provider.OpenAI,
   },
   {
+    id: "openai:gpt-4o",
+    label: "OpenAI · GPT-4o",
+    provider: Provider.OpenAI,
+  },
+  {
+    id: "openai:gpt-4-turbo",
+    label: "OpenAI · GPT-4 Turbo",
+    provider: Provider.OpenAI,
+  },
+  {
     id: "anthropic:claude-3-5-sonnet",
     label: "Anthropic · Claude 3.5 Sonnet",
     provider: Provider.Anthropic,

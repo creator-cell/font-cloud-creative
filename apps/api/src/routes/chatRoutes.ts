@@ -295,6 +295,7 @@ router.get("/stream", async (req, res) => {
 
   const decodedUserMessage = decodeText(chatTurn.userMessage) ?? "";
   const decodedSystemMessage = decodeText(chatTurn.system) ?? undefined;
+  const attachments = chatTurn.attachments ?? [];
 
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache, no-transform");
@@ -366,10 +367,11 @@ router.get("/stream", async (req, res) => {
           system: decodedSystemMessage ?? "",
           message: decodedUserMessage,
           maxOutputTokens,
-          signal: abortController.signal
+          signal: abortController.signal,
+          attachments: attachments
         },
         {
-          onDelta: (text) => {
+          onDelta: (text: string) => {
             if (clientClosed) return;
             safeSendEvent("delta", { text_delta: text });
           }

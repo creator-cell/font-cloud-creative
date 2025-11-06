@@ -33,6 +33,10 @@ type DefaultPrice = {
 const DEFAULT_PRICE_BOOK: Record<string, DefaultPrice> = {
   "openai:gpt-4.1-mini": { inputPer1kCents: 15, outputPer1kCents: 60, currency: "USD" },
   "gpt-4.1-mini": { inputPer1kCents: 15, outputPer1kCents: 60, currency: "USD" },
+  "openai:gpt-4o": { inputPer1kCents: 75, outputPer1kCents: 225, currency: "USD" },
+  "gpt-4o": { inputPer1kCents: 75, outputPer1kCents: 225, currency: "USD" },
+  "openai:gpt-4-turbo": { inputPer1kCents: 30, outputPer1kCents: 60, currency: "USD" },
+  "gpt-4-turbo": { inputPer1kCents: 30, outputPer1kCents: 60, currency: "USD" },
   "anthropic:claude-3-5-sonnet": { inputPer1kCents: 150, outputPer1kCents: 150, currency: "USD" },
   "claude-3-5-sonnet": { inputPer1kCents: 150, outputPer1kCents: 150, currency: "USD" },
   "google:gemini-1.5-pro": { inputPer1kCents: 100, outputPer1kCents: 100, currency: "USD" },

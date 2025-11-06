@@ -31,6 +31,14 @@ export const MODELS: ProviderModel[] = [
     provider: "openai"
   },
   {
+    id: "gpt-4o-full",
+    label: "GPT-4o Full",
+    capabilities: ["text", "json", "vision"],
+    minPlan: "pro",
+    estCostPer1K: 30,
+    provider: "openai"
+  },
+  {
     id: "claude-3-haiku",
     label: "Claude 3 Haiku",
     capabilities: ["text", "json"],

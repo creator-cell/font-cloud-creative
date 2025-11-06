@@ -37,11 +37,12 @@ import {
   type ChatHistoryTurn,
 } from "@/src/lib/chat/api";
 import { cn } from "@/lib/utils";
+import { ChatInput } from "./chat-input";
 
 const STREAM_TIMEOUT_MS = 45_000;
 const STORAGE_KEY = "frontcloud.single-chat.model";
 const PROJECT_STORAGE_KEY = "frontcloud.single-chat.project";
-const MAX_INLINE_FILE_BYTES = 2 * 1024 * 1024; // 2 MB
+const MAX_INLINE_FILE_BYTES = 20 * 1024 * 1024; // 20 MB
 const DEFAULT_MODEL_FALLBACK = PROVIDER_MODELS[0]?.id ?? "openai:gpt-4.1-mini";
 
 type StreamControllers = {
@@ -105,6 +106,7 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
   const [pendingAttachments, setPendingAttachments] = useState<PendingAttachment[]>([]);
   const [isPreparingAttachments, setIsPreparingAttachments] = useState(false);
   const [isDragActive, setIsDragActive] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<Array<{ id: string; name: string }>>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(initialProjectId);
   const [showTips, setShowTips] = useState(false);
   const [historyCursor, setHistoryCursor] = useState<string | null>(null);
@@ -114,6 +116,25 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
   const activeTurnRef = useRef<string | null>(null);
   const historyAbortRef = useRef<AbortController | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  
+    const handleFiles = async (files: File[]) => {
+    const newFiles = files.filter(file => {
+      const validTypes = ['.pdf', '.xlsx', '.xls', '.jpg', '.jpeg', '.png'];
+      return validTypes.some(ext => file.name.toLowerCase().endsWith(ext)) && file.size <= 10 * 1024 * 1024;
+    });    const filesData = newFiles.map(file => ({
+      id: crypto.randomUUID(),
+      name: file.name,
+      file
+    }));
+
+    setSelectedFiles(prev => [...prev, ...filesData.map(f => ({ id: f.id, name: f.name }))]);
+    setPendingAttachments(prev => [...prev, ...filesData]);
+  };
+
+  const removeFile = (id: string) => {
+    setSelectedFiles(prev => prev.filter(f => f.id !== id));
+    setPendingAttachments(prev => prev.filter(f => f.id !== id));
+  };
   const dragCounter = useRef(0);
   const chatScrollRef = useRef<HTMLDivElement | null>(null);
   const topSentinelRef = useRef<HTMLDivElement | null>(null);
@@ -450,10 +471,21 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
       skipAutoScrollRef.current = false;
       scrollChatToBottom("auto");
 
-      controllersRef.current.timeout = window.setTimeout(() => handleStreamTimeout(turn.id), STREAM_TIMEOUT_MS);
+      const scheduleTimeout = () => {
+        if (controllersRef.current.timeout !== null) {
+          window.clearTimeout(controllersRef.current.timeout);
+        }
+        controllersRef.current.timeout = window.setTimeout(
+          () => handleStreamTimeout(turn.id),
+          STREAM_TIMEOUT_MS
+        );
+      };
+
+      scheduleTimeout();
 
       controllersRef.current.source = openChatStream(streamUrl, {
         onStart: (event) => {
+          scheduleTimeout();
           dispatch({
             type: "update-answer",
             turnId: turn.id,
@@ -465,6 +497,7 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
           });
         },
         onDelta: (event) => {
+          scheduleTimeout();
           dispatch({
             type: "append-answer-content",
             turnId: turn.id,
@@ -679,85 +712,58 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
             <p className="text-xs text-sky-500">They’ll be added to this analysis request.</p>
           </div>
         )}
-        <div className="flex flex-col gap-2 lg:grid lg:grid-cols-[minmax(0,14rem)_minmax(0,14rem)] lg:items-start lg:gap-3">
-          <div className="flex w-full flex-col gap-1.5">
-            <label htmlFor="model" className="text-xs font-medium text-slate-700">
-              Model
-            </label>
-            <Select value={state.session.lastModelId} onValueChange={handleModelChange}>
-              <SelectTrigger id="model" aria-label="Select AI model" className="h-8 text-sm">
-                <SelectValue placeholder="Choose a model" />
-              </SelectTrigger>
-              <SelectContent>
-                {PROVIDER_MODELS.map((model) => (
-                  <SelectItem key={model.id} value={model.id}>
-                    {model.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+        <div className="sticky top-0 z-10 -mx-2 mb-2 rounded-xl bg-white/95 px-2 py-2 shadow-sm backdrop-blur">
+          <div className="flex flex-col gap-2 lg:grid lg:grid-cols-[minmax(0,14rem)_minmax(0,14rem)] lg:items-start lg:gap-3">
+            <div className="flex w-full flex-col gap-1.5">
+              <label htmlFor="model" className="text-xs font-medium text-slate-700">
+                Model
+              </label>
+              <Select value={state.session.lastModelId} onValueChange={handleModelChange}>
+                <SelectTrigger id="model" aria-label="Select AI model" className="h-8 text-sm">
+                  <SelectValue placeholder="Choose a model" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PROVIDER_MODELS.map((model) => (
+                    <SelectItem key={model.id} value={model.id}>
+                      {model.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div className="flex w-full flex-col gap-1.5">
-            <label htmlFor="project" className="text-xs font-medium text-slate-700">
-              Project
-            </label>
-            <Select
-              value={selectedProjectId ?? ""}
-              onValueChange={handleProjectChange}
-              disabled={projects.length === 0}
-            >
-              <SelectTrigger id="project" aria-label="Select project" className="h-8 text-sm">
-                <SelectValue
-                  placeholder={projects.length === 0 ? "No projects available" : "Choose a project"}
-                />
-              </SelectTrigger>
-              <SelectContent>
-                {projects.map((project) => (
-                  <SelectItem key={project._id} value={project._id}>
-                    {project.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="text-[11px] text-slate-500">
-              {projects.length === 0
-                ? "Create a project first from the Projects section."
-                : "Every conversation will be tagged to this project."}
-            </p>
+            <div className="flex w-full flex-col gap-1.5">
+              <label htmlFor="project" className="text-xs font-medium text-slate-700">
+                Project
+              </label>
+              <Select
+                value={selectedProjectId ?? ""}
+                onValueChange={handleProjectChange}
+                disabled={projects.length === 0}
+              >
+                <SelectTrigger id="project" aria-label="Select project" className="h-8 text-sm">
+                  <SelectValue
+                    placeholder={projects.length === 0 ? "No projects available" : "Choose a project"}
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {projects.map((project) => (
+                    <SelectItem key={project._id} value={project._id}>
+                      {project.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-[11px] text-slate-500">
+                {projects.length === 0
+                  ? "Create a project first from the Projects section."
+                  : "Every conversation will be tagged to this project."}
+              </p>
+            </div>
           </div>
         </div>
 
-        {pendingAttachments.length > 0 && (
-          <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/70 p-3">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Files to analyze</p>
-            <ul className="mt-2 flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
-              {pendingAttachments.map(({ id, file }) => (
-                <li
-                  key={id}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-[11px] font-medium text-slate-600 shadow-sm"
-                >
-                  <FileText className="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
-                  <span className="max-w-[160px] truncate" title={file.name}>
-                    {file.name}
-                  </span>
-                  <span className="text-slate-400">{formatBytes(file.size)}</span>
-                  <button
-                    type="button"
-                    className="ml-0.5 rounded-full p-0.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                    onClick={() => removeAttachment(id)}
-                    aria-label={`Remove ${file.name}`}
-                  >
-                    <X className="h-3 w-3" aria-hidden="true" />
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-2 text-[11px] text-slate-400">
-              Files up to 2&nbsp;MB are shared inline. Larger files are referenced by name and size.
-            </p>
-          </div>
-        )}
+
 
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl ring-1 ring-slate-200 bg-white shadow-sm">
           <div
@@ -819,14 +825,48 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
           </div>
           <div className="border-t border-slate-200 bg-slate-50/90 px-4 py-6 sm:px-6">
             <div className="flex flex-col gap-1">
-              <Textarea
-                rows={2}
-                value={state.inputValue}
-                onKeyDown={onTextareaKeyDown}
-                onChange={(event) => setInputValue(event.target.value)}
-                placeholder="Describe the analysis you want. Reference any uploaded files by name."
-                aria-label="Chat message"
-              />
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsDragActive(true);
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  dragCounter.current -= 1;
+                  if (dragCounter.current === 0) {
+                    setIsDragActive(false);
+                  }
+                }}
+                onDragEnter={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  dragCounter.current += 1;
+                  if (e.dataTransfer?.items?.length) {
+                    setIsDragActive(true);
+                  }
+                }}
+                onDrop={async (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsDragActive(false);
+                  dragCounter.current = 0;
+                  const files = Array.from(e.dataTransfer.files);
+                  await handleFiles(files);
+                }}
+              >
+                <ChatInput
+                  value={state.inputValue}
+                  onChange={setInputValue}
+                  onKeyDown={onTextareaKeyDown}
+                  onFilesSelected={handleFiles}
+                  onFileRemove={removeFile}
+                  isDragActive={isDragActive}
+                  isDisabled={state.isStreaming}
+                  selectedFiles={selectedFiles}
+                />
+              </div>
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-2 rounded-full bg-slate-200/80 px-5 py-2.5 text-[11px] font-medium text-slate-600 shadow-sm">
                   <span>Enter to send</span>

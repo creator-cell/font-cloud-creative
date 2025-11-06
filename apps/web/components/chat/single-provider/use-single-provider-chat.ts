@@ -205,7 +205,17 @@ export const useSingleProviderChat = ({
       activeTurnRef.current = turn.id;
       dispatch({ type: "append-turn", turn });
 
-      controllersRef.current.timeout = window.setTimeout(() => handleStreamTimeout(turn.id), STREAM_TIMEOUT_MS);
+      const scheduleTimeout = () => {
+        if (controllersRef.current.timeout !== null) {
+          window.clearTimeout(controllersRef.current.timeout);
+        }
+        controllersRef.current.timeout = window.setTimeout(
+          () => handleStreamTimeout(turn.id),
+          STREAM_TIMEOUT_MS
+        );
+      };
+
+      scheduleTimeout();
 
       controllersRef.current.source = openChatStream(streamUrl, {
         onStart: (event) => {
@@ -220,8 +230,10 @@ export const useSingleProviderChat = ({
               status: "streaming",
             },
           });
+          scheduleTimeout();
         },
         onDelta: (event) => {
+          scheduleTimeout();
           dispatch({
             type: "append-answer-content",
             turnId: turn.id,
