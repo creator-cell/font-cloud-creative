@@ -13,6 +13,9 @@ import { requireAuth } from "../middleware/requireAuth";
 import type { AuthenticatedRequest } from "../types/express";
 import { streamProviderChat } from "../providers/registry";
 import type { ProviderId } from "../providers/types";
+import { ProjectModel } from "../models";
+import { createAssistantThread } from "../services/openai/assistantThreads.js";
+import { env } from "../config/env.js";
 
 const CHAT_USE_HOLDS = process.env.CHAT_USE_HOLDS !== "false";
 const DEFAULT_MAX_OUTPUT_TOKENS = Number(process.env.CHAT_MAX_OUTPUT_TOKENS ?? 800);
@@ -296,6 +299,36 @@ router.get("/stream", async (req, res) => {
   const decodedUserMessage = decodeText(chatTurn.userMessage) ?? "";
   const decodedSystemMessage = decodeText(chatTurn.system) ?? undefined;
   const attachments = chatTurn.attachments ?? [];
+  let assistantThreadId: string | undefined;
+
+  if (chatTurn.projectId) {
+    try {
+      const projectId =
+        chatTurn.projectId instanceof Types.ObjectId
+          ? chatTurn.projectId
+          : Types.ObjectId.isValid(chatTurn.projectId)
+            ? new Types.ObjectId(chatTurn.projectId)
+            : null;
+
+      if (projectId) {
+        const project = await ProjectModel.findOne({ _id: projectId, userId: chatTurn.userId }).exec();
+        if (project) {
+          if (!project.assistantThreadId) {
+            const newThreadId = await createAssistantThread();
+            project.assistantThreadId = newThreadId;
+            await project.save();
+          }
+          assistantThreadId = project.assistantThreadId ?? undefined;
+        }
+      }
+    } catch (error) {
+      console.error("[chat][stream] failed to ensure assistant thread", {
+        projectId: chatTurn.projectId,
+        turnId: chatTurn.turnId,
+        error
+      });
+    }
+  }
 
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache, no-transform");
@@ -320,15 +353,53 @@ router.get("/stream", async (req, res) => {
   };
 
   const selection = normalizeModelSelection(chatTurn.provider, chatTurn.model);
+  const providerId = selection.provider as ProviderId;
+  const modelId = selection.model;
+  const maxOutputTokens = chatTurn.maxOutputTokens || DEFAULT_MAX_OUTPUT_TOKENS;
+
+  const storedResponse = decodeText(chatTurn.response?.content) ?? "";
+  if (chatTurn.status === "completed" && storedResponse) {
+    safeSendEvent("provider_start", {
+      provider: selection.provider,
+      model: selection.composite
+    });
+
+    safeSendEvent("delta", { text_delta: storedResponse });
+
+    const usage = chatTurn.usage ?? { tokensIn: 0, tokensOut: 0, latencyMs: 0 };
+    safeSendEvent("provider_end", {
+      tokens_in: usage.tokensIn ?? 0,
+      tokens_out: usage.tokensOut ?? 0,
+      latency_ms: usage.latencyMs ?? 0,
+      finish_reason: chatTurn.response?.finishReason ?? "stop"
+    });
+    safeSendEvent("complete", { turnId: chatTurn.turnId });
+    res.end();
+    return;
+  }
+
+  if (chatTurn.status === "failed") {
+    safeSendEvent("provider_start", {
+      provider: selection.provider,
+      model: selection.composite
+    });
+
+    const usage = chatTurn.usage ?? {};
+    safeSendEvent("provider_end", {
+      tokens_in: usage.tokensIn ?? 0,
+      tokens_out: usage.tokensOut ?? 0,
+      latency_ms: usage.latencyMs ?? 0,
+      finish_reason: "error"
+    });
+    safeSendEvent("complete", { turnId: chatTurn.turnId, status: "failed" });
+    res.end();
+    return;
+  }
 
   safeSendEvent("provider_start", {
     provider: selection.provider,
     model: selection.composite
   });
-
-  const providerId = selection.provider as ProviderId;
-  const modelId = selection.model;
-  const maxOutputTokens = chatTurn.maxOutputTokens || DEFAULT_MAX_OUTPUT_TOKENS;
 
   const runMockStream = async (): Promise<{
     tokensIn: number;
@@ -360,16 +431,27 @@ router.get("/stream", async (req, res) => {
   try {
     let result: Awaited<ReturnType<typeof streamProviderChat>>;
     try {
+      const streamParams: Parameters<typeof streamProviderChat>[2] = {
+        system: decodedSystemMessage ?? "",
+        message: decodedUserMessage,
+        maxOutputTokens,
+        signal: abortController.signal,
+        attachments: attachments
+      };
+
+      if (providerId === "openai") {
+        if (assistantThreadId) {
+          streamParams.threadId = assistantThreadId;
+        }
+        if (env.openaiAssistantId) {
+          streamParams.assistantId = env.openaiAssistantId;
+        }
+      }
+
       result = await streamProviderChat(
         providerId,
         modelId,
-        {
-          system: decodedSystemMessage ?? "",
-          message: decodedUserMessage,
-          maxOutputTokens,
-          signal: abortController.signal,
-          attachments: attachments
-        },
+        streamParams,
         {
           onDelta: (text: string) => {
             if (clientClosed) return;

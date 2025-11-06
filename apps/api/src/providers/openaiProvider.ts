@@ -415,6 +415,8 @@ export class OpenAIProvider implements LLMProvider {
     let documentResponseText = "";
     let documentResponses = 0;
     let clientAborted = false;
+    const threadId = params.threadId?.trim();
+    const assistantId = params.assistantId?.trim() || env.openaiAssistantId?.trim();
 
     const streamDocumentChunk = (chunk: string, options?: { persist?: boolean }) => {
       if (clientAborted) {
@@ -575,6 +577,81 @@ export class OpenAIProvider implements LLMProvider {
         finishReason: "completed",
         text: finalResponse
       };
+    }
+
+    const canUseAssistantThread = Boolean(threadId && assistantId && documentResponses === 0 && userContent.length === 0);
+
+    if (canUseAssistantThread) {
+      const userText = baseUserText.trim();
+
+      if (userText) {
+        if (params.signal?.aborted) {
+          throw new Error("client_closed");
+        }
+
+        await this.client.beta.threads.messages.create(threadId!, {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: userText
+            }
+          ]
+        });
+
+        const run = await this.client.beta.threads.runs.create(threadId!, {
+          assistant_id: assistantId!
+        });
+
+        const completedRun = await this.waitForRunCompletion(threadId!, run.id, {
+          signal: params.signal
+        });
+
+        const messages = await this.client.beta.threads.messages.list(threadId!, {
+          order: "desc",
+          limit: 10
+        });
+
+        const responseMessage =
+          messages.data.find((message) => message.role === "assistant" && message.run_id === completedRun.id) ??
+          messages.data.find((message) => message.role === "assistant");
+
+        if (!responseMessage) {
+          throw new Error("Assistant returned no messages");
+        }
+
+        const textParts: string[] = [];
+        for (const item of responseMessage.content ?? []) {
+          if (item.type === "text") {
+            textParts.push(item.text.value);
+          } else if ((item.type as string) === "output_text" && (item as any).output_text?.value) {
+            textParts.push((item as any).output_text.value);
+          }
+        }
+
+        const assistantResponse = textParts.join("\n\n").trim();
+        if (!assistantResponse) {
+          throw new Error("Assistant returned an empty response");
+        }
+
+        if (params.signal?.aborted) {
+          throw new Error("client_closed");
+        }
+
+        handlers.onDelta?.(assistantResponse);
+
+        const tokensIn = completedRun.usage?.input_tokens ?? estimateTokens(userText);
+        const tokensOut = completedRun.usage?.output_tokens ?? estimateTokens(assistantResponse);
+        const latencyMs = Date.now() - startedAt;
+
+        return {
+          tokensIn,
+          tokensOut,
+          latencyMs,
+          finishReason: completedRun.status ?? "completed",
+          text: assistantResponse
+        };
+      }
     }
 
     if (userContent.length > 0) {

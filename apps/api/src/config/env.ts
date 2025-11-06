@@ -19,6 +19,7 @@ export const env = {
     .map((email) => email.trim().toLowerCase())
     .filter(Boolean),
   openaiKey: process.env.OPENAI_API_KEY ?? "",
+  openaiAssistantId: process.env.OPENAI_ASSISTANT_ID ?? "",
   anthropicKey: process.env.ANTHROPIC_API_KEY ?? "",
   googleKey: process.env.GOOGLE_API_KEY ?? "",
   ollamaBaseUrl: process.env.OLLAMA_BASE_URL ?? "http://localhost:11434",

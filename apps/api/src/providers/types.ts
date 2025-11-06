@@ -27,6 +27,8 @@ export type ChatStreamParams = {
   signal?: AbortSignal;
   json?: boolean;
   attachments?: ChatAttachment[];
+  threadId?: string;
+  assistantId?: string;
 };
 
 export type ChatStreamResult = {
