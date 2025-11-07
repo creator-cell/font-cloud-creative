@@ -394,6 +394,10 @@ export class OpenAIProvider implements LLMProvider {
     params: ChatStreamParams,
     handlers: ChatStreamHandlers
   ): Promise<ChatStreamResult> {
+    if (params.threadId) {
+      return this.streamUsingAssistant(model, params, handlers);
+    }
+
     const startedAt = Date.now();
 
     const messages: Array<
@@ -415,8 +419,6 @@ export class OpenAIProvider implements LLMProvider {
     let documentResponseText = "";
     let documentResponses = 0;
     let clientAborted = false;
-    const threadId = params.threadId?.trim();
-    const assistantId = params.assistantId?.trim() || env.openaiAssistantId?.trim();
 
     const streamDocumentChunk = (chunk: string, options?: { persist?: boolean }) => {
       if (clientAborted) {
@@ -579,81 +581,6 @@ export class OpenAIProvider implements LLMProvider {
       };
     }
 
-    const canUseAssistantThread = Boolean(threadId && assistantId && documentResponses === 0 && userContent.length === 0);
-
-    if (canUseAssistantThread) {
-      const userText = baseUserText.trim();
-
-      if (userText) {
-        if (params.signal?.aborted) {
-          throw new Error("client_closed");
-        }
-
-        await this.client.beta.threads.messages.create(threadId!, {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: userText
-            }
-          ]
-        });
-
-        const run = await this.client.beta.threads.runs.create(threadId!, {
-          assistant_id: assistantId!
-        });
-
-        const completedRun = await this.waitForRunCompletion(threadId!, run.id, {
-          signal: params.signal
-        });
-
-        const messages = await this.client.beta.threads.messages.list(threadId!, {
-          order: "desc",
-          limit: 10
-        });
-
-        const responseMessage =
-          messages.data.find((message) => message.role === "assistant" && message.run_id === completedRun.id) ??
-          messages.data.find((message) => message.role === "assistant");
-
-        if (!responseMessage) {
-          throw new Error("Assistant returned no messages");
-        }
-
-        const textParts: string[] = [];
-        for (const item of responseMessage.content ?? []) {
-          if (item.type === "text") {
-            textParts.push(item.text.value);
-          } else if ((item.type as string) === "output_text" && (item as any).output_text?.value) {
-            textParts.push((item as any).output_text.value);
-          }
-        }
-
-        const assistantResponse = textParts.join("\n\n").trim();
-        if (!assistantResponse) {
-          throw new Error("Assistant returned an empty response");
-        }
-
-        if (params.signal?.aborted) {
-          throw new Error("client_closed");
-        }
-
-        handlers.onDelta?.(assistantResponse);
-
-        const tokensIn = completedRun.usage?.input_tokens ?? estimateTokens(userText);
-        const tokensOut = completedRun.usage?.output_tokens ?? estimateTokens(assistantResponse);
-        const latencyMs = Date.now() - startedAt;
-
-        return {
-          tokensIn,
-          tokensOut,
-          latencyMs,
-          finishReason: completedRun.status ?? "completed",
-          text: assistantResponse
-        };
-      }
-    }
-
     if (userContent.length > 0) {
       userContent.unshift({ type: "text", text: baseUserText });
       messages.push({
@@ -724,6 +651,185 @@ export class OpenAIProvider implements LLMProvider {
       latencyMs,
       finishReason: finishReason ?? "completed",
       text: aggregatedText
+    };
+  }
+
+  private async streamUsingAssistant(
+    _model: string,
+    params: ChatStreamParams,
+    handlers: ChatStreamHandlers
+  ): Promise<ChatStreamResult> {
+    const startedAt = Date.now();
+    const threadId = params.threadId!.trim();
+    const explicitAssistantId = params.assistantId?.trim();
+    const configuredAssistantId = env.openaiAssistantId?.trim();
+    let assistantId: string;
+
+    if (explicitAssistantId) {
+      assistantId = explicitAssistantId;
+    } else if (configuredAssistantId) {
+      assistantId = configuredAssistantId;
+    } else {
+      assistantId = await this.ensureDocumentAssistant();
+    }
+    const warnings: string[] = [];
+    const docAttachments: Array<{ fileId: string; name: string }> = [];
+    const imageParts: Array<{ type: string; image_file?: { file_id: string } }> = [];
+    const messageAttachments: Array<{ file_id: string; tools: Array<{ type: "file_search" }> }> = [];
+
+    if (params.attachments?.length) {
+      for (const attachment of params.attachments) {
+        const ext = attachment.name ? path.extname(attachment.name).toLowerCase() : "";
+        const mimeType = attachment.type?.toLowerCase();
+        const isImage =
+          (ext && SUPPORTED_IMAGE_EXTENSIONS.has(ext)) ||
+          (mimeType && SUPPORTED_IMAGE_MIME_TYPES.has(mimeType ?? ""));
+        const isDocument =
+          (!isImage && ext && SUPPORTED_DOCUMENT_EXTENSIONS.has(ext)) ||
+          (!isImage && mimeType && SUPPORTED_DOCUMENT_MIME_TYPES.has(mimeType));
+
+        if (!attachment.dataUrl) {
+          warnings.push(`Attachment ${attachment.name ?? "file"} is missing data and was skipped.`);
+          continue;
+        }
+
+        const parsed = this.parseDataUrl(attachment.dataUrl);
+        if (!parsed) {
+          warnings.push(`Attachment ${attachment.name ?? "file"} could not be parsed.`);
+          continue;
+        }
+
+        try {
+          if (isImage) {
+            const uploaded = await this.uploadAttachment(attachment);
+            imageParts.push({ type: "image_file", image_file: { file_id: uploaded.file_id } });
+          } else if (isDocument) {
+            const file = await toFile(
+              parsed.buffer,
+              attachment.name ?? "document.bin",
+              { type: attachment.type ?? parsed.mime ?? "application/octet-stream" }
+            );
+            const uploaded = await this.client.files.create({ file, purpose: "assistants" });
+            docAttachments.push({ fileId: uploaded.id, name: attachment.name ?? uploaded.id });
+            messageAttachments.push({
+              file_id: uploaded.id,
+              tools: [{ type: "file_search" }]
+            });
+          } else {
+            warnings.push(`Unsupported attachment type: ${attachment.name ?? "file"}.`);
+          }
+        } catch (error) {
+          warnings.push(
+            `Failed to process ${attachment.name ?? "attachment"}: ${
+              error instanceof Error ? error.message : "Unknown error"
+            }`
+          );
+          console.error("[openai] assistant attachment processing failed", {
+            attachment: attachment.name,
+            error
+          });
+        }
+      }
+    }
+
+    const baseText = [params.message, ...warnings.map((warning) => `Note: ${warning}`)]
+      .filter(Boolean)
+      .join("\n\n");
+
+    const content: Array<{ type: string; text?: string; image_file?: { file_id: string } }> = [];
+    if (baseText.trim()) {
+      content.push({ type: "text", text: baseText.trim() });
+    }
+    content.push(...imageParts);
+
+    if (content.length === 0 && messageAttachments.length === 0) {
+      content.push({ type: "text", text: "" });
+    }
+
+    await this.client.beta.threads.messages.create(threadId, {
+      role: "user",
+      content,
+      attachments: messageAttachments
+    });
+
+    const runOptions: Record<string, unknown> = {
+      assistant_id: assistantId
+    };
+
+    if (params.system?.trim()) {
+      runOptions.additional_instructions = params.system.trim();
+    }
+
+    if (params.vectorStoreId && docAttachments.length > 0) {
+      runOptions.tool_resources = {
+        file_search: {
+          vector_store_ids: [params.vectorStoreId]
+        }
+      };
+
+      for (const doc of docAttachments) {
+        try {
+          await this.client.vectorStores.files.create(params.vectorStoreId, {
+            file_id: doc.fileId
+          });
+          await this.waitForVectorStoreIndex(params.vectorStoreId, doc.fileId, {
+            signal: params.signal
+          });
+        } catch (error) {
+          console.error("[openai] failed to attach file to vector store", {
+            vectorStoreId: params.vectorStoreId,
+            fileId: doc.fileId,
+            error
+          });
+        }
+      }
+    }
+
+    const run = await this.client.beta.threads.runs.create(threadId, runOptions);
+
+    const completedRun = await this.waitForRunCompletion(threadId, run.id, {
+      signal: params.signal
+    });
+
+    const messages = await this.client.beta.threads.messages.list(threadId, {
+      order: "desc",
+      limit: 10
+    });
+
+    const assistantMessage =
+      messages.data.find((message) => message.role === "assistant" && message.run_id === completedRun.id) ??
+      messages.data.find((message) => message.role === "assistant");
+
+    if (!assistantMessage) {
+      throw new Error("Assistant returned no messages");
+    }
+
+    const textParts: string[] = [];
+    for (const item of assistantMessage.content ?? []) {
+      if (item.type === "text") {
+        textParts.push(item.text.value);
+      } else if ((item.type as string) === "output_text" && (item as any).output_text?.value) {
+        textParts.push((item as any).output_text.value);
+      }
+    }
+
+    const assistantResponse = textParts.join("\n\n").trim();
+    if (!assistantResponse) {
+      throw new Error("Assistant returned an empty response");
+    }
+
+    handlers.onDelta?.(assistantResponse);
+
+    const tokensIn = completedRun.usage?.input_tokens ?? estimateTokens(baseText);
+    const tokensOut = completedRun.usage?.output_tokens ?? estimateTokens(assistantResponse);
+    const latencyMs = Date.now() - startedAt;
+
+    return {
+      tokensIn,
+      tokensOut,
+      latencyMs,
+      finishReason: completedRun.status ?? "completed",
+      text: assistantResponse
     };
   }
 }

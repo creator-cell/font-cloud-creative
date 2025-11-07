@@ -29,6 +29,7 @@ export type ChatStreamParams = {
   attachments?: ChatAttachment[];
   threadId?: string;
   assistantId?: string;
+  vectorStoreId?: string;
 };
 
 export type ChatStreamResult = {

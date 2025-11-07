@@ -300,6 +300,7 @@ router.get("/stream", async (req, res) => {
   const decodedSystemMessage = decodeText(chatTurn.system) ?? undefined;
   const attachments = chatTurn.attachments ?? [];
   let assistantThreadId: string | undefined;
+  let assistantVectorStoreId: string | undefined;
 
   if (chatTurn.projectId) {
     try {
@@ -313,12 +314,11 @@ router.get("/stream", async (req, res) => {
       if (projectId) {
         const project = await ProjectModel.findOne({ _id: projectId, userId: chatTurn.userId }).exec();
         if (project) {
-          if (!project.assistantThreadId) {
-            const newThreadId = await createAssistantThread();
-            project.assistantThreadId = newThreadId;
-            await project.save();
+          if (!project.assistantThreadId || !project.assistantVectorStoreId) {
+            await project.ensureAssistantResources();
           }
           assistantThreadId = project.assistantThreadId ?? undefined;
+          assistantVectorStoreId = project.assistantVectorStoreId ?? undefined;
         }
       }
     } catch (error) {
@@ -445,6 +445,9 @@ router.get("/stream", async (req, res) => {
         }
         if (env.openaiAssistantId) {
           streamParams.assistantId = env.openaiAssistantId;
+        }
+        if (assistantVectorStoreId) {
+          streamParams.vectorStoreId = assistantVectorStoreId;
         }
       }
 

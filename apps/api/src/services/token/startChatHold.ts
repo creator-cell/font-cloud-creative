@@ -78,18 +78,24 @@ export async function startChatHold(input: StartChatHoldInput): Promise<StartCha
       throw new TokenHoldError("WALLET_NOT_FOUND");
     }
 
-    const spendable = wallet.tokenBalance + wallet.creditLimit - wallet.holdAmount;
-    if (spendable < holdTokens) {
+    const spendableRaw = wallet.tokenBalance + wallet.creditLimit - wallet.holdAmount;
+    const spendableTokens = Math.floor(spendableRaw);
+    if (spendableTokens <= 0) {
       await ensureCapAlert();
-      await recordGuardrailEvent("hold_insufficient", input.userId, {
-        turnId: input.turnId,
-        provider: input.provider,
-        model: input.model,
-        promptTokens: input.promptTokens,
-        maxOutputTokens: input.maxOutputTokens,
-        spendable,
-        required: holdTokens
-      }, session);
+      await recordGuardrailEvent(
+        "hold_insufficient",
+        input.userId,
+        {
+          turnId: input.turnId,
+          provider: input.provider,
+          model: input.model,
+          promptTokens: input.promptTokens,
+          maxOutputTokens: input.maxOutputTokens,
+          spendable: spendableRaw,
+          required: holdTokens
+        },
+        session
+      );
 
       await createSystemAlert({
         type: "insufficient_tokens",
@@ -99,7 +105,7 @@ export async function startChatHold(input: StartChatHoldInput): Promise<StartCha
           turnId: input.turnId,
           provider: input.provider,
           model: input.model,
-          spendable,
+          spendable: spendableRaw,
           required: holdTokens
         },
         session
@@ -107,6 +113,9 @@ export async function startChatHold(input: StartChatHoldInput): Promise<StartCha
 
       return { error: INSUFFICIENT_TOKENS_MESSAGE };
     }
+
+    const effectiveHoldTokens = Math.max(1, Math.min(holdTokens, spendableTokens));
+    const partialHold = effectiveHoldTokens < holdTokens;
 
     const existingHold = await TokenTransactionModel.findOne({
       userId: input.userId,
@@ -148,7 +157,7 @@ export async function startChatHold(input: StartChatHoldInput): Promise<StartCha
 
     await WalletModel.updateOne(
       { userId: input.userId },
-      { $inc: { holdAmount: holdTokens } },
+      { $inc: { holdAmount: effectiveHoldTokens } },
       { session }
     ).exec();
 
@@ -158,10 +167,15 @@ export async function startChatHold(input: StartChatHoldInput): Promise<StartCha
       balanceBefore,
       balanceAfter: balanceBefore,
       holdAmountBefore,
-      holdAmountAfter: holdAmountBefore + holdTokens
+      holdAmountAfter: holdAmountBefore + effectiveHoldTokens
     };
     if (safeCapExceeded) {
       holdMeta.safeCapExceeded = true;
+    }
+    if (partialHold) {
+      holdMeta.partialHold = true;
+      holdMeta.requestedHoldTokens = holdTokens;
+      holdMeta.appliedHoldTokens = effectiveHoldTokens;
     }
 
     await TokenTransactionModel.create(
@@ -169,7 +183,7 @@ export async function startChatHold(input: StartChatHoldInput): Promise<StartCha
         {
           userId: input.userId,
           type: "hold",
-          amountTokens: holdTokens,
+          amountTokens: effectiveHoldTokens,
           source: CHAT_TOKEN_SOURCE,
           refId,
           provider: input.provider,
@@ -187,13 +201,15 @@ export async function startChatHold(input: StartChatHoldInput): Promise<StartCha
     console.info("[chat][hold] hold placed", {
       turnId: input.turnId,
       userId: input.userId.toHexString(),
-      holdTokens
+      holdTokens: effectiveHoldTokens,
+      requestedHoldTokens: holdTokens,
+      spendable: spendableTokens
     });
 
     return {
-      holdTokens,
+      holdTokens: effectiveHoldTokens,
       walletBalance: wallet.tokenBalance,
-      holdAmount: wallet.holdAmount + holdTokens
+      holdAmount: wallet.holdAmount + effectiveHoldTokens
     };
   });
 

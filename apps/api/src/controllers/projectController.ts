@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 import type { AuthenticatedRequest } from "../types/express";
 import { createProjectSchema } from "../schemas/projectSchemas";
 import { ProjectModel, BrandVoiceModel } from "../models";
-import { createAssistantThread } from "../services/openai/assistantThreads.js";
+import { createAssistantThread, createAssistantVectorStore } from "../services/openai/assistantThreads.js";
 import { asyncHandler } from "../utils/asyncHandler";
 
 export const listProjects = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
@@ -16,12 +16,16 @@ export const listProjects = asyncHandler(async (req: AuthenticatedRequest, res: 
 
 export const createProject = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   const payload = createProjectSchema.parse(req.body);
-  const assistantThreadId = await createAssistantThread();
+  const [assistantThreadId, assistantVectorStoreId] = await Promise.all([
+    createAssistantThread(),
+    createAssistantVectorStore()
+  ]);
   const project = await ProjectModel.create({
     userId: new Types.ObjectId(req.user.sub),
     name: payload.name,
     modelOverride: payload.modelOverride,
-    assistantThreadId
+    assistantThreadId,
+    assistantVectorStoreId
   });
 
   res.status(201).json({ project });
