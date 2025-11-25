@@ -175,11 +175,6 @@ export const translationsEn = {
           "Generate ads, blog posts, and social media carousels optimized for engagement and conversion.",
       },
       {
-        title: "Team Collaboration",
-        description:
-          "Work together with your team on projects with shared brand voices and content libraries.",
-      },
-      {
         title: "Analytics & Insights",
         description:
           "Track performance, usage, and ROI with detailed analytics and reporting.",
