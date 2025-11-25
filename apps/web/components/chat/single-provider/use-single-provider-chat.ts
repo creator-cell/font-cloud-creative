@@ -27,6 +27,8 @@ import {
 import type { PendingAttachment } from "./pending-attachments";
 
 const STREAM_TIMEOUT_MS = 45_000;
+const TYPEWRITER_CHAR_BATCH = 3;
+const TYPEWRITER_INTERVAL_MS = 22;
 const STORAGE_KEY = "frontcloud.single-chat.model";
 const PROJECT_STORAGE_KEY = "frontcloud.single-chat.project";
 const MAX_INLINE_FILE_BYTES = 2 * 1024 * 1024; // 2 MB
@@ -99,6 +101,7 @@ export const useSingleProviderChat = ({
 
   const controllersRef = useRef<StreamControllers>({ source: null, timeout: null });
   const activeTurnRef = useRef<string | null>(null);
+  const typingStateRef = useRef<Map<string, { buffer: string; timer: number | null; isRunning: boolean }>>(new Map());
   const chatScrollRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const dragCounter = useRef(0);
@@ -159,6 +162,12 @@ export const useSingleProviderChat = ({
       window.clearTimeout(controllersRef.current.timeout);
       controllersRef.current.timeout = null;
     }
+    typingStateRef.current.forEach((entry) => {
+      if (entry.timer !== null) {
+        window.clearTimeout(entry.timer);
+      }
+    });
+    typingStateRef.current.clear();
   }, []);
 
   const handleModelChange = (value: string) => {
@@ -175,8 +184,74 @@ export const useSingleProviderChat = ({
     dispatch({ type: "set-input", value });
   };
 
-  const resetStreaming = useCallback(() => {
-    activeTurnRef.current = null;
+  const stopTyping = useCallback(
+    (turnId?: string | null) => {
+      if (!turnId) return;
+      const entry = typingStateRef.current.get(turnId);
+      if (!entry) return;
+      if (entry.timer !== null) {
+        window.clearTimeout(entry.timer);
+      }
+      if (entry.buffer.length) {
+        dispatch({ type: "append-answer-content", turnId, delta: entry.buffer });
+      }
+      typingStateRef.current.delete(turnId);
+    },
+    [dispatch]
+  );
+
+  const enqueueTyping = useCallback(
+    (turnId: string, delta: string) => {
+      if (!delta) return;
+      const entry =
+        typingStateRef.current.get(turnId) ?? { buffer: "", timer: null, isRunning: false };
+      entry.buffer += delta;
+      typingStateRef.current.set(turnId, entry);
+      if (entry.isRunning) {
+        return;
+      }
+      entry.isRunning = true;
+
+      const processChunk = () => {
+        const current = typingStateRef.current.get(turnId);
+        if (!current) return;
+
+        const chunk = current.buffer.slice(0, TYPEWRITER_CHAR_BATCH) || current.buffer;
+        current.buffer = current.buffer.slice(chunk.length);
+        typingStateRef.current.set(turnId, current);
+
+        if (chunk) {
+          dispatch({ type: "append-answer-content", turnId, delta: chunk });
+        }
+
+        if (current.buffer.length === 0) {
+          current.isRunning = false;
+          if (current.timer !== null) {
+            window.clearTimeout(current.timer);
+          }
+          typingStateRef.current.delete(turnId);
+          return;
+        }
+
+        const pause = chunk.endsWith("\n") ? TYPEWRITER_INTERVAL_MS * 2 : TYPEWRITER_INTERVAL_MS;
+        if (current.timer !== null) {
+          window.clearTimeout(current.timer);
+        }
+        current.timer = window.setTimeout(processChunk, pause);
+        typingStateRef.current.set(turnId, current);
+      };
+
+      processChunk();
+    },
+    [dispatch]
+  );
+
+  const resetStreaming = useCallback(
+    (options?: { skipTypingFlush?: boolean }) => {
+      if (!options?.skipTypingFlush && activeTurnRef.current) {
+        stopTyping(activeTurnRef.current);
+      }
+      activeTurnRef.current = null;
     if (controllersRef.current.timeout !== null) {
       window.clearTimeout(controllersRef.current.timeout);
       controllersRef.current.timeout = null;
@@ -185,7 +260,7 @@ export const useSingleProviderChat = ({
       controllersRef.current.source.close();
       controllersRef.current.source = null;
     }
-  }, []);
+  }, [stopTyping]);
 
   const handleStreamTimeout = useCallback(
     (turnId: string) => {
@@ -203,6 +278,7 @@ export const useSingleProviderChat = ({
   const beginStreaming = useCallback(
     (turn: ChatTurn, streamUrl: string) => {
       activeTurnRef.current = turn.id;
+      stopTyping(turn.id);
       dispatch({ type: "append-turn", turn });
 
       const scheduleTimeout = () => {
@@ -234,13 +310,10 @@ export const useSingleProviderChat = ({
         },
         onDelta: (event) => {
           scheduleTimeout();
-          dispatch({
-            type: "append-answer-content",
-            turnId: turn.id,
-            delta: event.text_delta,
-          });
+          enqueueTyping(turn.id, event.text_delta);
         },
         onEnd: (event) => {
+          stopTyping(turn.id);
           dispatch({
             type: "update-answer",
             turnId: turn.id,
@@ -256,6 +329,7 @@ export const useSingleProviderChat = ({
           });
         },
         onError: (event) => {
+          stopTyping(turn.id);
           let errorMessage = event.message;
           if (errorMessage === "Unknown streaming error") {
             errorMessage = "Connection error. Please try again.";
@@ -274,11 +348,11 @@ export const useSingleProviderChat = ({
           resetStreaming();
         },
         onComplete: () => {
-          resetStreaming();
+          resetStreaming({ skipTypingFlush: true });
         },
       });
     },
-    [handleStreamTimeout, resetStreaming]
+    [enqueueTyping, handleStreamTimeout, resetStreaming, stopTyping]
   );
 
   const serializeAttachments = useCallback(async () => {

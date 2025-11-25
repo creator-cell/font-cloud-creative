@@ -43,6 +43,8 @@ const STREAM_TIMEOUT_MS = 45_000;
 const STORAGE_KEY = "frontcloud.single-chat.model";
 const PROJECT_STORAGE_KEY = "frontcloud.single-chat.project";
 const MAX_INLINE_FILE_BYTES = 20 * 1024 * 1024; // 20 MB
+const TYPEWRITER_CHAR_BATCH = 3;
+const TYPEWRITER_INTERVAL_MS = 22;
 const DEFAULT_MODEL_FALLBACK = PROVIDER_MODELS[0]?.id ?? "openai:gpt-4.1-mini";
 
 type StreamControllers = {
@@ -141,6 +143,7 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
   const lastModelIdRef = useRef(state.session.lastModelId);
   const isLoadingHistoryRef = useRef(false);
   const skipAutoScrollRef = useRef(false);
+  const typingStateRef = useRef<Map<string, { buffer: string; timer: number | null; isRunning: boolean }>>(new Map());
 
   const projectMap = useMemo(() => {
     const map = new Map<string, ProjectSummary>();
@@ -149,6 +152,19 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
   }, [projects]);
 
   const hasTurns = state.session.turns.length > 0;
+
+  const scrollChatToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
+    const container = chatScrollRef.current;
+    if (!container) return;
+    requestAnimationFrame(() => {
+      const target = chatScrollRef.current;
+      if (!target) return;
+      target.scrollTo({
+        top: target.scrollHeight,
+        behavior,
+      });
+    });
+  }, []);
 
   const mapHistoryTurn = useCallback(
     (item: ChatHistoryTurn): ChatTurn => {
@@ -341,7 +357,16 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
     };
   }, []);
 
-  useEffect(() => () => historyAbortRef.current?.abort(), []);
+useEffect(() => () => historyAbortRef.current?.abort(), []);
+
+useEffect(() => () => {
+  typingStateRef.current.forEach((entry) => {
+    if (entry.timer !== null) {
+      window.clearTimeout(entry.timer);
+    }
+  });
+  typingStateRef.current.clear();
+}, []);
 
   useEffect(() => {
     const container = chatScrollRef.current;
@@ -383,9 +408,76 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
     dispatch({ type: "set-input", value });
   };
 
-  const resetStreaming = useCallback(() => {
-    dispatch({ type: "set-streaming", value: false });
-    activeTurnRef.current = null;
+  const stopTyping = useCallback(
+    (turnId?: string | null, flush: boolean = true) => {
+      if (!turnId) return;
+      const entry = typingStateRef.current.get(turnId);
+      if (!entry) return;
+      if (entry.timer !== null) {
+        window.clearTimeout(entry.timer);
+      }
+      if (flush && entry.buffer.length) {
+        dispatch({ type: "append-answer-content", turnId, delta: entry.buffer });
+      }
+      typingStateRef.current.delete(turnId);
+    },
+    [dispatch]
+  );
+
+  const enqueueTyping = useCallback(
+    (turnId: string, delta: string) => {
+      if (!delta) return;
+      const entry =
+        typingStateRef.current.get(turnId) ?? { buffer: "", timer: null, isRunning: false };
+      entry.buffer += delta;
+      typingStateRef.current.set(turnId, entry);
+      if (entry.isRunning) {
+        return;
+      }
+      entry.isRunning = true;
+
+      const processChunk = () => {
+        const current = typingStateRef.current.get(turnId);
+        if (!current) return;
+
+        const chunk = current.buffer.slice(0, TYPEWRITER_CHAR_BATCH) || current.buffer;
+        current.buffer = current.buffer.slice(chunk.length);
+        typingStateRef.current.set(turnId, current);
+
+        if (chunk) {
+          dispatch({ type: "append-answer-content", turnId, delta: chunk });
+          scrollChatToBottom("auto");
+        }
+
+        if (current.buffer.length === 0) {
+          current.isRunning = false;
+          if (current.timer !== null) {
+            window.clearTimeout(current.timer);
+          }
+          typingStateRef.current.delete(turnId);
+          return;
+        }
+
+        const pause = chunk.endsWith("\n") ? TYPEWRITER_INTERVAL_MS * 2 : TYPEWRITER_INTERVAL_MS;
+        if (current.timer !== null) {
+          window.clearTimeout(current.timer);
+        }
+        current.timer = window.setTimeout(processChunk, pause);
+        typingStateRef.current.set(turnId, current);
+      };
+
+      processChunk();
+    },
+    [dispatch, scrollChatToBottom]
+  );
+
+  const resetStreaming = useCallback(
+    (options?: { skipTypingFlush?: boolean }) => {
+      if (!options?.skipTypingFlush && activeTurnRef.current) {
+        stopTyping(activeTurnRef.current);
+      }
+      dispatch({ type: "set-streaming", value: false });
+      activeTurnRef.current = null;
     if (controllersRef.current.timeout !== null) {
       window.clearTimeout(controllersRef.current.timeout);
       controllersRef.current.timeout = null;
@@ -394,7 +486,7 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
       controllersRef.current.source.close();
       controllersRef.current.source = null;
     }
-  }, []);
+  }, [stopTyping]);
 
   const handleStreamTimeout = useCallback(
     (turnId: string) => {
@@ -451,21 +543,9 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
     []
   );
 
-  const scrollChatToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
-    const container = chatScrollRef.current;
-    if (!container) return;
-    requestAnimationFrame(() => {
-      const target = chatScrollRef.current;
-      if (!target) return;
-      target.scrollTo({
-        top: target.scrollHeight,
-        behavior,
-      });
-    });
-  }, []);
-
   const beginStreaming = useCallback(
     (turn: ChatTurn, streamUrl: string) => {
+      stopTyping(turn.id);
       activeTurnRef.current = turn.id;
       dispatch({ type: "append-turn", turn });
       skipAutoScrollRef.current = false;
@@ -498,12 +578,7 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
         },
         onDelta: (event) => {
           scheduleTimeout();
-          dispatch({
-            type: "append-answer-content",
-            turnId: turn.id,
-            delta: event.text_delta,
-          });
-          scrollChatToBottom("auto");
+          enqueueTyping(turn.id, event.text_delta);
         },
         onEnd: (event) => {
           dispatch({
@@ -522,6 +597,7 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
           scrollChatToBottom("smooth");
         },
         onError: (event) => {
+          stopTyping(turn.id);
           dispatch({
             type: "update-answer",
             turnId: turn.id,
@@ -532,12 +608,12 @@ export const SingleProviderChat = ({ projects, defaultModelId }: SingleProviderC
           scrollChatToBottom("smooth");
         },
         onComplete: () => {
-          resetStreaming();
+          resetStreaming({ skipTypingFlush: true });
           scrollChatToBottom("smooth");
         },
       });
     },
-    [handleStreamTimeout, resetStreaming, scrollChatToBottom]
+    [enqueueTyping, handleStreamTimeout, resetStreaming, scrollChatToBottom, stopTyping]
   );
 
   const sendMessage = useCallback(

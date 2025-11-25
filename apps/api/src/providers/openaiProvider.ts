@@ -673,9 +673,10 @@ export class OpenAIProvider implements LLMProvider {
       assistantId = await this.ensureDocumentAssistant();
     }
     const warnings: string[] = [];
-    const docAttachments: Array<{ fileId: string; name: string }> = [];
+    const docAttachments: Array<{ fileId: string; name: string; useFileSearch: boolean }> = [];
     const imageParts: Array<{ type: string; image_file?: { file_id: string } }> = [];
-    const messageAttachments: Array<{ file_id: string; tools: Array<{ type: "file_search" }> }> = [];
+    const messageAttachments: Array<{ file_id: string; tools: Array<{ type: "file_search" | "code_interpreter" }> }> = [];
+    const codeInterpreterFileIds: string[] = [];
 
     if (params.attachments?.length) {
       for (const attachment of params.attachments) {
@@ -700,6 +701,11 @@ export class OpenAIProvider implements LLMProvider {
         }
 
         try {
+          const useFileSearch = Boolean(
+            params.vectorStoreId &&
+              ((ext && FILE_SEARCH_ELIGIBLE_EXTENSIONS.has(ext)) ||
+                (mimeType && SUPPORTED_DOCUMENT_MIME_TYPES.has(mimeType)))
+          );
           if (isImage) {
             const uploaded = await this.uploadAttachment(attachment);
             imageParts.push({ type: "image_file", image_file: { file_id: uploaded.file_id } });
@@ -710,11 +716,23 @@ export class OpenAIProvider implements LLMProvider {
               { type: attachment.type ?? parsed.mime ?? "application/octet-stream" }
             );
             const uploaded = await this.client.files.create({ file, purpose: "assistants" });
-            docAttachments.push({ fileId: uploaded.id, name: attachment.name ?? uploaded.id });
-            messageAttachments.push({
-              file_id: uploaded.id,
-              tools: [{ type: "file_search" }]
+            docAttachments.push({
+              fileId: uploaded.id,
+              name: attachment.name ?? uploaded.id,
+              useFileSearch
             });
+            if (useFileSearch) {
+              messageAttachments.push({
+                file_id: uploaded.id,
+                tools: [{ type: "file_search" }]
+              });
+            } else {
+              codeInterpreterFileIds.push(uploaded.id);
+              messageAttachments.push({
+                file_id: uploaded.id,
+                tools: [{ type: "code_interpreter" }]
+              });
+            }
           } else {
             warnings.push(`Unsupported attachment type: ${attachment.name ?? "file"}.`);
           }
@@ -760,27 +778,44 @@ export class OpenAIProvider implements LLMProvider {
       runOptions.additional_instructions = params.system.trim();
     }
 
-    if (params.vectorStoreId && docAttachments.length > 0) {
+    if (docAttachments.length > 0 || codeInterpreterFileIds.length > 0) {
+      runOptions.tool_resources = runOptions.tool_resources ?? {};
+    }
+
+    if (codeInterpreterFileIds.length > 0) {
       runOptions.tool_resources = {
-        file_search: {
-          vector_store_ids: [params.vectorStoreId]
+        ...runOptions.tool_resources,
+        code_interpreter: {
+          file_ids: codeInterpreterFileIds
         }
       };
+    }
 
-      for (const doc of docAttachments) {
-        try {
-          await this.client.vectorStores.files.create(params.vectorStoreId, {
-            file_id: doc.fileId
-          });
-          await this.waitForVectorStoreIndex(params.vectorStoreId, doc.fileId, {
-            signal: params.signal
-          });
-        } catch (error) {
-          console.error("[openai] failed to attach file to vector store", {
-            vectorStoreId: params.vectorStoreId,
-            fileId: doc.fileId,
-            error
-          });
+    if (params.vectorStoreId) {
+      const fileSearchDocs = docAttachments.filter((doc) => doc.useFileSearch);
+      if (fileSearchDocs.length > 0) {
+        runOptions.tool_resources = {
+          ...runOptions.tool_resources,
+          file_search: {
+            vector_store_ids: [params.vectorStoreId]
+          }
+        };
+
+        for (const doc of fileSearchDocs) {
+          try {
+            await this.client.vectorStores.files.create(params.vectorStoreId, {
+              file_id: doc.fileId
+            });
+            await this.waitForVectorStoreIndex(params.vectorStoreId, doc.fileId, {
+              signal: params.signal
+            });
+          } catch (error) {
+            console.error("[openai] failed to attach file to vector store", {
+              vectorStoreId: params.vectorStoreId,
+              fileId: doc.fileId,
+              error
+            });
+          }
         }
       }
     }
