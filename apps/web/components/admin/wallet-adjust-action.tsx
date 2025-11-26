@@ -55,7 +55,12 @@ export const WalletAdjustAction = ({ token, wallet }: Props) => {
   };
 
   return (
-    <Button variant="outline" size="sm" onClick={handleAdjust} disabled={pending}>
+    <Button
+      variant="secondary"
+      onClick={handleAdjust}
+      disabled={pending}
+      className="px-3 py-1 text-sm border border-slate-200 bg-white text-slate-700 hover:border-sky-200 hover:text-slate-900"
+    >
       {pending ? "Updating..." : "Adjust"}
     </Button>
   );

@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { motion } from "framer-motion";
 
-const CardTitle = ({ children, className }) => (
+const CardTitle: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
   <h4 className={`text-lg font-semibold ${className}`}>{children}</h4>
 );
 
@@ -105,7 +105,16 @@ const WorkDemo = ({ copy }: any) => {
         </div>
 
         {speedFeatures.map(
-          ({ title, description, Icon, iconColor, style }, index) => (
+          (
+            {
+              title,
+              description,
+              Icon,
+              iconColor,
+              style,
+            }: { title: string; description: string; Icon: LucideIcon; iconColor: string; style?: React.CSSProperties },
+            index: number
+          ) => (
             <motion.div
               key={title}
               className="relative rounded-2xl p-4 h-full flex flex-col justify-between"

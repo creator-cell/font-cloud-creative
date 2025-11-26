@@ -59,7 +59,11 @@ export const FlagList = ({ token, flags }: FlagListProps) => {
                 value={flag.rolloutPercent}
                 onChange={(event) => handleRollout(flag.key, Number(event.target.value))}
               />
-              <Button size="sm" onClick={() => handleSave(flag)} disabled={loadingKey === flag.key}>
+              <Button
+                onClick={() => handleSave(flag)}
+                disabled={loadingKey === flag.key}
+                className="px-3 py-1 text-sm"
+              >
                 {loadingKey === flag.key ? "Saving..." : "Save"}
               </Button>
             </div>

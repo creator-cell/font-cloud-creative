@@ -51,7 +51,12 @@ export const LedgerExportButton = ({ token, params, endpoint }: Props) => {
   };
 
   return (
-    <Button variant="outline" onClick={handleExport} disabled={loading}>
+    <Button
+      variant="secondary"
+      onClick={handleExport}
+      disabled={loading}
+      className="border border-slate-200 bg-white text-slate-700 hover:border-sky-200 hover:text-slate-900"
+    >
       {loading ? "Preparing..." : "Export CSV"}
     </Button>
   );

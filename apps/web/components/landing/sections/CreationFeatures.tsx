@@ -9,7 +9,7 @@ import {
   Server,
   type LucideIcon
 } from "lucide-react";
-import type { LandingTranslation } from "../translations.js";
+import type { LandingTranslation } from "../types";
 
 type CreationFeature = {
   title: string;

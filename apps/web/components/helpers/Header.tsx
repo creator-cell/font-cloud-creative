@@ -56,7 +56,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
 
         {/* Nav */}
         <nav className="hidden md:flex items-center gap-6 text-medium text-[#64748B] font-semibold dark:text-white">
-          {navItems.map((item) => (
+          {navItems.map((item: { label: string; href: string }) => (
             <Link
               key={item.label}
               href={item.href}
@@ -135,7 +135,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
       {mobileOpen && (
         <nav className="md:hidden bg-white dark:bg-gray-900 border-t dark:border-[#324154] border-gray-200 px-4 sm:px-6">
           <ul className="flex flex-col gap-1 px-2 space-y-1 pt-2 pb-3 text-sm text-[#778599] font-medium dark:text-white">
-            {navItems.map((item) => (
+            {navItems.map((item: { label: string; href: string }) => (
               <li key={item.label}>
                 <Link
                   href={item.href}

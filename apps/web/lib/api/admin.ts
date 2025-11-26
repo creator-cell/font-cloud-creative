@@ -22,6 +22,7 @@ export interface KPIResponse {
   arpu: number;
   tokenBurnByProvider: Record<string, { in: number; out: number }>;
   planMix: Record<string, number>;
+  trend?: Array<{ date: string; signups: number }>;
 }
 
 export const fetchAdminOverview = (token: string, range: "7d" | "30d" | "90d" = "30d") =>
@@ -59,7 +60,7 @@ export const grantUserTokens = (
   });
 
 export const fetchProviderRegistry = (token: string) =>
-  apiFetch<{ providers: Record<string, { id: string; label: string; minPlan: string; estCostPer1K: number }[]> }>(
+  apiFetch<{ providers: Record<string, { id: string; label: string; minPlan: string; estCostPer1K: number; capabilities?: string[] }[]> }>(
     "/admin/models/providers",
     { token }
   );
@@ -91,6 +92,108 @@ export const fetchAuditLog = (
     }
   });
   return apiFetch<{ logs: unknown[] }>(`/admin/audit?${query.toString()}`, { token });
+};
+
+export const fetchAnalyticsCohort = (
+  token: string,
+  params: { start?: string; weeks?: number } = {}
+) => apiFetch<AnalyticsCohortResponse>(`/admin/analytics/cohort${buildQueryString(params)}`, { token });
+
+export const fetchAnalyticsSummary = (
+  token: string,
+  params: { range?: "7d" | "30d" | "90d"; start?: string; end?: string; from?: string; to?: string; tz?: string } = {}
+) => apiFetch<AnalyticsSummaryResponse>(`/admin/analytics/summary${buildQueryString(params)}`, { token });
+
+export const fetchAnalyticsTimeseries = (
+  token: string,
+  params: { range?: "7d" | "30d" | "90d"; start?: string; end?: string; from?: string; to?: string; tz?: string; interval?: "day" | "week" | "month" } = {}
+) => apiFetch<AnalyticsTimeseriesResponse>(`/admin/analytics/timeseries${buildQueryString(params)}`, { token });
+
+export const fetchAnalyticsDistribution = (
+  token: string,
+  params: { range?: "7d" | "30d" | "90d"; start?: string; end?: string; from?: string; to?: string; tz?: string; metric?: string } = {}
+) => apiFetch<AnalyticsDistributionResponse>(`/admin/analytics/distribution${buildQueryString(params)}`, { token });
+
+export const buildAnalyticsExportUrl = (params: {
+  type: "timeseries" | "distribution" | "users" | "models";
+  from?: string;
+  to?: string;
+  tz?: string;
+  interval?: string;
+  limit?: number;
+}) => {
+  const qs = buildQueryString(params);
+  return `/admin/analytics/export${qs}`;
+};
+
+export const fetchAnalyticsTopUsers = (
+  token: string,
+  params: { from?: string; to?: string; tz?: string; limit?: number } = {}
+) => apiFetch<AnalyticsTopUsersResponse>(`/admin/analytics/top-users${buildQueryString(params)}`, { token });
+
+export const fetchAnalyticsTopModels = (
+  token: string,
+  params: { from?: string; to?: string; tz?: string; limit?: number } = {}
+) => apiFetch<AnalyticsTopModelsResponse>(`/admin/analytics/top-models${buildQueryString(params)}`, { token });
+
+export type AnalyticsSummaryResponse = {
+  from?: string;
+  to?: string;
+  totalTokens: number;
+  totalCostCents: number;
+  activeUsers: number;
+  turns: number;
+  avgLatencyMs: number;
+};
+
+export type AnalyticsTimeseriesResponse = {
+  labels: string[];
+  tokens: number[];
+  costCents: number[];
+  turns: number[];
+  avgLatencyMs: number[];
+};
+
+export type AnalyticsDistributionResponse = {
+  byProvider: { provider: string; totalTokens: number; totalCostCents?: number }[];
+  byPlan: { plan: string; totalTokens: number; totalCostCents?: number }[];
+};
+
+export type AnalyticsCohortResponse = {
+  cohorts: Array<{ cohortStartISO: string; weekIndex: number; tokens: number; users: number }>;
+  retention: Array<{ cohortStartISO: string; weekIndex: number; activePct: number }>;
+  cohortSizes: Array<{ cohortStartISO: string; users: number }>;
+  from?: string;
+  to?: string;
+};
+
+export type AnalyticsTopUsersResponse = {
+  from?: string;
+  to?: string;
+  tz?: string;
+  users: Array<{
+    userId?: string;
+    email: string;
+    totalTokens: number;
+    totalCostCents: number;
+    turns: number;
+    avgLatencyMs: number;
+    plan?: string;
+  }>;
+};
+
+export type AnalyticsTopModelsResponse = {
+  from?: string;
+  to?: string;
+  tz?: string;
+  models: Array<{
+    model: string;
+    provider: string;
+    totalTokens: number;
+    totalCostCents: number;
+    turns: number;
+    avgLatencyMs: number;
+  }>;
 };
 
 export const createAnnouncement = (
@@ -167,7 +270,7 @@ export type AdminLedgerRecord = {
   id: string;
   userId: string;
   userEmail: string;
-  type: "grant" | "spend" | "hold" | "hold_release" | "refund" | "adjustment";
+  type: "grant" | "spend" | "hold" | "hold_release" | "refund" | "adjustment" | "purchase";
   amountTokens: number;
   source: string;
   provider: string;

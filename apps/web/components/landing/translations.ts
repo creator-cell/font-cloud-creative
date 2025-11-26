@@ -29,8 +29,8 @@ const iconMap = {
 
 const mapIcon = (name?: string) => (name ? iconMap[name as keyof typeof iconMap] : undefined);
 
-const withIcons = (raw: LandingTranslation): LandingTranslation => {
-  const newsroomActions = (raw.newsroomActions ?? []).map((action) => {
+const withIcons = (raw: any): LandingTranslation => {
+  const newsroomActions = (raw.newsroomActions ?? []).map((action: NewsroomAction | string) => {
     if (typeof action === "string") return action;
     const iconName = (action as any).Icon ?? (action as any).icon;
     return { ...(action as NewsroomAction), Icon: mapIcon(iconName) };
@@ -41,14 +41,20 @@ const withIcons = (raw: LandingTranslation): LandingTranslation => {
     return { ...tile, Icon: mapIcon(iconName) };
   };
 
+  const pricingPlans = (raw.pricingPlans ?? []).map((plan: any) => ({
+    ...plan,
+    logo: mapIcon(plan.logo) ?? plan.logo,
+  }));
+
   return {
     ...raw,
     newsroomActions,
     statsTiles: (raw.statsTiles ?? []).map(mapTile),
+    pricingPlans,
   };
 };
 
 export const translations = {
-  en: withIcons(translationsEnJson as LandingTranslation),
-  ar: withIcons(translationsArJson as LandingTranslation),
+  en: withIcons(translationsEnJson),
+  ar: withIcons(translationsArJson),
 } as const;

@@ -56,7 +56,7 @@ export default async function AdminLedgerPage({ searchParams }: PageProps) {
 
   const page = Number(getParam(searchParams.page) || "1");
   const limit = Number(getParam(searchParams.limit) || "50");
-  const direction = getParam(searchParams.direction) === "asc" ? "asc" : "desc";
+  const direction: "asc" | "desc" = getParam(searchParams.direction) === "asc" ? "asc" : "desc";
 
   const queryParams = {
     ...filters,

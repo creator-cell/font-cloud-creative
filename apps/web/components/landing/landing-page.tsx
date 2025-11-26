@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { LucideIcon } from "lucide-react";
+import type { PricingPlan } from "./types";
 import {
   ArrowRight,
   Bot,
@@ -57,7 +58,6 @@ import FooterFirstCard from "../utils/FooterFirstCard";
 import LimitedTime from "../utils/LimitedTime";
 import FooterSection from "../utils/FooterSection";
 import TypeContent from "../helpers/TypeContent";
-import HeroSection from "../helpers/HeroSection";
 import Header from "../helpers/Header";
 import WorkDemo from "../helpers/WorkDemo";
 import Features from "../helpers/Features";
@@ -138,14 +138,10 @@ export const LandingPage = () => {
   const activeScenario = (
     copy.contentScenarios?.[activeContentFilter] || []
   ).map((item: string) => item);
-  const newsroomActions = (copy.newsroomActions || []).map(
-    (action: string) => action
-  );
+  const newsroomActions = copy.newsroomActions || [];
   const finalData = (copy.finalData || []).map((action: string) => action);
 
-  const statsTiles = (copy.statsTiles || []).map(
-    (tile: { value: string; label: string }) => tile
-  );
+  const statsTiles = copy.statsTiles || [];
   const providerItems = [
     {
       key: "openai",
@@ -181,17 +177,7 @@ export const LandingPage = () => {
     }
   ];
 
-  const pricingPlans = (copy.pricingPlans || []).map(
-    (plan: {
-      id: string;
-      title: string;
-      price: string;
-      description: string;
-      features: string[];
-      cta: string;
-      popular: boolean;
-    }) => plan
-  );
+  const pricingPlans = (copy.pricingPlans || []) as PricingPlan[];
   const fadeIn = (delay = 0, offset = 40) => ({
     initial: { opacity: 0, y: -offset },
     whileInView: { opacity: 1, y: 0 },
@@ -461,7 +447,10 @@ export const LandingPage = () => {
             </div>
 
             {speedFeatures.map(
-              ({ title, description, Icon, iconColor, style }, index) => (
+              (
+                { title, description, Icon, iconColor, style }: { title: string; description: string; Icon: LucideIcon; iconColor?: string; style?: React.CSSProperties },
+                index: number
+              ) => (
                 <motion.div
                   key={title}
                   className="relative rounded-2xl p-4 h-full flex flex-col justify-between dark:bg-[#162033] dark:border-[#1c3d57]"
@@ -604,7 +593,7 @@ export const LandingPage = () => {
                       {copy.data.leftPanel.toneStyle.title}
                     </h3>
                     <div className="flex gap-2 text-[.65rem]">
-                      {copy.data.leftPanel.toneStyle.styles.map((style) => (
+                      {copy.data.leftPanel.toneStyle.styles.map((style: string) => (
                         <span
                           key={style}
                           className="border items-center border-gray-200 rounded-full bg-[#f0f9ff] font-medium px-1.5 text-[#0c4a6e] text-xs dark:bg-[#1e293b] dark:text-[#e1e8f0]"
@@ -679,18 +668,14 @@ export const LandingPage = () => {
                       {copy.data.rightPanel.actions.tryYourself}
                     </Button>
 
-                    <Button
-                      className="w-[14rem] bg-white hover:bg-sky-100  text-sm font-medium py-2
-                    rounded-md mt-2 text-black border border-[#e1e8f0] dark:bg-[#1c2a3d]  dark:border-[#324154] dark:text-[#f2f6fa]"
-                      asChild
+                    <Link
+                      href={whatsappLink}
+                      target="_blank"
+                      className="w-[14rem] bg-white hover:bg-sky-100 text-sm font-medium py-2 rounded-md mt-2 text-black border border-[#e1e8f0] dark:bg-[#1c2a3d] dark:border-[#324154] dark:text-[#f2f6fa] flex items-center justify-center gap-1"
                     >
-                      <Link href={whatsappLink} target="_blank" className="flex items-center gap-1">
-                        <div>
-                          <Globe2 className="w-4 h-4" />
-                        </div>
-                        {copy.data.rightPanel.actions.watchDemo}
-                      </Link>
-                    </Button>
+                      <Globe2 className="w-4 h-4" />
+                      {copy.data.rightPanel.actions.watchDemo}
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -816,7 +801,7 @@ export const LandingPage = () => {
 
           <div className="mt-14 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
             {statsTiles.map((card, index) => {
-              const { text, bg, border } = getColor(card.color);
+              const { text, bg, border } = getColor(card.color || "");
               const Icon = card.Icon as LucideIcon;
 
               return (
@@ -935,7 +920,7 @@ export const LandingPage = () => {
                             {plan.boundary}
                           </span>
                           <div className="flex flex-col gap-1 ">
-                            {plan.Limitations.map((limit, i) => (
+                            {(plan.Limitations ?? []).map((limit, i) => (
                               <div
                                 key={i}
                                 className="flex items-center gap-2  text-gray-600 text-xs dark:text-[#93a2b8]"
@@ -983,24 +968,20 @@ export const LandingPage = () => {
               </p>
             </CardHeader>
             <CardContent className="flex flex-wrap justify-center gap-4 text-slate-900 dark:text-slate-900 mt-6">
-              <Button
-                size="lg"
-                className="rounded-full bg-white  text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit dark:text-[#93a2b8] dark:bg-[#1c283d] dark:border-[#324154]"
-                asChild
+              <Link
+                href={whatsappLink}
+                target="_blank"
+                className="rounded-full bg-white text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit px-4 py-2 text-sm font-semibold dark:text-[#93a2b8] dark:bg-[#1c283d] dark:border-[#324154] flex items-center justify-center"
               >
-                <Link href={whatsappLink} target="_blank">
-                  {copy.enterpriseCta}
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                className="rounded-full bg-gradient-to-r from-[#09a0eb] to-[#0773f7] text-white hover:bg-slate-800 w-full sm:w-fit"
-                asChild
+                {copy.enterpriseCta}
+              </Link>
+              <Link
+                href={whatsappLink}
+                target="_blank"
+                className="rounded-full bg-gradient-to-r from-[#09a0eb] to-[#0773f7] text-white hover:bg-slate-800 w-full sm:w-fit px-4 py-2 text-sm font-semibold flex items-center justify-center"
               >
-                <Link href={whatsappLink} target="_blank">
-                  {copy.enterpriseCta2}
-                </Link>
-              </Button>
+                {copy.enterpriseCta2}
+              </Link>
             </CardContent>
           </Card>
         </motion.div>
@@ -1081,13 +1062,15 @@ export const LandingPage = () => {
                   {copy.finalPrimaryCta}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
-                <Button className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit dark:bg-[#1c67d8] dark:text-[#f2f6fa] dark:border-[#324154]" asChild>
-                  <Link href={whatsappLink} target="_blank" className="flex items-center">
-                    <Zap className="w-4 h-auto mr-2" />
-                    {copy.finalSecondaryCta}
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Link>
-                </Button>
+                <Link
+                  href={whatsappLink}
+                  target="_blank"
+                  className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit dark:bg-[#1c67d8] dark:text-[#f2f6fa] dark:border-[#324154] flex items-center justify-center"
+                >
+                  <Zap className="w-4 h-auto mr-2" />
+                  {copy.finalSecondaryCta}
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
               </div>
             </div>
 

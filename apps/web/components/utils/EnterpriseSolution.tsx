@@ -46,24 +46,20 @@ const EnterpriseSolution = ({ copy }: any) => {
           </p>
         </CardHeader>
         <CardContent className="flex flex-wrap justify-center gap-4 text-slate-900 dark:text-slate-900 mt-6">
-          <Button
-            size="lg"
-            className="rounded-full bg-white  text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit"
-            asChild
+          <Link
+            href={whatsappLink}
+            target="_blank"
+            className="rounded-full bg-white text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit px-4 py-2 text-sm font-semibold flex items-center justify-center"
           >
-            <Link href={whatsappLink} target="_blank">
-              {copy.enterpriseCta}
-            </Link>
-          </Button>
-          <Button
-            size="lg"
-            className="rounded-full bg-gradient-to-r from-[#09a0eb] to-[#0773f7] text-white hover:bg-slate-800 w-full sm:w-fit"
-            asChild
+            {copy.enterpriseCta}
+          </Link>
+          <Link
+            href={whatsappLink}
+            target="_blank"
+            className="rounded-full bg-gradient-to-r from-[#09a0eb] to-[#0773f7] text-white hover:bg-slate-800 w-full sm:w-fit px-4 py-2 text-sm font-semibold flex items-center justify-center"
           >
-            <Link href={whatsappLink} target="_blank">
-              {copy.enterpriseCta2}
-            </Link>
-          </Button>
+            {copy.enterpriseCta2}
+          </Link>
         </CardContent>
       </Card>
     </motion.div>

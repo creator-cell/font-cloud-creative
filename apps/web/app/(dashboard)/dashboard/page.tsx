@@ -300,13 +300,12 @@ export default async function DashboardPage() {
                 })
               )}
             </div>
-            <Button
-              asChild
-              variant="secondary"
-              className="w-full justify-center border border-slate-200 bg-white text-sm text-slate-600 hover:border-sky-200 hover:text-slate-700"
+            <Link
+              href="/wallet"
+              className="w-full justify-center border border-slate-200 bg-white text-sm text-slate-600 hover:border-sky-200 hover:text-slate-700 inline-flex items-center rounded-md px-4 py-1.5 font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
             >
-              <Link href="/wallet">View All Wallet Transactions</Link>
-            </Button>
+              View All Wallet Transactions
+            </Link>
           </CardContent>
         </Card>
       </section>

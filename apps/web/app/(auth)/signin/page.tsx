@@ -1,12 +1,14 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 import { planOptions } from "@/components/plan-selector";
+
+export const dynamic = "force-dynamic";
 
 type Mode = "signin" | "register" | "forgot";
 type RegisterStep = 1 | 2;
@@ -37,7 +39,7 @@ const defaultCountryCode = "+966" as const;
 const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4004";
 const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{10,}$/;
 
-export default function SignInPage() {
+function SignInPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [mode, setMode] = useState<Mode>("signin");
@@ -414,7 +416,7 @@ export default function SignInPage() {
               {`Don't have an account? `}
               <button
                 type="button"
-                onClick={openRegister}
+                onClick={() => openRegister()}
                 className="font-semibold text-indigo-300 transition hover:text-indigo-200"
               >
                 Register
@@ -642,14 +644,14 @@ export default function SignInPage() {
               {registerError && <p className="text-sm text-rose-400">{registerError}</p>}
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <Button
-                  type="button"
-                  onClick={() => setRegisterStep(1)}
-                  className="rounded-full bg-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
-                  disabled={registerLoading}
-                >
-                  Change plan
-                </Button>
+              <Button
+                type="button"
+                onClick={() => setRegisterStep(1)}
+                className="rounded-full bg-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+                disabled={registerLoading}
+              >
+                Change plan
+              </Button>
                 <Button
                   type="submit"
                   className="rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-6 py-2 text-sm font-semibold text-white shadow-lg transition hover:opacity-95 focus-visible:ring-2 focus-visible:ring-indigo-300"
@@ -753,5 +755,13 @@ export default function SignInPage() {
         </form>
       )}
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignInPageInner />
+    </Suspense>
   );
 }

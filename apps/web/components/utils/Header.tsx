@@ -7,8 +7,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sun, Moon, Laptop, Zap, ChevronDown, Globe } from "lucide-react";
@@ -54,7 +52,6 @@ const Header = () => {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  size="icon"
                   className="rounded-md flex items-center gap-1"
                 >
                   {theme === "light" && (
@@ -93,7 +90,6 @@ const Header = () => {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  size="icon"
                   className="rounded-md flex items-center gap-1"
                 >
                   <Globe className="h-4 w-4 text-slate-700" />

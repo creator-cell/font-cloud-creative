@@ -51,7 +51,10 @@ export default async function AdminUsagePage({ searchParams }: PageProps) {
     userId: getParam(searchParams.userId).trim(),
     provider: getParam(searchParams.provider).trim(),
     model: getParam(searchParams.model).trim(),
-    status: getParam(searchParams.status),
+    status: (() => {
+      const val = getParam(searchParams.status);
+      return val === "completed" || val === "failed" ? val : "";
+    })(),
     from: getParam(searchParams.from),
     to: getParam(searchParams.to)
   } as const;
@@ -61,11 +64,16 @@ export default async function AdminUsagePage({ searchParams }: PageProps) {
   const sort = usageSortFields.has(getParam(searchParams.sort))
     ? (getParam(searchParams.sort) as "createdAt" | "totalTokens")
     : "createdAt";
-  const direction = getParam(searchParams.direction) === "asc" ? "asc" : "desc";
-  const displayCurrency = (getParam(searchParams.displayCurrency) as "USD" | "INR" | "SAR") || "INR";
+  const direction: "asc" | "desc" = getParam(searchParams.direction) === "asc" ? "asc" : "desc";
+  const displayCurrency = ((getParam(searchParams.displayCurrency) as "USD" | "INR" | "SAR") ?? "INR") || "INR";
 
   const data = await fetchAdminUsage(session.apiToken, {
-    ...filters,
+    userId: filters.userId,
+    provider: filters.provider,
+    model: filters.model,
+    status: filters.status || undefined,
+    from: filters.from,
+    to: filters.to,
     page,
     limit,
     sort,

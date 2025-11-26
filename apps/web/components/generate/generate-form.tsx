@@ -55,12 +55,12 @@ export const GenerateForm = ({ token, models, projects, brandVoices, defaults }:
         projectId: values.projectId || undefined,
         styleCardId: values.styleCardId || undefined,
         claimsMode: values.claimsMode,
-        provider: selection?.provider,
+        provider: selection?.provider as "openai" | "google" | "anthropic" | "ollama" | undefined,
         model: selection?.model
       };
-      const response = await postGenerate(token, payload);
+      const response: any = await postGenerate(token, payload);
       setResult(response);
-      setWarnings(response.warnings ?? []);
+      setWarnings(response?.warnings ?? []);
     } catch (err) {
       console.error(err);
       const status = (err as Error & { status?: number }).status;

@@ -340,7 +340,7 @@ export const useSingleProviderChat = ({
             patch: { status: "error", errorMessage },
           });
           if (event.code === 401) {
-            handleError(new Error(errorMessage));
+            handleApiError(new Error(errorMessage));
           } else {
             setStatusMessage(errorMessage);
           }
@@ -391,7 +391,7 @@ export const useSingleProviderChat = ({
     setStatusMessage(null);
   }, []);
 
-  const handleError = useApiErrorHandler();
+  const { handleApiError } = useApiErrorHandler();
   
   const sendMessage = useCallback(
     async (options?: {
@@ -487,7 +487,7 @@ export const useSingleProviderChat = ({
         }
       } catch (error) {
         dispatch({ type: "set-streaming", value: false });
-        handleError(error as Error);
+        handleApiError(error as Error);
         if (!options?.message) {
           setInputValue(rawMessage);
         }
@@ -614,7 +614,7 @@ export const useSingleProviderChat = ({
     retryTurn,
     copyTurn,
     sendMessage,
-    inputValue: state.session.inputValue,
+    inputValue: state.inputValue,
     setInputValue,
     onTextareaKeyDown,
     isStreaming: state.isStreaming,

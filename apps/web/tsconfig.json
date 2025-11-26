@@ -9,11 +9,10 @@
     },
     "jsx": "preserve",
     "module": "ESNext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "Bundler",
     "types": [
       "next",
-      "node",
-      "stripe-event-types"
+      "node"
     ],
     "lib": [
       "dom",

@@ -183,11 +183,15 @@ export const AnalyticsTop = ({ usersResponse, modelsResponse, initialFilters }: 
           </div>
         </div>
         <div className="flex gap-2">
-          <Button asChild variant="secondary" disabled={isPending}>
-            <a href={activeTab === "users" ? usersExport : modelsExport}>
-              Download {activeTab === "users" ? "Top Users" : "Top Models"} CSV
-            </a>
-          </Button>
+          <a
+            href={activeTab === "users" ? usersExport : modelsExport}
+            className={cn(
+              "inline-flex items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-1.5 text-sm font-medium text-slate-600 transition hover:border-sky-200 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+              isPending && "pointer-events-none opacity-50"
+            )}
+          >
+            Download {activeTab === "users" ? "Top Users" : "Top Models"} CSV
+          </a>
         </div>
       </div>
 
@@ -312,4 +316,3 @@ export const AnalyticsTop = ({ usersResponse, modelsResponse, initialFilters }: 
     </div>
   );
 };
-

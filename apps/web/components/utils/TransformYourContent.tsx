@@ -42,7 +42,7 @@ const TransformYourContent = ({ copy }: any) => {
           <p className="text-[#E6F1FC] mb-4 text-lg">{copy.finalCtaSubtitle}</p>
 
           <div className="grid sm:grid-cols-2 gap-2 mb-6 text-[#E6F1FC]">
-            {finalData.map((text, i) => (
+            {finalData.map((text: string, i: number) => (
               <div key={i} className="flex items-center gap-2 text-sm">
                 <CheckCircle className="text-[#E6F1FC] w-4 h-4" />
                 {text}

@@ -17,8 +17,8 @@ const ChooseUrPlan = () => {
     viewport: { once: false, amount: 0.3 },
   });
   const copy = useMemo(() => translations[language], [language]);
-  const pricingPlans = (copy.pricingPlans || []).map(
-    (plan: {
+  const pricingPlans = (copy.pricingPlans || []) as Array<
+    {
       id: string;
       title: string;
       price: string;
@@ -26,8 +26,10 @@ const ChooseUrPlan = () => {
       features: string[];
       cta: string;
       popular: boolean;
-    }) => plan
-  );
+      logo?: React.ComponentType<any>;
+      logoProps?: Record<string, any>;
+    }
+  >;
   return (
     <motion.section className="space-y-10" {...fadeIn(0.1)}>
       {/* id="pricing"  */}

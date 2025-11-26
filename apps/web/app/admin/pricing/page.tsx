@@ -35,17 +35,23 @@ export default async function AdminPricingPage({ searchParams }: PageProps) {
     notFound();
   }
 
+  const rawCurrency = getParam(searchParams.currency).trim();
+  const currency: "USD" | "INR" | "SAR" | "" =
+    rawCurrency === "USD" || rawCurrency === "INR" || rawCurrency === "SAR" ? rawCurrency : "";
+
   const filters = {
     provider: getParam(searchParams.provider).trim(),
     model: getParam(searchParams.model).trim(),
-    currency: getParam(searchParams.currency).trim()
+    currency
   } as const;
 
   const page = Number(getParam(searchParams.page) || "1");
   const limit = Number(getParam(searchParams.limit) || "25");
 
   const data = await fetchAdminPricing(session.apiToken, {
-    ...filters,
+    provider: filters.provider,
+    model: filters.model,
+    currency: filters.currency || undefined,
     page,
     limit
   });
@@ -66,7 +72,7 @@ export default async function AdminPricingPage({ searchParams }: PageProps) {
             defaults={{
               provider: filters.provider || undefined,
               model: filters.model || undefined,
-              currency: (filters.currency as "USD" | "INR" | "SAR") || undefined
+              currency: filters.currency || undefined
             }}
           />
         </CardContent>
