@@ -457,13 +457,6 @@ function SignInPageInner() {
                 Select a plan, confirm your email, and we will simulate your payment instantly.
               </p>
             </div>
-            <Button
-              type="button"
-              onClick={backToSignIn}
-              className="self-end rounded-full bg-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
-            >
-              Back to sign in
-            </Button>
           </div>
 
           {registerStep === 1 && (
@@ -664,16 +657,6 @@ function SignInPageInner() {
           )}
 
           <div className="space-y-3 text-center">
-            <p className="text-sm text-slate-400">
-              Already have an account?{" "}
-              <button
-                type="button"
-                onClick={backToSignIn}
-                className="font-semibold text-indigo-300 transition hover:text-indigo-200"
-              >
-                Sign in
-              </button>
-            </p>
             <p className="text-[11px] text-slate-500">
               By continuing you agree to our{" "}
               <Link
