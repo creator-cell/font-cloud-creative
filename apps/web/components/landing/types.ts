@@ -3,8 +3,9 @@ import type { LucideIcon } from "lucide-react";
 export type ContentFilter = "copy" | "product" | "social";
 
 export interface StatsTile {
-  label: string;
-  value: string;
+  label?: string;
+  value?: string;
+  title?: string;
   description?: string;
   Icon?: LucideIcon;
   color?: string;
@@ -95,7 +96,6 @@ export interface LandingTranslation {
   providerAllam: string;
   providerAllamBadge?: string;
   providerLabels: string[];
-  speedDemo: string;
   speedTitle: string;
   speedTitleSecond: string;
   speedSubtitle: string;
@@ -119,7 +119,6 @@ export interface LandingTranslation {
   newsroomHighlightTitle: string;
   newsroomHighlightBody: string;
   statsTiles: StatsTile[];
-  statsTiles2: StatsTile[];
   pricingHead: string;
   pricingTitle: string;
   pricingSubtitle: string;

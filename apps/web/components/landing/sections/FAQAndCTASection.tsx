@@ -166,10 +166,12 @@ export const FAQAndCTASection = ({ copy }: FAQAndCTASectionProps) => {
                 {copy.finalPrimaryCta}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
-              <Button className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit dark:bg-[#1c67d8] dark:text-[#f2f6fa] dark:border-[#324154]">
-                <Zap className="w-4 h-auto mr-2" />
-                {copy.finalSecondaryCta}
-                <ArrowRight className="ml-2 w-4 h-4" />
+              <Button className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit dark:bg-[#1c67d8] dark:text-[#f2f6fa] dark:border-[#324154]" asChild>
+                <Link href="https://wa.me/966504576354" target="_blank" className="flex items-center">
+                  <Zap className="w-4 h-auto mr-2" />
+                  {copy.finalSecondaryCta}
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
               </Button>
             </div>
           </div>

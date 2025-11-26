@@ -14,6 +14,7 @@ import {
   Play
 } from "lucide-react";
 import { fadeIn } from "../animations";
+const whatsappLink = "https://wa.me/966504576354";
 
 interface DemoSectionProps {
   copy: {
@@ -237,11 +238,14 @@ export const DemoSection = ({ copy }: DemoSectionProps) => {
                 {copy.data.rightPanel.actions.tryYourself}
               </Button>
 
-              <Button className="w-[14rem] bg-white hover:bg-sky-100 text-sm font-medium py-2 rounded-md mt-2 text-black border border-[#e1e8f0] dark:bg-[#1c2a3d] dark:border-[#324154] dark:text-[#f2f6fa]">
-                <div className="flex items-center gap-1">
+              <Button
+                className="w-[14rem] bg-white hover:bg-sky-100 text-sm font-medium py-2 rounded-md mt-2 text-black border border-[#e1e8f0] dark:bg-[#1c2a3d] dark:border-[#324154] dark:text-[#f2f6fa]"
+                asChild
+              >
+                <a href={whatsappLink} target="_blank" className="flex items-center gap-1">
                   <Globe2 className="w-4 h-4" />
                   {copy.data.rightPanel.actions.watchDemo}
-                </div>
+                </a>
               </Button>
             </div>
           </div>

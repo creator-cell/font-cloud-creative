@@ -14,6 +14,9 @@ import { CardContent } from "../ui/card";
 import { CardTitle } from "../ui/card";
 import { CardHeader } from "../ui/card";
 import { Card } from "../ui/card";
+import Link from "next/link";
+
+const whatsappLink = "https://wa.me/966504576354";
 
 const EnterpriseSolution = ({ copy }: any) => {
   const [language, setLanguage] = useState<"en" | "ar">("en");
@@ -46,14 +49,20 @@ const EnterpriseSolution = ({ copy }: any) => {
           <Button
             size="lg"
             className="rounded-full bg-white  text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit"
+            asChild
           >
-            {copy.enterpriseCta}
+            <Link href={whatsappLink} target="_blank">
+              {copy.enterpriseCta}
+            </Link>
           </Button>
           <Button
             size="lg"
             className="rounded-full bg-gradient-to-r from-[#09a0eb] to-[#0773f7] text-white hover:bg-slate-800 w-full sm:w-fit"
+            asChild
           >
-            {copy.enterpriseCta2}
+            <Link href={whatsappLink} target="_blank">
+              {copy.enterpriseCta2}
+            </Link>
           </Button>
         </CardContent>
       </Card>

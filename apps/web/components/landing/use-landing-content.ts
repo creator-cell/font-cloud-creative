@@ -118,7 +118,6 @@ export const useLandingContent = (
   const newsroomActions = copy.newsroomActions ?? [];
   const finalData = copy.finalData ?? [];
   const statsTiles = copy.statsTiles ?? [];
-  const statsTiles2 = copy.statsTiles2 ?? [];
   const pricingPlans = copy.pricingPlans ?? [];
 
   const socials = [
@@ -168,7 +167,6 @@ export const useLandingContent = (
     newsroomActions,
     finalData,
     statsTiles,
-    statsTiles2,
     pricingPlans,
     socials,
     footerExtras,

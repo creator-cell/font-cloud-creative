@@ -47,17 +47,6 @@ export const SpeedFeaturesSection = ({ copy }: SpeedFeaturesSectionProps) => {
       id="solutions"
       {...fadeIn(0.1)}
     >
-      <motion.div
-        className="text-center"
-        {...fadeIn(0.05, 10)}
-        viewport={{ once: true }}
-      >
-        <span className="inline-flex items-center text-xs font-medium border border-[#e1e8f0] px-1 rounded-md py-0.5 dark:bg-[#0f1a2b] dark:text-[#f2f6fa] dark:border-[#324154]">
-          <Sparkles className="w-3 h-3 mr-1" />
-          {copy.speedDemo}
-        </span>
-      </motion.div>
-
       <motion.div className="space-y-4 text-center" {...fadeIn(0.1, 20)}>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 dark:text-[#f2f6fa]">
           {copy.speedTitle}{" "}

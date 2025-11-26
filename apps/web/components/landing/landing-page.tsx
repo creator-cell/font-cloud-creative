@@ -29,7 +29,6 @@ import {
   Zap,
   Star,
   ArrowUpRight,
-  Users,
   CheckCircle,
   Play,
   Check,
@@ -67,6 +66,7 @@ import DemoSection from "../utils/DemoSection";
 import { ThemeToggle } from "../theme-toggle";
 
 const contentFilterOrder = ["copy", "product", "social"] as const;
+const whatsappLink = "https://wa.me/966504576354";
 const speedFeatureIcons: LucideIcon[] = [MessageSquare, Brain, Sparkles];
 const orchestrateIcons: LucideIcon[] = [LayoutGrid, Target];
 const creationFeatureIcons: LucideIcon[] = [
@@ -104,9 +104,6 @@ export const LandingPage = () => {
   // Explicitly typed all parameters and destructured properties to resolve TypeScript errors
   const navItems = (copy.nav || []).map(
     (item: { label: string; href: string }) => item
-  );
-  const heroStats = (copy.heroStats || []).map(
-    (stat: { value: string; label: string }) => stat
   );
   const providers = (copy.providerLabels || []).map((label: string) => label);
   const speedFeatures = (copy.speedFeatures || []).map(
@@ -149,10 +146,6 @@ export const LandingPage = () => {
   const statsTiles = (copy.statsTiles || []).map(
     (tile: { value: string; label: string }) => tile
   );
-  const statsTiles2 = (copy.statsTiles2 || []).map(
-    (tile: { value: string; label: string; icon: string }) => tile
-  );
-
   const providerItems = [
     {
       key: "openai",
@@ -319,9 +312,13 @@ export const LandingPage = () => {
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Link>
 
-                <button className="flex items-center justify-center w-full sm:w-auto px-4 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-sky-100 transition-colors text-sm dark:bg-[#1a2438] dark:text-[#f2f6fa]">
+                <Link
+                  href={whatsappLink}
+                  target="_blank"
+                  className="flex items-center justify-center w-full sm:w-auto px-4 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-sky-100 transition-colors text-sm dark:bg-[#1a2438] dark:text-[#f2f6fa]"
+                >
                   <Play className="h-4 w-4 mr-2" /> {copy.heroSecondaryCta}
-                </button>
+                </Link>
               </div>
 
               <div className="flex flex-wrap justify-start lg:justify-start gap-x-8 gap-y-4 text-gray-600 mb-12">
@@ -345,26 +342,21 @@ export const LandingPage = () => {
                 </div>
               </div>
 
-              <div className="flex justify-between gap-12 border-t border-gray-200 pt-8">
-                <div className="flex justify-between items-center w-full">
-                  {heroStats.map((stat, index) => (
-                    <motion.div
-                      className="flex flex-col items-start"
-                      {...fadeIn(index * 0.15, 30)}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <Users className="h-5 w-5 text-blue-500" />
-                        <p className="text-3xl font-bold text-gray-900 dark:text-[#f2f6fa]">
-                          {stat.value}
-                        </p>
-                      </div>
-                      <p className="text-sm text-gray-500 mt-0.5 ml-7 dark:text-[#93a2b8]">
-                        {stat.label}
-                      </p>
-                    </motion.div>
-                  ))}
+              <div className="flex flex-wrap items-center gap-6 border-t border-gray-200 pt-8 text-sm text-slate-700 dark:border-[#1f2b3b] dark:text-[#d7deea]">
+                <div className="flex items-center gap-2">
+                  <Zap className="h-4 w-4 text-blue-500" />
+                  <span>Average response under 2s</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-blue-500" />
+                  <span>Batch generation ready in ~12s</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-blue-500" />
+                  <span>Optimized orchestration across providers</span>
                 </div>
               </div>
+
             </div>
 
             <motion.div className="space-y-6 md:mt-8 overflow-visible" {...fadeIn(0.2)}>
@@ -448,17 +440,6 @@ export const LandingPage = () => {
           id="solutions"
           {...fadeIn(0.1)}
         >
-          <motion.div
-            className="text-center"
-            {...fadeIn(0.05, 10)}
-            viewport={{ once: true }}
-          >
-            <span className="inline-flex items-center text-xs font-medium border border-[#e1e8f0] px-1 rounded-md py-0.5 dark:bg-[#0f1a2b] dark:text-[#f2f6fa] dark:border-[#324154]">
-              <Sparkles className="w-3 h-3 mr-1" />
-              {copy.speedDemo}
-            </span>
-          </motion.div>
-
           <motion.div className="space-y-4 text-center" {...fadeIn(0.1, 20)}>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 dark:text-[#f2f6fa]">
               {copy.speedTitle}{" "}
@@ -701,13 +682,14 @@ export const LandingPage = () => {
                     <Button
                       className="w-[14rem] bg-white hover:bg-sky-100  text-sm font-medium py-2
                     rounded-md mt-2 text-black border border-[#e1e8f0] dark:bg-[#1c2a3d]  dark:border-[#324154] dark:text-[#f2f6fa]"
+                      asChild
                     >
-                      <div className="flex items-center gap-1">
+                      <Link href={whatsappLink} target="_blank" className="flex items-center gap-1">
                         <div>
                           <Globe2 className="w-4 h-4" />
                         </div>
                         {copy.data.rightPanel.actions.watchDemo}
-                      </div>
+                      </Link>
                     </Button>
                   </div>
                 </div>
@@ -1004,14 +986,20 @@ export const LandingPage = () => {
               <Button
                 size="lg"
                 className="rounded-full bg-white  text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit dark:text-[#93a2b8] dark:bg-[#1c283d] dark:border-[#324154]"
+                asChild
               >
-                {copy.enterpriseCta}
+                <Link href={whatsappLink} target="_blank">
+                  {copy.enterpriseCta}
+                </Link>
               </Button>
               <Button
                 size="lg"
                 className="rounded-full bg-gradient-to-r from-[#09a0eb] to-[#0773f7] text-white hover:bg-slate-800 w-full sm:w-fit"
+                asChild
               >
-                {copy.enterpriseCta2}
+                <Link href={whatsappLink} target="_blank">
+                  {copy.enterpriseCta2}
+                </Link>
               </Button>
             </CardContent>
           </Card>
@@ -1093,10 +1081,12 @@ export const LandingPage = () => {
                   {copy.finalPrimaryCta}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
-                <Button className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit dark:bg-[#1c67d8] dark:text-[#f2f6fa] dark:border-[#324154]">
-                  <Zap className="w-4 h-auto mr-2" />
-                  {copy.finalSecondaryCta}
-                  <ArrowRight className="ml-2 w-4 h-4" />
+                <Button className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit dark:bg-[#1c67d8] dark:text-[#f2f6fa] dark:border-[#324154]" asChild>
+                  <Link href={whatsappLink} target="_blank" className="flex items-center">
+                    <Zap className="w-4 h-auto mr-2" />
+                    {copy.finalSecondaryCta}
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -1134,32 +1124,6 @@ export const LandingPage = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </motion.section>
-
-        <motion.section {...fadeIn(0.1)} className=" dark:bg-[#0F1729]">
-          <div className="grid gap-6 md:grid-cols-3 text-center">
-            {statsTiles2.map((stat, index) => {
-              return (
-                <motion.div
-                  key={index}
-                  className="rounded-xl bg-white border dark:bg-[#1E293B] dark:border dark:border-[#2a364a] shadow-md py-5 px-8 hover:shadow-lg transition-shadow duration-300"
-                  whileHover={{ scale: 1.03 }}
-                >
-                  <div className="flex flex-col items-center space-y-4 mt-1">
-                    <div className="bg-sky-100 rounded-full text-sky-500 p-3 dark:bg-[#21384E]">
-                      <stat.Icon className="w-6 h-6" />
-                    </div>
-                    <div className="text-3xl font-bold text-gray-900 dark:text-[#f2f6fa]">
-                      {stat.description}
-                    </div>
-                    <div className="text-gray-600 dark:text-[#72879c]">
-                      {stat.title}
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
           </div>
         </motion.section>
 

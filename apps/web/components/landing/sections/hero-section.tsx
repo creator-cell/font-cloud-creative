@@ -95,9 +95,13 @@ export const HeroSection = ({
             <ArrowRight className="h-4 w-4 ml-2" />
           </Link>
 
-          <button className="flex items-center justify-center w-full sm:w-auto px-4 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-sky-100 transition-colors text-sm dark:bg-[#1a2438] dark:text-[#f2f6fa]">
-            <Play className="h-4 w-4 mr-2" /> {copy.heroSecondaryCta}
-          </button>
+            <Link
+              href={whatsappLink}
+              target="_blank"
+              className="flex items-center justify-center w-full sm:w-auto px-4 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-sky-100 transition-colors text-sm dark:bg-[#1a2438] dark:text-[#f2f6fa]"
+            >
+              <Play className="h-4 w-4 mr-2" /> {copy.heroSecondaryCta}
+            </Link>
         </div>
 
         <div className="flex flex-wrap justify-start lg:justify-start gap-x-8 gap-y-4 text-gray-600 mb-12">
@@ -174,13 +178,6 @@ export const HeroSection = ({
     </div>
 
     <motion.section className="space-y-6 pb-8 bg-white dark:bg-[#0F1729]" id="solutions" {...fadeIn(0.1)}>
-      <motion.div className="text-center" {...fadeIn(0.05, 10)} viewport={{ once: true }}>
-        <span className="inline-flex items-center text-xs font-medium border border-[#e1e8f0] px-1 rounded-md py-0.5 dark:bg-[#0f1a2b] dark:text-[#f2f6fa] dark:border-[#324154]">
-          <Sparkles className="w-3 h-3 mr-1" />
-          {copy.speedDemo}
-        </span>
-      </motion.div>
-
       <motion.div className="space-y-4 text-center" {...fadeIn(0.1, 20)}>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 dark:text-[#f2f6fa]">
           {copy.speedTitle}{" "}
@@ -267,4 +264,4 @@ const ProviderAction = ({ label, Icon }: { label: string; Icon: LucideIcon }) =>
     <ArrowRight className="h-4 w-4 text-gray-400" />
   </div>
 );
-
+const whatsappLink = "https://wa.me/966504576354";
