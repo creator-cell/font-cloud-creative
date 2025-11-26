@@ -11,6 +11,7 @@
     "module": "ESNext",
     "moduleResolution": "NodeNext",
     "types": [
+      "next",
       "node",
       "stripe-event-types"
     ],
