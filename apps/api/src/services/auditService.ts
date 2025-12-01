@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { AuditLogModel } from "../models";
+import { AuditLogModel } from "../models/index.js";
 
 interface AuditOptions {
   actorId: string;

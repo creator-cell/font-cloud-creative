@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { requireRole } from "../../middleware/requireRole";
-import { getAuditLog } from "../../controllers/admin";
+import { requireRole } from "../../middleware/requireRole.js";
+import { getAuditLog } from "../../controllers/admin/index.js";
 
 const router = Router();
 

@@ -1,8 +1,8 @@
 import type { Response, Request } from "express";
-import type { AuthenticatedRequest } from "../types/express";
-import { checkoutSessionSchema } from "../schemas/subscriptionSchemas";
-import { createBillingPortalSession, createCheckoutSession } from "../services/subscriptionService";
-import { asyncHandler } from "../utils/asyncHandler";
+import type { AuthenticatedRequest } from "../types/express.js";
+import { checkoutSessionSchema } from "../schemas/subscriptionSchemas.js";
+import { createBillingPortalSession, createCheckoutSession } from "../services/subscriptionService.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 const resolveOrigin = (req: Request): string => req.headers.origin?.toString() ?? "http://localhost:3000";
 

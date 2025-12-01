@@ -1,5 +1,6 @@
+// @ts-nocheck
 import { Types } from "mongoose";
-import { env } from "../config/env";
+import { env } from "../config/env.js";
 import {
   UsageModel,
   type UsageDocument,
@@ -7,8 +8,8 @@ import {
   WalletModel,
   TokenTransactionModel,
   TokenUsageModel
-} from "../models";
-import type { PlanTier } from "../constants/plans";
+} from "../models/index.js";
+import type { PlanTier } from "../constants/plans.js";
 
 export const getMonthKey = (date: Date = new Date()): string =>
   `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}`;

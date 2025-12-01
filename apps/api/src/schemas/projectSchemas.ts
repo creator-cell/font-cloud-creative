@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { providerIdSchema } from "./generationSchemas";
+import { providerIdSchema } from "./generationSchemas.js";
 
 export const createProjectSchema = z.object({
   name: z.string().min(2),

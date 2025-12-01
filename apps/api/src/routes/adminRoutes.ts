@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { requireAuth } from "../middleware/requireAuth";
-import { impersonateUser } from "../middleware/impersonateUser";
-import { requireRole } from "../middleware/requireRole";
-import { adminRateLimit } from "../middleware/adminRateLimit";
-import { adminExportRateLimit } from "../middleware/adminExportRateLimit";
+import { requireAuth } from "../middleware/requireAuth.js";
+import { impersonateUser } from "../middleware/impersonateUser.js";
+import { requireRole } from "../middleware/requireRole.js";
+import { adminRateLimit } from "../middleware/adminRateLimit.js";
+import { adminExportRateLimit } from "../middleware/adminExportRateLimit.js";
 import {
   getOverview,
   getTopUsers,
@@ -36,7 +36,7 @@ import {
   retireProviderPricing,
   acknowledgeAdminSystemAlert,
   listAdminSystemAlerts
-} from "../controllers/admin";
+} from "../controllers/admin/index.js";
 
 const adminRouter = Router();
 

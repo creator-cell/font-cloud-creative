@@ -2,9 +2,9 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import morgan from "morgan";
-import router from "./routes";
-import { errorHandler } from "./middleware/errorHandler";
-import { stripeWebhook } from "./controllers/webhookController";
+import router from "./routes/index.js";
+import { errorHandler } from "./middleware/errorHandler.js";
+import { stripeWebhook } from "./controllers/webhookController.js";
 
 const app = express();
 

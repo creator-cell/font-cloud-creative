@@ -1,9 +1,9 @@
 import { Router } from "express";
-import chatRouter from "./chatRoutes";
-import { registerPublicRoutes } from "./publicRoutes";
-import { registerAuthRoutes } from "./authRoutes";
-import { registerApplicationRoutes } from "./applicationRoutes";
-import adminRouter from "./adminRoutes";
+import chatRouter from "./chatRoutes.js";
+import { registerPublicRoutes } from "./publicRoutes.js";
+import { registerAuthRoutes } from "./authRoutes.js";
+import { registerApplicationRoutes } from "./applicationRoutes.js";
+import adminRouter from "./adminRoutes.js";
 
 const router = Router();
 

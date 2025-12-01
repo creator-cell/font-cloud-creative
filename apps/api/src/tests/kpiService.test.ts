@@ -10,8 +10,8 @@ vi.mock("../models", () => {
   };
 });
 
-import { kpiService } from "../services/kpiService";
-import { DailyMetricsModel } from "../models";
+import { kpiService } from "../services/kpiService.js";
+import { DailyMetricsModel } from "../models/index.js";
 
 describe("kpiService.getOverview", () => {
     beforeEach(() => {

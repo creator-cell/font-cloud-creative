@@ -1,6 +1,6 @@
 import type { Response, NextFunction } from "express";
-import { comparePlans, type PlanTier } from "../constants/plans";
-import type { AuthenticatedRequest } from "../types/express";
+import { comparePlans, type PlanTier } from "../constants/plans.js";
+import type { AuthenticatedRequest } from "../types/express.js";
 
 export const planGate = (minTier: PlanTier) =>
   (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {

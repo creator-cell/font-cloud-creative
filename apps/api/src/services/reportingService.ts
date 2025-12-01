@@ -1,5 +1,5 @@
 import { endOfDay, startOfDay, subDays } from "date-fns";
-import { DailyMetricsModel, GenerationModel, PlanModel, UserModel } from "../models";
+import { DailyMetricsModel, GenerationModel, PlanModel, UserModel } from "../models/index.js";
 
 export const reportingService = {
   async refreshDailyMetrics(target: Date = new Date()): Promise<void> {

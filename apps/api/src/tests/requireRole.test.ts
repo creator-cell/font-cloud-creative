@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import type { Response } from "express";
-import { requireRole } from "../middleware/requireRole";
-import type { AuthenticatedRequest } from "../types/express";
+import { requireRole } from "../middleware/requireRole.js";
+import type { AuthenticatedRequest } from "../types/express.js";
 
 describe("requireRole", () => {
   const createResponse = () => {

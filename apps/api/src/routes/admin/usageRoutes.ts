@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { requireRole } from "../../middleware/requireRole";
-import { adminRateLimit } from "../../middleware/adminRateLimit";
-import { getTopUsers, listAdminUsage, throttleFreeTier } from "../../controllers/admin";
+import { requireRole } from "../../middleware/requireRole.js";
+import { adminRateLimit } from "../../middleware/adminRateLimit.js";
+import { getTopUsers, listAdminUsage, throttleFreeTier } from "../../controllers/admin/index.js";
 
 const router = Router();
 

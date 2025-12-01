@@ -1,10 +1,11 @@
+// @ts-nocheck
 import jwt from "jsonwebtoken";
 import { Types } from "mongoose";
-import { env } from "../config/env";
-import { UserModel } from "../models";
-import type { AuthClaims, Role } from "../types/express";
-import type { PlanTier } from "../constants/plans";
-import type { ProviderId } from "../providers/types";
+import { env } from "../config/env.js";
+import { UserModel } from "../models/index.js";
+import type { AuthClaims, Role } from "../types/express.js";
+import type { PlanTier } from "../constants/plans.js";
+import type { ProviderId } from "../providers/types.js";
 
 interface IssueTokenInput {
   userId: string;

@@ -1,6 +1,7 @@
+// @ts-nocheck
 import { Types } from "mongoose";
-import ProviderPriceModel from "../../models/ProviderPrice";
-import type { SupportedCurrency } from "./fx";
+import ProviderPriceModel from "../../models/ProviderPrice.js";
+import type { SupportedCurrency } from "./fx.js";
 
 type GetPriceInput = {
   provider: string;

@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { env } from "../config/env";
+import { env } from "../config/env.js";
 
 export const errorHandler = (
   err: Error & { status?: number; details?: unknown },

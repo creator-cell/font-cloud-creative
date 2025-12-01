@@ -38,6 +38,22 @@ export const env = {
       team: process.env.STRIPE_PRICE_TEAM ?? ""
     }
   },
+  amazonPay: {
+    enabled: process.env.AMAZON_PAY_ENABLED === "true",
+    scope: process.env.AMAZON_PAY_SCOPE ?? "",
+    clientId: process.env.AMAZON_PAY_CLIENT_ID ?? "",
+    clientSecret: process.env.AMAZON_PAY_CLIENT_SECRET ?? "",
+    authEndpoint:
+      process.env.AMAZON_PAY_AUTH_ENDPOINT ?? "https://api.amazon.com/auth/o2/token",
+    apiEndpoint: process.env.AMAZON_PAY_API_ENDPOINT ?? "https://pay-api.amazon.com",
+    region: process.env.AMAZON_PAY_REGION ?? "EU",
+    merchantId: process.env.AMAZON_PAY_MERCHANT_ID ?? "",
+    chargePermissionId: process.env.AMAZON_PAY_CHARGE_PERMISSION_ID ?? "",
+    softDescriptor: process.env.AMAZON_PAY_SOFT_DESCRIPTOR ?? "FrontCloud",
+    storeName: process.env.AMAZON_PAY_STORE_NAME ?? "FrontCloud",
+    sandbox: process.env.AMAZON_PAY_SANDBOX === "true",
+    simulateCharges: process.env.AMAZON_PAY_SIMULATE === "true"
+  },
   defaults: {
     provider: process.env.SYSTEM_DEFAULT_PROVIDER ?? "openai",
     model: process.env.SYSTEM_DEFAULT_MODEL ?? "gpt-4o-mini"

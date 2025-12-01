@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildPrompt } from "../services/promptBuilder";
+import { buildPrompt } from "../services/promptBuilder.js";
 
 describe("buildPrompt", () => {
   it("builds prompts with style card context", () => {

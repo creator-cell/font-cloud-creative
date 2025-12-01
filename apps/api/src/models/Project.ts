@@ -1,5 +1,5 @@
 import { Schema, model, type Document, Types } from "mongoose";
-import type { ProviderId } from "../providers/types";
+import type { ProviderId } from "../providers/types.js";
 import {
   createAssistantThread,
   createAssistantVectorStore,

@@ -1,6 +1,6 @@
 import type { Request } from "express";
-import type { PlanTier } from "../constants/plans";
-import type { ProviderId } from "../providers/types";
+import type { PlanTier } from "../constants/plans.js";
+import type { ProviderId } from "../providers/types.js";
 
 export type Role = "owner" | "admin" | "analyst" | "support" | "billing" | "user";
 
@@ -13,7 +13,11 @@ export interface AuthClaims {
   roles: Role[];
 }
 
-export interface AuthenticatedRequest extends Request {
-  user: AuthClaims;
-  impersonatorId?: string;
+declare module "express-serve-static-core" {
+  interface Request {
+    user: AuthClaims;
+    impersonatorId?: string;
+  }
 }
+
+export type AuthenticatedRequest = Request;

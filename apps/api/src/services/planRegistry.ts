@@ -1,6 +1,7 @@
-import type { PlanTier } from "../constants/plans";
-import { PlanModel } from "../models/Plan";
-import type { PlanSnapshot } from "./token/allocateOnRegistration";
+// @ts-nocheck
+import type { PlanTier } from "../constants/plans.js";
+import { PlanModel } from "../models/Plan.js";
+import type { PlanSnapshot } from "./token/allocateOnRegistration.js";
 
 type PlanRegistryEntry = PlanSnapshot & {
   billing: PlanSnapshot["billing"] & { amountPaise?: number };

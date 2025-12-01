@@ -1,6 +1,6 @@
 import type { Response, NextFunction } from "express";
-import { redis } from "../config/redis";
-import type { AuthenticatedRequest } from "../types/express";
+import { redis } from "../config/redis.js";
+import type { AuthenticatedRequest } from "../types/express.js";
 
 const WINDOW_SECONDS = 30;
 const MAX_ACTIONS = 20;

@@ -1,20 +1,20 @@
 import { Router } from "express";
-import { requireAuth } from "../../middleware/requireAuth";
-import { impersonateUser } from "../../middleware/impersonateUser";
-import analyticsRoutes from "./analyticsRoutes";
-import usageRoutes from "./usageRoutes";
-import revenueRoutes from "./revenueRoutes";
-import modelsRoutes from "./modelsRoutes";
-import featureFlagRoutes from "./featureFlagRoutes";
-import auditRoutes from "./auditRoutes";
-import announcementRoutes from "./announcementRoutes";
-import planRoutes from "./planRoutes";
-import userRoutes from "./userRoutes";
-import supportRoutes from "./supportRoutes";
-import pricingRoutes from "./pricingRoutes";
-import financeRoutes from "./financeRoutes";
-import exportRoutes from "./exportRoutes";
-import alertRoutes from "./alertRoutes";
+import { requireAuth } from "../../middleware/requireAuth.js";
+import { impersonateUser } from "../../middleware/impersonateUser.js";
+import analyticsRoutes from "./analyticsRoutes.js";
+import usageRoutes from "./usageRoutes.js";
+import revenueRoutes from "./revenueRoutes.js";
+import modelsRoutes from "./modelsRoutes.js";
+import featureFlagRoutes from "./featureFlagRoutes.js";
+import auditRoutes from "./auditRoutes.js";
+import announcementRoutes from "./announcementRoutes.js";
+import planRoutes from "./planRoutes.js";
+import userRoutes from "./userRoutes.js";
+import supportRoutes from "./supportRoutes.js";
+import pricingRoutes from "./pricingRoutes.js";
+import financeRoutes from "./financeRoutes.js";
+import exportRoutes from "./exportRoutes.js";
+import alertRoutes from "./alertRoutes.js";
 
 const adminRouter = Router();
 

@@ -1,8 +1,8 @@
 import type { Response } from "express";
-import type { AuthenticatedRequest } from "../types/express";
-import { buildBrandVoiceSchema } from "../schemas/brandVoiceSchemas";
-import { buildStyleCard, createBrandVoice } from "../services/brandVoiceService";
-import { asyncHandler } from "../utils/asyncHandler";
+import type { AuthenticatedRequest } from "../types/express.js";
+import { buildBrandVoiceSchema } from "../schemas/brandVoiceSchemas.js";
+import { buildStyleCard, createBrandVoice } from "../services/brandVoiceService.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const buildBrandVoice = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   const payload = buildBrandVoiceSchema.parse(req.body);

@@ -1,12 +1,12 @@
 import type { Router } from "express";
-import { listModels } from "../controllers/modelsController";
-import { createProject, listBrandVoices, listProjects } from "../controllers/projectController";
-import { buildBrandVoice } from "../controllers/brandVoiceController";
-import { generate } from "../controllers/generationController";
-import { getMyUsage } from "../controllers/usageController";
-import { listWalletTransactions, rechargeWallet } from "../controllers/walletController";
-import { requireAuth } from "../middleware/requireAuth";
-import { usageLimiter } from "../middleware/usageLimiter";
+import { listModels } from "../controllers/modelsController.js";
+import { createProject, listBrandVoices, listProjects } from "../controllers/projectController.js";
+import { buildBrandVoice } from "../controllers/brandVoiceController.js";
+import { generate } from "../controllers/generationController.js";
+import { getMyUsage } from "../controllers/usageController.js";
+import { listWalletTransactions, rechargeWallet } from "../controllers/walletController.js";
+import { requireAuth } from "../middleware/requireAuth.js";
+import { usageLimiter } from "../middleware/usageLimiter.js";
 
 export const registerApplicationRoutes = (router: Router): void => {
   router.get("/models", requireAuth, listModels);

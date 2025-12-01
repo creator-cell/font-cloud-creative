@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { BrandVoiceModel, ProjectModel, type StyleCard } from "../models";
+import { BrandVoiceModel, ProjectModel, type StyleCard } from "../models/index.js";
 
 type BuildStyleCardInput = {
   samples: string[];

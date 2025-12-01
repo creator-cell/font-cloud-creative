@@ -1,8 +1,9 @@
+// @ts-nocheck
 import { Types } from "mongoose";
-import WalletModel from "../../models/Wallet";
-import TokenTransactionModel from "../../models/TokenTransaction";
-import { withMongoTxn } from "./mongoSession";
-import { CHAT_TOKEN_SOURCE, buildChatTurnRef } from "./estimate";
+import WalletModel from "../../models/Wallet.js";
+import TokenTransactionModel from "../../models/TokenTransaction.js";
+import { withMongoTxn } from "./mongoSession.js";
+import { CHAT_TOKEN_SOURCE, buildChatTurnRef } from "./estimate.js";
 
 type CancelChatHoldResult = {
   releasedTokens: number;

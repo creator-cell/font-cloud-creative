@@ -1,7 +1,7 @@
 import { Types, type ClientSession } from "mongoose";
-import WalletModel from "../../models/Wallet";
-import TokenTransactionModel from "../../models/TokenTransaction";
-import { withMongoTxn } from "./mongoSession";
+import WalletModel from "../../models/Wallet.js";
+import TokenTransactionModel from "../../models/TokenTransaction.js";
+import { withMongoTxn } from "./mongoSession.js";
 
 export type CreditWalletOptions = {
   userId: Types.ObjectId;

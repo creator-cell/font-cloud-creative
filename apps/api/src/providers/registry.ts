@@ -1,5 +1,5 @@
-import { env } from "../config/env";
-import { comparePlans, type PlanTier } from "../constants/plans";
+import { env } from "../config/env.js";
+import { comparePlans, type PlanTier } from "../constants/plans.js";
 import {
   ChatStreamHandlers,
   ChatStreamParams,
@@ -9,7 +9,7 @@ import {
   ProviderId,
   ProviderModel,
   ProviderSelection
-} from "./types";
+} from "./types.js";
 
 const providerInstances = new Map<ProviderId, LLMProvider>();
 

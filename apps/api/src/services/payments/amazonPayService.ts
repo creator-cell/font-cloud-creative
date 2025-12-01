@@ -1,6 +1,6 @@
 import axios, { isAxiosError } from "axios";
 import crypto from "node:crypto";
-import { env } from "../../config/env";
+import { env } from "../../config/env.js";
 
 type AmazonChargeParams = {
   amountPaise: number;

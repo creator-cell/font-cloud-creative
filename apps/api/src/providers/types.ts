@@ -1,4 +1,4 @@
-import { PlanTier } from "../constants/plans";
+import { PlanTier } from "../constants/plans.js";
 
 export type ProviderId = "openai" | "anthropic" | "google" | "ollama";
 

@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { creditWalletBalance } from "./walletService";
+import { creditWalletBalance } from "./walletService.js";
 
 export type PlanSnapshot = {
   key: string;

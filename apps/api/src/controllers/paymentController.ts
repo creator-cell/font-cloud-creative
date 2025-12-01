@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import { amazonPlanChargeSchema } from "../schemas/paymentSchemas";
-import { asyncHandler } from "../utils/asyncHandler";
-import { chargePlanWithAmazon } from "../services/payments/planPayments";
+import { amazonPlanChargeSchema } from "../schemas/paymentSchemas.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { chargePlanWithAmazon } from "../services/payments/planPayments.js";
 
 export const createAmazonPlanCharge = asyncHandler(async (req: Request, res: Response) => {
   const payload = amazonPlanChargeSchema.parse(req.body);

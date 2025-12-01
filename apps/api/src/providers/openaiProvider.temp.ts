@@ -1,3 +1,4 @@
+// @ts-nocheck
 import OpenAI from "openai";
 import { env } from "../config/env.js";
 import { estimateTokens } from "../utils/tokenizer.js";

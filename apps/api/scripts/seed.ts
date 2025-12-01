@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 import "dotenv/config";
-import { connectDatabase, disconnectDatabase } from "../src/config/database";
-import { PlanModel, UserModel } from "../src/models";
+import { connectDatabase, disconnectDatabase } from "../src/config/database.js";
+import { PlanModel, UserModel } from "../src/models/index.js";
 
 const PLANS = [
   {

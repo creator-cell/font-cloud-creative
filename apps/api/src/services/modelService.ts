@@ -1,6 +1,6 @@
-import { comparePlans, type PlanTier } from "../constants/plans";
-import { MODELS } from "../providers/registry";
-import type { ProviderId } from "../providers/types";
+import { comparePlans, type PlanTier } from "../constants/plans.js";
+import { MODELS } from "../providers/registry.js";
+import type { ProviderId } from "../providers/types.js";
 
 export interface ProviderModelsResponse {
   provider: ProviderId;

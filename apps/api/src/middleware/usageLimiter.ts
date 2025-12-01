@@ -1,7 +1,7 @@
 import type { Response, NextFunction } from "express";
-import { redis } from "../config/redis";
-import { assertWithinQuota } from "../services/usageService";
-import type { AuthenticatedRequest } from "../types/express";
+import { redis } from "../config/redis.js";
+import { assertWithinQuota } from "../services/usageService.js";
+import type { AuthenticatedRequest } from "../types/express.js";
 
 const RATE_LIMIT = 60; // requests per minute per user
 

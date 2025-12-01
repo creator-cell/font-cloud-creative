@@ -1,10 +1,10 @@
 import type { Response } from "express";
 import { Types } from "mongoose";
-import type { AuthenticatedRequest } from "../types/express";
-import { createProjectSchema } from "../schemas/projectSchemas";
-import { ProjectModel, BrandVoiceModel } from "../models";
+import type { AuthenticatedRequest } from "../types/express.js";
+import { createProjectSchema } from "../schemas/projectSchemas.js";
+import { ProjectModel, BrandVoiceModel } from "../models/index.js";
 import { createAssistantThread, createAssistantVectorStore } from "../services/openai/assistantThreads.js";
-import { asyncHandler } from "../utils/asyncHandler";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const listProjects = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   const projects = await ProjectModel.find({ userId: new Types.ObjectId(req.user.sub) })

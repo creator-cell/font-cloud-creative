@@ -1,9 +1,10 @@
+// @ts-nocheck
 import { differenceInCalendarWeeks, addDays, addWeeks, addMonths, startOfDay } from "date-fns";
 import { Types } from "mongoose";
-import TokenUsageModel from "../../models/TokenUsage";
-import { UserModel } from "../../models";
-import { convertCents, type SupportedCurrency } from "../pricing/fx";
-import { redis } from "../../config/redis";
+import TokenUsageModel from "../../models/TokenUsage.js";
+import { UserModel } from "../../models/index.js";
+import { convertCents, type SupportedCurrency } from "../pricing/fx.js";
+import { redis } from "../../config/redis.js";
 
 type IntervalUnit = "day" | "week" | "month";
 

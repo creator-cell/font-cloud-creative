@@ -1,13 +1,9 @@
-import type { Response, NextFunction } from "express";
+import type { Response, NextFunction, RequestHandler } from "express";
 import jwt from "jsonwebtoken";
-import { env } from "../config/env";
-import type { AuthenticatedRequest, AuthClaims } from "../types/express";
+import { env } from "../config/env.js";
+import type { AuthClaims } from "../types/express.js";
 
-export const requireAuth = (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-): void => {
+export const requireAuth: RequestHandler = (req, res: Response, next: NextFunction): void => {
   const header = req.headers.authorization;
   if (!header?.startsWith("Bearer ")) {
     res.status(401).json({ error: "Unauthorized" });

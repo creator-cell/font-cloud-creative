@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
-import TokenTransactionModel from "../models/TokenTransaction";
-import { createSystemAlert } from "../services/systemAlertService";
-import { Guardrails } from "../config/guardrails";
+import TokenTransactionModel from "../models/TokenTransaction.js";
+import { createSystemAlert } from "../services/systemAlertService.js";
+import { Guardrails } from "../config/guardrails.js";
 
 const HOURS_24 = 24 * 60 * 60 * 1000;
 const DAYS_7 = 7 * HOURS_24;

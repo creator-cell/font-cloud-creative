@@ -1,5 +1,5 @@
 import { Schema, model, type Document, Types } from "mongoose";
-import type { PlanTier } from "../constants/plans";
+import type { PlanTier } from "../constants/plans.js";
 
 export interface SubscriptionDocument extends Document {
   userId: Types.ObjectId;

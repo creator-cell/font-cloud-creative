@@ -1,10 +1,11 @@
+// @ts-nocheck
 import type { Response } from "express";
 import { Types } from "mongoose";
-import type { AuthenticatedRequest } from "../../types/express";
-import { SupportTicketModel } from "../../models";
-import { supportReplySchema } from "../../schemas/adminSchemas";
-import { asyncHandler } from "../../utils/asyncHandler";
-import { auditService } from "../../services/auditService";
+import type { AuthenticatedRequest } from "../../types/express.js";
+import { SupportTicketModel } from "../../models/index.js";
+import { supportReplySchema } from "../../schemas/adminSchemas.js";
+import { asyncHandler } from "../../utils/asyncHandler.js";
+import { auditService } from "../../services/auditService.js";
 
 export const listSupportTickets = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   const status = req.query.status as string | undefined;

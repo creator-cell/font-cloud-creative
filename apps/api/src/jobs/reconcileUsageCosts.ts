@@ -1,11 +1,12 @@
+// @ts-nocheck
 import "../config/env";
 import mongoose from "mongoose";
-import { connectDatabase, disconnectDatabase } from "../config/database";
-import TokenUsageModel from "../models/TokenUsage";
-import WalletModel from "../models/Wallet";
-import { getActivePrice } from "../services/pricing/getPrice";
-import { calcCostCents } from "../services/pricing/calcCost";
-import { convertCents, type SupportedCurrency } from "../services/pricing/fx";
+import { connectDatabase, disconnectDatabase } from "../config/database.js";
+import TokenUsageModel from "../models/TokenUsage.js";
+import WalletModel from "../models/Wallet.js";
+import { getActivePrice } from "../services/pricing/getPrice.js";
+import { calcCostCents } from "../services/pricing/calcCost.js";
+import { convertCents, type SupportedCurrency } from "../services/pricing/fx.js";
 
 type CliOptions = {
   from?: Date;

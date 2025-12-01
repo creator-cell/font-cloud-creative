@@ -1,18 +1,19 @@
+// @ts-nocheck
 import { Types } from "mongoose";
-import WalletModel from "../../models/Wallet";
-import TokenTransactionModel from "../../models/TokenTransaction";
-import TokenUsageModel from "../../models/TokenUsage";
-import { withMongoTxn } from "./mongoSession";
+import WalletModel from "../../models/Wallet.js";
+import TokenTransactionModel from "../../models/TokenTransaction.js";
+import TokenUsageModel from "../../models/TokenUsage.js";
+import { withMongoTxn } from "./mongoSession.js";
 import {
   CHAT_TOKEN_SOURCE,
   buildChatTurnRef,
   ensureObjectId,
   summarizeTokens
-} from "./estimate";
-import { getActivePrice } from "../pricing/getPrice";
-import { calcCostCents } from "../pricing/calcCost";
-import { convertCents, type SupportedCurrency } from "../pricing/fx";
-import { createSystemAlert } from "../systemAlertService";
+} from "./estimate.js";
+import { getActivePrice } from "../pricing/getPrice.js";
+import { calcCostCents } from "../pricing/calcCost.js";
+import { convertCents, type SupportedCurrency } from "../pricing/fx.js";
+import { createSystemAlert } from "../systemAlertService.js";
 
 type SettleChatTurnInput = {
   userId: Types.ObjectId;

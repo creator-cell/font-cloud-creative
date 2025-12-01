@@ -1,5 +1,5 @@
 import mongoose, { Schema, Types, model, InferSchemaType } from "mongoose";
-import { sendAlertNotifications } from "../services/notifications/alertNotify";
+import { sendAlertNotifications } from "../services/notifications/alertNotify.js";
 
 const systemAlertSchema = new Schema(
   {

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { providerIdSchema } from "./generationSchemas";
+import { providerIdSchema } from "./generationSchemas.js";
 
 export const createTokenSchema = z.object({
   userId: z.string(),

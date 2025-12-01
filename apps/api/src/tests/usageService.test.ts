@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { bumpUsage } from "../services/usageService";
-import { UsageModel } from "../models";
+import { bumpUsage } from "../services/usageService.js";
+import { UsageModel } from "../models/index.js";
 
 const mockSave = vi.fn();
 

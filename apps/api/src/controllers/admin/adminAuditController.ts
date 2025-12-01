@@ -1,9 +1,9 @@
 import type { Response } from "express";
 import { Types } from "mongoose";
-import type { AuthenticatedRequest } from "../../types/express";
-import { AuditLogModel } from "../../models";
-import { auditQuerySchema } from "../../schemas/adminSchemas";
-import { asyncHandler } from "../../utils/asyncHandler";
+import type { AuthenticatedRequest } from "../../types/express.js";
+import { AuditLogModel } from "../../models/index.js";
+import { auditQuerySchema } from "../../schemas/adminSchemas.js";
+import { asyncHandler } from "../../utils/asyncHandler.js";
 
 export const getAuditLog = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   const params = auditQuerySchema.parse(req.query);

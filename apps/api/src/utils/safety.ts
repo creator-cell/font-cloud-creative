@@ -1,4 +1,4 @@
-import type { PlanTier } from "../constants/plans";
+import type { PlanTier } from "../constants/plans.js";
 
 type SafetyResult = {
   warnings: string[];

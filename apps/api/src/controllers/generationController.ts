@@ -1,8 +1,8 @@
 import type { Response } from "express";
-import type { AuthenticatedRequest } from "../types/express";
-import { generateRequestSchema } from "../schemas/generationSchemas";
-import { generateContent } from "../services/generationService";
-import { asyncHandler } from "../utils/asyncHandler";
+import type { AuthenticatedRequest } from "../types/express.js";
+import { generateRequestSchema } from "../schemas/generationSchemas.js";
+import { generateContent } from "../services/generationService.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const generate = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   const payload = generateRequestSchema.parse(req.body);

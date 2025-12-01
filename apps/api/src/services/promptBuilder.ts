@@ -1,5 +1,5 @@
-import type { GenerationType } from "../models/Generation";
-import type { StyleCard } from "../models/BrandVoice";
+import type { GenerationType } from "../models/Generation.js";
+import type { StyleCard } from "../models/BrandVoice.js";
 
 export interface BuildPromptInput {
   type: GenerationType;

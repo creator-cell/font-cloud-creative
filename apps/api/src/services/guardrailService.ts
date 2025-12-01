@@ -1,6 +1,6 @@
 import type { ClientSession } from "mongoose";
 import { Types } from "mongoose";
-import GuardrailEventModel from "../models/GuardrailEvent";
+import GuardrailEventModel from "../models/GuardrailEvent.js";
 
 export type GuardrailEventType = "hold_insufficient" | "negative_balance_attempt";
 

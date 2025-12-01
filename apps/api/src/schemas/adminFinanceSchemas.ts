@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { pricingCurrencySchema } from "./adminPricingSchemas";
+import { pricingCurrencySchema } from "./adminPricingSchemas.js";
 
 const sortDirection = z.enum(["asc", "desc"]).default("desc");
 

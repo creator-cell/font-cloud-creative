@@ -1,5 +1,5 @@
-import type { SystemAlertDocument } from "../../models/SystemAlert";
-import { Guardrails } from "../../config/guardrails";
+import type { SystemAlertDocument } from "../../models/SystemAlert.js";
+import { Guardrails } from "../../config/guardrails.js";
 
 const formatAlertSummary = (alert: SystemAlertDocument): string => {
   const user = alert.userId ? `User ${alert.userId.toString()}` : "Unscoped user";

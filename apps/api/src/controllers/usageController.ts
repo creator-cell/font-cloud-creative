@@ -1,7 +1,7 @@
 import type { Response } from "express";
-import type { AuthenticatedRequest } from "../types/express";
-import { getUsageSummary } from "../services/usageService";
-import { asyncHandler } from "../utils/asyncHandler";
+import type { AuthenticatedRequest } from "../types/express.js";
+import { getUsageSummary } from "../services/usageService.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const getMyUsage = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   const summary = await getUsageSummary(req.user.sub, req.user.plan);

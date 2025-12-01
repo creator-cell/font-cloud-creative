@@ -1,9 +1,9 @@
 import { Types } from "mongoose";
-import { env } from "../config/env";
-import { stripe } from "../config/stripe";
-import { SubscriptionModel, UserModel } from "../models";
+import { env } from "../config/env.js";
+import { stripe } from "../config/stripe.js";
+import { SubscriptionModel, UserModel } from "../models/index.js";
 import type Stripe from "stripe";
-import type { PlanTier } from "../constants/plans";
+import type { PlanTier } from "../constants/plans.js";
 
 type PaidPlan = Exclude<PlanTier, "free">;
 

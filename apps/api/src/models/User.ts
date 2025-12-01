@@ -1,7 +1,7 @@
 import { Schema, model, type Document, Types } from "mongoose";
-import type { ProviderId } from "../providers/types";
-import type { PlanTier } from "../constants/plans";
-import type { Role } from "../types/express";
+import type { ProviderId } from "../providers/types.js";
+import type { PlanTier } from "../constants/plans.js";
+import type { Role } from "../types/express.js";
 
 export interface PreferredModel {
   provider: ProviderId;

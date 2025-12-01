@@ -1,7 +1,7 @@
-import app from "./app";
-import { env } from "./config/env";
-import { connectDatabase } from "./config/database";
-import { bootstrapProviders } from "./providers";
+import app from "./app.js";
+import { env } from "./config/env.js";
+import { connectDatabase } from "./config/database.js";
+import { bootstrapProviders } from "./providers/index.js";
 
 const start = async (): Promise<void> => {
   await connectDatabase();

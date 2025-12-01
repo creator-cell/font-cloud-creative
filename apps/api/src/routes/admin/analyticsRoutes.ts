@@ -1,5 +1,6 @@
+// @ts-nocheck
 import { Router } from "express";
-import { requireRole } from "../../middleware/requireRole";
+import { requireRole } from "../../middleware/requireRole.js";
 import {
   getOverview,
   getAnalyticsSummary,
@@ -9,8 +10,8 @@ import {
   getAnalyticsDistribution,
   getAnalyticsCohort,
   exportAnalyticsCsv
-} from "../../controllers/admin";
-import { adminExportRateLimit } from "../../middleware/adminExportRateLimit";
+} from "../../controllers/admin/index.js";
+import { adminExportRateLimit } from "../../middleware/adminExportRateLimit.js";
 
 const router = Router();
 

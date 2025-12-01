@@ -1,6 +1,6 @@
-import type { PlanTier } from "../../constants/plans";
-import { getPlanBillingInfo } from "../planRegistry";
-import { createAmazonCharge, type AmazonChargeResult } from "./amazonPayService";
+import type { PlanTier } from "../../constants/plans.js";
+import { getPlanBillingInfo } from "../planRegistry.js";
+import { createAmazonCharge, type AmazonChargeResult } from "./amazonPayService.js";
 
 const truncateSoftDescriptor = (value: string): string => value.slice(0, 16);
 

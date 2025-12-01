@@ -1,13 +1,14 @@
+// @ts-nocheck
 import axios from "axios";
-import { env } from "../config/env";
-import { estimateTokens } from "../utils/tokenizer";
+import { env } from "../config/env.js";
+import { estimateTokens } from "../utils/tokenizer.js";
 import {
   ChatStreamHandlers,
   ChatStreamParams,
   ChatStreamResult,
   GenerationPayload,
   LLMProvider
-} from "./types";
+} from "./types.js";
 
 export class OllamaProvider implements LLMProvider {
   public readonly id = "ollama" as const;

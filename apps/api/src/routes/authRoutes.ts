@@ -4,10 +4,10 @@ import {
   registerUser,
   loginWithPassword,
   completePlanSelection
-} from "../controllers/authController";
-import { checkout, portal } from "../controllers/subscriptionController";
-import { requireAuth } from "../middleware/requireAuth";
-import { planGate } from "../middleware/planGate";
+} from "../controllers/authController.js";
+import { checkout, portal } from "../controllers/subscriptionController.js";
+import { requireAuth } from "../middleware/requireAuth.js";
+import { planGate } from "../middleware/planGate.js";
 
 export const registerAuthRoutes = (router: Router): void => {
   router.post("/auth/token", createToken);

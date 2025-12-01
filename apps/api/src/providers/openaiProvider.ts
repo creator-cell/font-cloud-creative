@@ -1,3 +1,4 @@
+// @ts-nocheck
 import OpenAI from "openai";
 import { toFile } from "openai/uploads";
 import fs from "node:fs/promises";

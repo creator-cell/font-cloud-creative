@@ -1,11 +1,11 @@
-import { env } from "../config/env";
+import { env } from "../config/env.js";
 import {
   ChatStreamHandlers,
   ChatStreamParams,
   ChatStreamResult,
   GenerationPayload,
   LLMProvider
-} from "./types";
+} from "./types.js";
 
 export class AnthropicProvider implements LLMProvider {
   public readonly id = "anthropic" as const;

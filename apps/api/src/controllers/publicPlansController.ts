@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { PlanModel } from "../models/Plan";
+import { PlanModel } from "../models/Plan.js";
 
 export const listPublicPlans = async (_req: Request, res: Response) => {
   const now = new Date();
