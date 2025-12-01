@@ -9,7 +9,6 @@
     "start": "node dist/server.js",
     "lint": "tsc --noEmit",
     "format": "prettier --check \"src/**/*.{ts,tsx,json}\"",
-    "test": "vitest",
     "seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
