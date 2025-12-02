@@ -702,7 +702,7 @@ useEffect(() => () => {
     }
   };
 
-  const onTextareaKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const onTextareaKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       void sendMessage();

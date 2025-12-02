@@ -1,7 +1,7 @@
 "use client";
 
 import { Clock, Sparkles, Wand2, type LucideIcon } from "lucide-react";
-import type { LandingTranslation } from "../translations.js";
+import type { LandingTranslation } from "../types";
 
 type SpeedFeature = {
   title: string;

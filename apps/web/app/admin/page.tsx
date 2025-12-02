@@ -29,7 +29,7 @@ export default async function AdminOverviewPage() {
 
   const planMix = Object.entries(overview.planMix).map(([plan, value]) => ({ plan, value }));
 
-  const signupTrend = overview.trend.map((point) => ({
+  const signupTrend = (overview.trend ?? []).map((point) => ({
     date: new Date(point.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
     value: point.signups
   }));
@@ -53,9 +53,12 @@ export default async function AdminOverviewPage() {
             <CardTitle>Top creators by token usage</CardTitle>
             <p className="text-xs text-slate-500 dark:text-slate-400">Current month</p>
           </div>
-          <Button asChild variant="secondary">
-            <a href="/admin/usage">View usage</a>
-          </Button>
+          <a
+            href="/admin/usage"
+            className="inline-flex items-center justify-center rounded-md bg-gray-200 px-4 py-1.5 text-sm font-medium text-slate-900 transition hover:bg-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700"
+          >
+            View usage
+          </a>
         </CardHeader>
         <CardContent className="overflow-x-auto">
           <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-800">

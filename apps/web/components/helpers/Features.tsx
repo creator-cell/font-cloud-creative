@@ -84,10 +84,14 @@ const Features = ({ copy }: any) => {
         </p>
       </motion.div>
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {creationFeatures.map(({ title, description, Icon }, index) => (
-          <motion.div
-            key={title}
-            className="rounded-xl border border-sky-100 bg-white p-6 shadow-sm"
+        {creationFeatures.map(
+          (
+            { title, description, Icon }: { title: string; description: string; Icon: React.ComponentType<any> },
+            index: number
+          ) => (
+            <motion.div
+              key={title}
+              className="rounded-xl border border-sky-100 bg-white p-6 shadow-sm"
             whileHover={{
               y: -8,
               boxShadow:

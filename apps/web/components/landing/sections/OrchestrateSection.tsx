@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, LayoutGrid, Target, type LucideIcon } from "lucide-react";
-import type { LandingTranslation } from "../translations.js";
+import type { LandingTranslation } from "../types";
 
 type OrchestrateCard = {
   badge: string;

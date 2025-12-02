@@ -42,7 +42,7 @@ type HeroSectionProps = {
     style?: Record<string, string>;
     Icon: LucideIcon;
   }>;
-  fadeIn: (delay?: number, offset?: number) => unknown;
+  fadeIn?: (delay?: number, offset?: number) => unknown;
 };
 
 export const HeroSection = ({
@@ -52,7 +52,11 @@ export const HeroSection = ({
   speedFeatures,
   fadeIn,
 }: HeroSectionProps) => (
-  <motion.section className="relative w-full text-gray-900" id="product" {...fadeIn(0.05)}>
+  <motion.section
+    className="relative w-full text-gray-900"
+    id="product"
+    {...(fadeIn ? (fadeIn(0.05) as Record<string, unknown>) : {})}
+  >
     <div className="absolute inset-0 z-0 opacity-20">
       <div
         className="absolute bottom-0 right-1/2 w-96 h-96 bg-sky-200 dark:bg-[#14263D] rounded-full mix-blend-multiply filter blur-xl animate-blob"
@@ -64,7 +68,10 @@ export const HeroSection = ({
       />
     </div>
 
-    <motion.div className="relative z-10 w-full flex justify-center pt-8 sm:pt-0 pb-6 sm:pb-8" {...fadeIn()}>
+    <motion.div
+      className="relative z-10 w-full flex justify-center pt-8 sm:pt-0 pb-6 sm:pb-8"
+      {...(fadeIn ? (fadeIn() as Record<string, unknown>) : {})}
+    >
       <div className="inline-flex justify-center items-center gap-2 sm:gap-1 border border-blue-200 bg-[#F3FAFE] rounded-md px-3 py-1 sm:px-3 text-xs text-blue-700 font-medium whitespace-nowrap dark:bg-[#111e33] dark:border-[#183e5c]">
         <Sparkles className="h-3 w-3 text-[#0EA5E9] flex-shrink-0" />
         <p className="text-[12px] sm:text-[10px] text-black whitespace-nowrap font-semibold dark:text-[#f2f6fa]">
@@ -95,9 +102,13 @@ export const HeroSection = ({
             <ArrowRight className="h-4 w-4 ml-2" />
           </Link>
 
-          <button className="flex items-center justify-center w-full sm:w-auto px-4 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-sky-100 transition-colors text-sm dark:bg-[#1a2438] dark:text-[#f2f6fa]">
-            <Play className="h-4 w-4 mr-2" /> {copy.heroSecondaryCta}
-          </button>
+            <Link
+              href={whatsappLink}
+              target="_blank"
+              className="flex items-center justify-center w-full sm:w-auto px-4 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-sky-100 transition-colors text-sm dark:bg-[#1a2438] dark:text-[#f2f6fa]"
+            >
+              <Play className="h-4 w-4 mr-2" /> {copy.heroSecondaryCta}
+            </Link>
         </div>
 
         <div className="flex flex-wrap justify-start lg:justify-start gap-x-8 gap-y-4 text-gray-600 mb-12">
@@ -109,7 +120,11 @@ export const HeroSection = ({
         <div className="flex justify-between gap-12 border-t border-gray-200 pt-8">
           <div className="flex justify-between items-center w-full">
             {heroStats.map((stat, index) => (
-              <motion.div key={stat.label} className="flex flex-col items-start" {...fadeIn(index * 0.15, 30)}>
+              <motion.div
+                key={stat.label}
+                className="flex flex-col items-start"
+                {...(fadeIn ? (fadeIn(index * 0.15, 30) as Record<string, unknown>) : {})}
+              >
                 <div className="flex items-center space-x-2">
                   <Users className="h-5 w-5 text-blue-500" />
                   <p className="text-3xl font-bold text-gray-900 dark:text-[#f2f6fa]">{stat.value}</p>
@@ -121,7 +136,10 @@ export const HeroSection = ({
         </div>
       </div>
 
-      <motion.div className="space-y-6 md:mt-8 overflow-visible" {...fadeIn(0.2)}>
+      <motion.div
+        className="space-y-6 md:mt-8 overflow-visible"
+        {...(fadeIn ? (fadeIn(0.2) as Record<string, unknown>) : {})}
+      >
         <div>
           <h3 className="flex items-center text-base font-medium text-gray-800 mb-6 justify-start lg:justify-start dark:text-[#f0f5fa]">
             <Brain className="h-5 w-5 mr-2 text-[#0EA5E9]" /> {copy.providerHeading}
@@ -173,15 +191,15 @@ export const HeroSection = ({
       </motion.div>
     </div>
 
-    <motion.section className="space-y-6 pb-8 bg-white dark:bg-[#0F1729]" id="solutions" {...fadeIn(0.1)}>
-      <motion.div className="text-center" {...fadeIn(0.05, 10)} viewport={{ once: true }}>
-        <span className="inline-flex items-center text-xs font-medium border border-[#e1e8f0] px-1 rounded-md py-0.5 dark:bg-[#0f1a2b] dark:text-[#f2f6fa] dark:border-[#324154]">
-          <Sparkles className="w-3 h-3 mr-1" />
-          {copy.speedDemo}
-        </span>
-      </motion.div>
-
-      <motion.div className="space-y-4 text-center" {...fadeIn(0.1, 20)}>
+    <motion.section
+      className="space-y-6 pb-8 bg-white dark:bg-[#0F1729]"
+      id="solutions"
+      {...(fadeIn ? (fadeIn(0.1) as Record<string, unknown>) : {})}
+    >
+      <motion.div
+        className="space-y-4 text-center"
+        {...(fadeIn ? (fadeIn(0.1, 20) as Record<string, unknown>) : {})}
+      >
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 dark:text-[#f2f6fa]">
           {copy.speedTitle}{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-500 text-3xl sm:text-4xl lg:text-5xl">
@@ -203,13 +221,13 @@ export const HeroSection = ({
         {speedFeatures.map(({ title, description, Icon, iconColor, style }, index) => (
           <motion.div
             key={title}
-            className="relative rounded-2xl p-4 h-full flex flex-col justify-between dark:bg-[#162033] dark:border-[#1c3d57]"
-            style={{
-              ...style,
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)",
-            }}
-            {...fadeIn(index * 0.2)}
-          >
+          className="relative rounded-2xl p-4 h-full flex flex-col justify-between dark:bg-[#162033] dark:border-[#1c3d57]"
+          style={{
+            ...style,
+            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)",
+          }}
+          {...(fadeIn ? (fadeIn(index * 0.2) as Record<string, unknown>) : {})}
+        >
             <div>
               <div className="flex items-start space-x-3 mb-4">
                 <div
@@ -267,4 +285,4 @@ const ProviderAction = ({ label, Icon }: { label: string; Icon: LucideIcon }) =>
     <ArrowRight className="h-4 w-4 text-gray-400" />
   </div>
 );
-
+const whatsappLink = "https://wa.me/966504576354";

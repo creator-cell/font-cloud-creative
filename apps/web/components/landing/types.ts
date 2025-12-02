@@ -3,8 +3,9 @@ import type { LucideIcon } from "lucide-react";
 export type ContentFilter = "copy" | "product" | "social";
 
 export interface StatsTile {
-  label: string;
-  value: string;
+  label?: string;
+  value?: string;
+  title?: string;
   description?: string;
   Icon?: LucideIcon;
   color?: string;
@@ -50,6 +51,8 @@ export interface PricingPlan {
   month?: string;
   boundary?: string;
   Limitations?: string[];
+  logo?: React.ComponentType<any>;
+  logoProps?: Record<string, any>;
 }
 
 export interface FooterLink {
@@ -75,6 +78,7 @@ export interface LandingTranslation {
   heroDescription: string;
   heroPrimaryCta: string;
   heroSecondaryCta: string;
+  heroTertiaryCta?: string;
   heroToken: string;
   heroCard: string;
   heroCancel: string;
@@ -89,13 +93,16 @@ export interface LandingTranslation {
   providerOpenAI: string;
   providerAnthropic: string;
   providerGoogle: string;
+  providerOllama?: string;
+  providerOpenSource?: string;
+  providerCombo?: string;
   providerOpenAIBadge?: string;
   providerAnthropicBadge?: string;
   providerComboBadge?: string;
   providerAllam: string;
+  providerAllamSubtitle?: string;
   providerAllamBadge?: string;
   providerLabels: string[];
-  speedDemo: string;
   speedTitle: string;
   speedTitleSecond: string;
   speedSubtitle: string;
@@ -113,13 +120,15 @@ export interface LandingTranslation {
   creationSubtitle: string;
   creationFeature: string;
   creationFeatures: CreationFeature[];
+  newsOverview?: string;
   newsroomTitle: string;
   newsroomSubtitle: string;
-  newsroomActions: (NewsroomAction | string)[];
+  newsroomActions: NewsroomAction[];
   newsroomHighlightTitle: string;
   newsroomHighlightBody: string;
   statsTiles: StatsTile[];
-  statsTiles2: StatsTile[];
+  TypeTitle?: string;
+  TypeDescription?: string;
   pricingHead: string;
   pricingTitle: string;
   pricingSubtitle: string;
@@ -158,5 +167,5 @@ export interface LandingTranslation {
   footerInputPlaceholder: string;
   footerBottomCta: string;
   footerLinks: Record<string, FooterLinkGroup>;
-  finalSecondaryCta?: string;
+  data?: any;
 }

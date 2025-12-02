@@ -36,6 +36,7 @@ type UsageSummary = {
   softWarned: boolean;
   availableTokens: number;
   totalAllocatedTokens: number;
+  tokenBalance?: number;
 };
 
 const navLinks: NavLink[] = [

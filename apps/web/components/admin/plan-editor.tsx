@@ -67,7 +67,11 @@ export const PlanEditor = ({ token, plans }: PlanEditorProps) => {
         >
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h3 className="text-sm font-semibold text-slate-900 uppercase dark:text-white">{plan.key}</h3>
-            <Button type="submit" size="sm" disabled={working === plan.key}>
+            <Button
+              type="submit"
+              disabled={working === plan.key}
+              className="px-3 py-1 text-sm"
+            >
               {working === plan.key ? "Saving..." : "Save"}
             </Button>
           </div>

@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { LucideIcon } from "lucide-react";
+import type { PricingPlan } from "./types";
 import {
   ArrowRight,
   Bot,
@@ -29,7 +30,6 @@ import {
   Zap,
   Star,
   ArrowUpRight,
-  Users,
   CheckCircle,
   Play,
   Check,
@@ -58,7 +58,6 @@ import FooterFirstCard from "../utils/FooterFirstCard";
 import LimitedTime from "../utils/LimitedTime";
 import FooterSection from "../utils/FooterSection";
 import TypeContent from "../helpers/TypeContent";
-import HeroSection from "../helpers/HeroSection";
 import Header from "../helpers/Header";
 import WorkDemo from "../helpers/WorkDemo";
 import Features from "../helpers/Features";
@@ -67,6 +66,7 @@ import DemoSection from "../utils/DemoSection";
 import { ThemeToggle } from "../theme-toggle";
 
 const contentFilterOrder = ["copy", "product", "social"] as const;
+const whatsappLink = "https://wa.me/966504576354";
 const speedFeatureIcons: LucideIcon[] = [MessageSquare, Brain, Sparkles];
 const orchestrateIcons: LucideIcon[] = [LayoutGrid, Target];
 const creationFeatureIcons: LucideIcon[] = [
@@ -105,9 +105,6 @@ export const LandingPage = () => {
   const navItems = (copy.nav || []).map(
     (item: { label: string; href: string }) => item
   );
-  const heroStats = (copy.heroStats || []).map(
-    (stat: { value: string; label: string }) => stat
-  );
   const providers = (copy.providerLabels || []).map((label: string) => label);
   const speedFeatures = (copy.speedFeatures || []).map(
     (feature: { title: string; description: string }, index: number) => ({
@@ -141,18 +138,10 @@ export const LandingPage = () => {
   const activeScenario = (
     copy.contentScenarios?.[activeContentFilter] || []
   ).map((item: string) => item);
-  const newsroomActions = (copy.newsroomActions || []).map(
-    (action: string) => action
-  );
+  const newsroomActions = copy.newsroomActions || [];
   const finalData = (copy.finalData || []).map((action: string) => action);
 
-  const statsTiles = (copy.statsTiles || []).map(
-    (tile: { value: string; label: string }) => tile
-  );
-  const statsTiles2 = (copy.statsTiles2 || []).map(
-    (tile: { value: string; label: string; icon: string }) => tile
-  );
-
+  const statsTiles = copy.statsTiles || [];
   const providerItems = [
     {
       key: "openai",
@@ -188,17 +177,7 @@ export const LandingPage = () => {
     }
   ];
 
-  const pricingPlans = (copy.pricingPlans || []).map(
-    (plan: {
-      id: string;
-      title: string;
-      price: string;
-      description: string;
-      features: string[];
-      cta: string;
-      popular: boolean;
-    }) => plan
-  );
+  const pricingPlans = (copy.pricingPlans || []) as PricingPlan[];
   const fadeIn = (delay = 0, offset = 40) => ({
     initial: { opacity: 0, y: -offset },
     whileInView: { opacity: 1, y: 0 },
@@ -319,9 +298,13 @@ export const LandingPage = () => {
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Link>
 
-                <button className="flex items-center justify-center w-full sm:w-auto px-4 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-sky-100 transition-colors text-sm dark:bg-[#1a2438] dark:text-[#f2f6fa]">
+                <Link
+                  href={whatsappLink}
+                  target="_blank"
+                  className="flex items-center justify-center w-full sm:w-auto px-4 py-3 bg-white text-gray-800 font-semibold border border-gray-300 rounded-lg shadow-sm hover:bg-sky-100 transition-colors text-sm dark:bg-[#1a2438] dark:text-[#f2f6fa]"
+                >
                   <Play className="h-4 w-4 mr-2" /> {copy.heroSecondaryCta}
-                </button>
+                </Link>
               </div>
 
               <div className="flex flex-wrap justify-start lg:justify-start gap-x-8 gap-y-4 text-gray-600 mb-12">
@@ -345,26 +328,21 @@ export const LandingPage = () => {
                 </div>
               </div>
 
-              <div className="flex justify-between gap-12 border-t border-gray-200 pt-8">
-                <div className="flex justify-between items-center w-full">
-                  {heroStats.map((stat, index) => (
-                    <motion.div
-                      className="flex flex-col items-start"
-                      {...fadeIn(index * 0.15, 30)}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <Users className="h-5 w-5 text-blue-500" />
-                        <p className="text-3xl font-bold text-gray-900 dark:text-[#f2f6fa]">
-                          {stat.value}
-                        </p>
-                      </div>
-                      <p className="text-sm text-gray-500 mt-0.5 ml-7 dark:text-[#93a2b8]">
-                        {stat.label}
-                      </p>
-                    </motion.div>
-                  ))}
+              <div className="flex flex-wrap items-center gap-6 border-t border-gray-200 pt-8 text-sm text-slate-700 dark:border-[#1f2b3b] dark:text-[#d7deea]">
+                <div className="flex items-center gap-2">
+                  <Zap className="h-4 w-4 text-blue-500" />
+                  <span>Average response under 2s</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-blue-500" />
+                  <span>Batch generation ready in ~12s</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-blue-500" />
+                  <span>Optimized orchestration across providers</span>
                 </div>
               </div>
+
             </div>
 
             <motion.div className="space-y-6 md:mt-8 overflow-visible" {...fadeIn(0.2)}>
@@ -448,17 +426,6 @@ export const LandingPage = () => {
           id="solutions"
           {...fadeIn(0.1)}
         >
-          <motion.div
-            className="text-center"
-            {...fadeIn(0.05, 10)}
-            viewport={{ once: true }}
-          >
-            <span className="inline-flex items-center text-xs font-medium border border-[#e1e8f0] px-1 rounded-md py-0.5 dark:bg-[#0f1a2b] dark:text-[#f2f6fa] dark:border-[#324154]">
-              <Sparkles className="w-3 h-3 mr-1" />
-              {copy.speedDemo}
-            </span>
-          </motion.div>
-
           <motion.div className="space-y-4 text-center" {...fadeIn(0.1, 20)}>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 dark:text-[#f2f6fa]">
               {copy.speedTitle}{" "}
@@ -480,7 +447,10 @@ export const LandingPage = () => {
             </div>
 
             {speedFeatures.map(
-              ({ title, description, Icon, iconColor, style }, index) => (
+              (
+                { title, description, Icon, iconColor, style }: { title: string; description: string; Icon: LucideIcon; iconColor?: string; style?: React.CSSProperties },
+                index: number
+              ) => (
                 <motion.div
                   key={title}
                   className="relative rounded-2xl p-4 h-full flex flex-col justify-between dark:bg-[#162033] dark:border-[#1c3d57]"
@@ -623,7 +593,7 @@ export const LandingPage = () => {
                       {copy.data.leftPanel.toneStyle.title}
                     </h3>
                     <div className="flex gap-2 text-[.65rem]">
-                      {copy.data.leftPanel.toneStyle.styles.map((style) => (
+                      {copy.data.leftPanel.toneStyle.styles.map((style: string) => (
                         <span
                           key={style}
                           className="border items-center border-gray-200 rounded-full bg-[#f0f9ff] font-medium px-1.5 text-[#0c4a6e] text-xs dark:bg-[#1e293b] dark:text-[#e1e8f0]"
@@ -698,17 +668,14 @@ export const LandingPage = () => {
                       {copy.data.rightPanel.actions.tryYourself}
                     </Button>
 
-                    <Button
-                      className="w-[14rem] bg-white hover:bg-sky-100  text-sm font-medium py-2
-                    rounded-md mt-2 text-black border border-[#e1e8f0] dark:bg-[#1c2a3d]  dark:border-[#324154] dark:text-[#f2f6fa]"
+                    <Link
+                      href={whatsappLink}
+                      target="_blank"
+                      className="w-[14rem] bg-white hover:bg-sky-100 text-sm font-medium py-2 rounded-md mt-2 text-black border border-[#e1e8f0] dark:bg-[#1c2a3d] dark:border-[#324154] dark:text-[#f2f6fa] flex items-center justify-center gap-1"
                     >
-                      <div className="flex items-center gap-1">
-                        <div>
-                          <Globe2 className="w-4 h-4" />
-                        </div>
-                        {copy.data.rightPanel.actions.watchDemo}
-                      </div>
-                    </Button>
+                      <Globe2 className="w-4 h-4" />
+                      {copy.data.rightPanel.actions.watchDemo}
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -762,7 +729,7 @@ export const LandingPage = () => {
             ))}
           </div>
         </motion.section>
-        <motion.section {...fadeIn(0.1)}>
+        <motion.section {...fadeIn(0.1)} className="-mt-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <motion.div {...fadeIn(0.1, 20)}>
@@ -834,7 +801,7 @@ export const LandingPage = () => {
 
           <div className="mt-14 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
             {statsTiles.map((card, index) => {
-              const { text, bg, border } = getColor(card.color);
+              const { text, bg, border } = getColor(card.color || "");
               const Icon = card.Icon as LucideIcon;
 
               return (
@@ -953,7 +920,7 @@ export const LandingPage = () => {
                             {plan.boundary}
                           </span>
                           <div className="flex flex-col gap-1 ">
-                            {plan.Limitations.map((limit, i) => (
+                            {(plan.Limitations ?? []).map((limit, i) => (
                               <div
                                 key={i}
                                 className="flex items-center gap-2  text-gray-600 text-xs dark:text-[#93a2b8]"
@@ -1001,18 +968,20 @@ export const LandingPage = () => {
               </p>
             </CardHeader>
             <CardContent className="flex flex-wrap justify-center gap-4 text-slate-900 dark:text-slate-900 mt-6">
-              <Button
-                size="lg"
-                className="rounded-full bg-white  text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit dark:text-[#93a2b8] dark:bg-[#1c283d] dark:border-[#324154]"
+              <Link
+                href={whatsappLink}
+                target="_blank"
+                className="rounded-full bg-white text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit px-4 py-2 text-sm font-semibold dark:text-[#93a2b8] dark:bg-[#1c283d] dark:border-[#324154] flex items-center justify-center"
               >
                 {copy.enterpriseCta}
-              </Button>
-              <Button
-                size="lg"
-                className="rounded-full bg-gradient-to-r from-[#09a0eb] to-[#0773f7] text-white hover:bg-slate-800 w-full sm:w-fit"
+              </Link>
+              <Link
+                href={whatsappLink}
+                target="_blank"
+                className="rounded-full bg-gradient-to-r from-[#09a0eb] to-[#0773f7] text-white hover:bg-slate-800 w-full sm:w-fit px-4 py-2 text-sm font-semibold flex items-center justify-center"
               >
                 {copy.enterpriseCta2}
-              </Button>
+              </Link>
             </CardContent>
           </Card>
         </motion.div>
@@ -1093,11 +1062,15 @@ export const LandingPage = () => {
                   {copy.finalPrimaryCta}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
-                <Button className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit dark:bg-[#1c67d8] dark:text-[#f2f6fa] dark:border-[#324154]">
+                <Link
+                  href={whatsappLink}
+                  target="_blank"
+                  className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit dark:bg-[#1c67d8] dark:text-[#f2f6fa] dark:border-[#324154] flex items-center justify-center"
+                >
                   <Zap className="w-4 h-auto mr-2" />
                   {copy.finalSecondaryCta}
                   <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
+                </Link>
               </div>
             </div>
 
@@ -1137,32 +1110,6 @@ export const LandingPage = () => {
           </div>
         </motion.section>
 
-        <motion.section {...fadeIn(0.1)} className=" dark:bg-[#0F1729]">
-          <div className="grid gap-6 md:grid-cols-3 text-center">
-            {statsTiles2.map((stat, index) => {
-              return (
-                <motion.div
-                  key={index}
-                  className="rounded-xl bg-white border dark:bg-[#1E293B] dark:border dark:border-[#2a364a] shadow-md py-5 px-8 hover:shadow-lg transition-shadow duration-300"
-                  whileHover={{ scale: 1.03 }}
-                >
-                  <div className="flex flex-col items-center space-y-4 mt-1">
-                    <div className="bg-sky-100 rounded-full text-sky-500 p-3 dark:bg-[#21384E]">
-                      <stat.Icon className="w-6 h-6" />
-                    </div>
-                    <div className="text-3xl font-bold text-gray-900 dark:text-[#f2f6fa]">
-                      {stat.description}
-                    </div>
-                    <div className="text-gray-600 dark:text-[#72879c]">
-                      {stat.title}
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </motion.section>
-
         <motion.section {...fadeIn(0.1)}>
           <motion.div className="flex flex-col items-center text-center">
             <div className="flex items-center justify-center gap-2 bg-[#dcf3fc] dark:bg-[#132e47]  rounded-full py-1.5 px-3">
@@ -1177,62 +1124,25 @@ export const LandingPage = () => {
           </motion.div>
         </motion.section>
 
-        <footer className="mt-12 md:mt-16 -mx-6 space-y-10 border-t border-sky-100 bg-white px-6 py-8 text-sm text-slate-600 shadow-inner md:-mx-10 md:px-10 lg:-mx-16 lg:px-16 xl:-mx-24 xl:px-24 dark:bg-[#1e293b]">
-          <div className="flex flex-col md:flex-row md:items-start md:justify-between mt-5 gap-10 md:gap-16">
-            <div className="max-w-sm space-y-3 text-center md:text-left">
-              <Link
-                href="/"
-                className="flex justify-start items-center gap-2 text-lg font-semibold text-slate-900 dark:text-[#f1f2ed]"
-              >
-                <Image
-                  src="/logo2.png"
-                  alt="Front Cloud logo"
-                  width={28}
-                  height={28}
-                  className="mt-1"
-                />
-                Front Cloud
-              </Link>
-              <p className="text-base text-slate-500 mt-2 text-start dark:text-[#93a2b8]">
-                {copy.footerTagline}
-              </p>
+        <footer className="mt-6 md:mt-8 -mx-6 space-y-10 border-t border-sky-100 bg-white px-6 py-10 text-sm text-slate-600 shadow-inner md:-mx-10 md:px-10 lg:-mx-16 lg:px-16 xl:-mx-24 xl:px-24 dark:bg-[#1e293b]">
+          <div className="flex flex-col items-center gap-6 text-center">
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-[#f1f2ed]"
+            >
+              <Image
+                src="/logo2.png"
+                alt="Front Cloud logo"
+                width={28}
+                height={28}
+                className="mt-1"
+              />
+              Front Cloud
+            </Link>
+            <p className="text-base text-slate-500 max-w-4xl dark:text-[#93a2b8]">
+              {copy.footerTagline}
+            </p>
 
-              <div className="flex justify-start items-center gap-5 !mt-7">
-                {socials.map(({ icon: Icon, href }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-sky-200 transition"
-                  >
-                    <Icon className="w-5 h-5 text-slate-700 hover:text-black dark:text-[#f2f6fa]" />
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-8 md:gap-[5rem] text-start md:text-left md:mx-0">
-              {Object.values(copy.footerLinks).map((group) => {
-                return (
-                  <div key={group.heading} className="space-y-3">
-                    <p className="text-base font-semibold text-slate-900 dark:text-[#f2f6fa]">
-                      {group.heading}
-                    </p>
-                    <ul className="space-y-3 text-sm text-slate-500">
-                      {group.links.map((link) => (
-                        <li key={link.label}>
-                          <Link
-                            href={link.href}
-                            className="transition hover:text-black dark:text-[#93a2b8]"
-                          >
-                            {link.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })}
-            </div>
           </div>
 
           <div className="flex flex-col gap-4 border-t dark:border-[#324154] border-sky-100 pt-6 text-xs sm:text-sm text-[#65758c] md:flex-row md:items-center md:justify-between">
@@ -1250,28 +1160,6 @@ export const LandingPage = () => {
                   {label}
                 </Link>
               ))}
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#F3FAFE] border border-sky-100 p-6 sm:p-8 rounded-xl text-center sm:text-left dark:bg-[#203145] dark:border-[#243f57]">
-            <div className="flex flex-col justify-start items-start">
-              <h1 className="text-black font-semibold text-base dark:text-[#f2f6fa]">
-                Stay updated
-              </h1>
-              <p className="text-sm mt-1 dark:text-[#9382b8]">
-                Get the latest updates about new features and AI improvements.
-              </p>
-            </div>
-
-            <div className="w-full sm:w-auto flex flex-row justify-center sm:justify-end items-center gap-3">
-              <input
-                type="email"
-                placeholder={copy.footerInputPlaceholder}
-                className="rounded-lg border border-[#e1e8f0] bg-white px-4 py-2 text-sm text-slate-700 focus:border-sky-400 focus:outline-none h-10 dark:bg-[#0f1729] dark:border-[#324154] dark:text-[#088691]"
-              />
-              <button className="rounded-lg bg-sky-500 px-5 text-white hover:bg-sky-400 py-2.5 font-semibold flex items-center justify-center dark:bg-[#39b2f7] dark:text-[#0f1729]">
-                {copy.footerBottomCta}
-              </button>
             </div>
           </div>
         </footer>

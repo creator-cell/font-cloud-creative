@@ -32,7 +32,9 @@ export default async function AdminModelsPage() {
                   <tr key={model.id}>
                     <td className="px-3 py-2 text-slate-700 dark:text-slate-200">{model.label}</td>
                     <td className="px-3 py-2 text-slate-500 capitalize dark:text-slate-400">{model.minPlan}</td>
-                    <td className="px-3 py-2 text-slate-500 dark:text-slate-400">{model.capabilities.join(", ")}</td>
+                    <td className="px-3 py-2 text-slate-500 dark:text-slate-400">
+                      {(model.capabilities ?? []).join(", ")}
+                    </td>
                     <td className="px-3 py-2 text-right text-slate-700 dark:text-slate-200">${model.estCostPer1K}</td>
                   </tr>
                 ))}

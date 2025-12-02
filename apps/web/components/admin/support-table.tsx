@@ -61,7 +61,11 @@ export const SupportTable = ({ token, tickets }: SupportTableProps) => {
               value={replyState[ticket._id] ?? ""}
               onChange={(event) => setReplyState((prev) => ({ ...prev, [ticket._id]: event.target.value }))}
             />
-            <Button size="sm" onClick={() => handleReply(ticket._id)} disabled={loading === ticket._id}>
+            <Button
+              onClick={() => handleReply(ticket._id)}
+              disabled={loading === ticket._id}
+              className="px-3 py-1 text-sm"
+            >
               {loading === ticket._id ? "Sending..." : "Reply"}
             </Button>
           </div>

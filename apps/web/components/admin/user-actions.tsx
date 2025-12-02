@@ -51,10 +51,20 @@ export const UserActions = ({ token, userId, email, plan }: Props) => {
 
   return (
     <div className="flex gap-2">
-      <Button size="sm" variant="secondary" onClick={handleSetPlan} disabled={loading === "plan"}>
+      <Button
+        variant="secondary"
+        onClick={handleSetPlan}
+        disabled={loading === "plan"}
+        className="px-3 py-1 text-sm"
+      >
         Set Plan
       </Button>
-      <Button size="sm" variant="ghost" onClick={handleGrantTokens} disabled={loading === "tokens"}>
+      <Button
+        variant="ghost"
+        onClick={handleGrantTokens}
+        disabled={loading === "tokens"}
+        className="px-3 py-1 text-sm"
+      >
         Grant Tokens
       </Button>
     </div>

@@ -14,6 +14,9 @@ import { CardContent } from "../ui/card";
 import { CardTitle } from "../ui/card";
 import { CardHeader } from "../ui/card";
 import { Card } from "../ui/card";
+import Link from "next/link";
+
+const whatsappLink = "https://wa.me/966504576354";
 
 const EnterpriseSolution = ({ copy }: any) => {
   const [language, setLanguage] = useState<"en" | "ar">("en");
@@ -43,18 +46,20 @@ const EnterpriseSolution = ({ copy }: any) => {
           </p>
         </CardHeader>
         <CardContent className="flex flex-wrap justify-center gap-4 text-slate-900 dark:text-slate-900 mt-6">
-          <Button
-            size="lg"
-            className="rounded-full bg-white  text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit"
+          <Link
+            href={whatsappLink}
+            target="_blank"
+            className="rounded-full bg-white text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit px-4 py-2 text-sm font-semibold flex items-center justify-center"
           >
             {copy.enterpriseCta}
-          </Button>
-          <Button
-            size="lg"
-            className="rounded-full bg-gradient-to-r from-[#09a0eb] to-[#0773f7] text-white hover:bg-slate-800 w-full sm:w-fit"
+          </Link>
+          <Link
+            href={whatsappLink}
+            target="_blank"
+            className="rounded-full bg-gradient-to-r from-[#09a0eb] to-[#0773f7] text-white hover:bg-slate-800 w-full sm:w-fit px-4 py-2 text-sm font-semibold flex items-center justify-center"
           >
             {copy.enterpriseCta2}
-          </Button>
+          </Link>
         </CardContent>
       </Card>
     </motion.div>

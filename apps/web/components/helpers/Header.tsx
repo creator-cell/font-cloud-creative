@@ -56,7 +56,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
 
         {/* Nav */}
         <nav className="hidden md:flex items-center gap-6 text-medium text-[#64748B] font-semibold dark:text-white">
-          {navItems.map((item) => (
+          {navItems.map((item: { label: string; href: string }) => (
             <Link
               key={item.label}
               href={item.href}
@@ -114,12 +114,6 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
               <SelectItem value="ar">العربية</SelectItem>
             </SelectContent>
           </Select>
-          <Link
-            href="/signin"
-            className="ml-1 text-xs font-medium dark:text-white"
-          >
-            {language === "ar" ? "تسجيل الدخول" : "Sign In"}
-          </Link>
           <Link href="/signin?register=1">
             <button className="rounded-lg bg-sky-500 text-white hover:bg-sky-400 px-2.5 py-1.5 font-semibold text-sm">
               {language === "ar" ? "ابدأ الآن" : "Get Started"}
@@ -141,7 +135,7 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
       {mobileOpen && (
         <nav className="md:hidden bg-white dark:bg-gray-900 border-t dark:border-[#324154] border-gray-200 px-4 sm:px-6">
           <ul className="flex flex-col gap-1 px-2 space-y-1 pt-2 pb-3 text-sm text-[#778599] font-medium dark:text-white">
-            {navItems.map((item) => (
+            {navItems.map((item: { label: string; href: string }) => (
               <li key={item.label}>
                 <Link
                   href={item.href}
@@ -210,16 +204,6 @@ const Header = ({ language, setLanguage, copy }: HeaderProps) => {
               </li>
             </div>
             {/* auth prop */}
-
-            <li>
-              <Link
-                href="/signin"
-                className="block w-full pb-1  font-medium text-sm text-center text-black dark:text-white"
-                onClick={() => setMobileOpen(false)}
-              >
-                {language === "ar" ? "تسجيل الدخول" : "Sign In"}
-              </Link>
-            </li>
 
             <li className="flex justify-center pb-1.5">
               <Link

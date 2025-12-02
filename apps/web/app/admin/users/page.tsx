@@ -34,7 +34,7 @@ export default async function AdminUsersPage() {
             {top.users.map((user) => (
               <tr key={user.userId}>
                 <td className="px-3 py-2 text-slate-700 dark:text-slate-200">{user.email}</td>
-                <td className="px-3 py-2 text-slate-500 capitalize dark:text-slate-400">{user.plan}</td>
+                <td className="px-3 py-2 text-slate-500 capitalize dark:text-slate-400">{user.plan ?? "—"}</td>
                 <td className="px-3 py-2 text-right text-slate-700 dark:text-slate-200">{formatNumber(user.totalTokens)}</td>
                 <td className="px-3 py-2 text-right text-xs">
                   {user.overLimit ? (
@@ -44,7 +44,12 @@ export default async function AdminUsersPage() {
                   )}
                 </td>
                 <td className="px-3 py-2 text-right">
-                  <UserActions token={session.apiToken} userId={user.userId} email={user.email} plan={user.plan} />
+                  <UserActions
+                    token={session.apiToken ?? ""}
+                    userId={user.userId}
+                    email={user.email}
+                    plan={(user.plan ?? "") as string}
+                  />
                 </td>
               </tr>
             ))}

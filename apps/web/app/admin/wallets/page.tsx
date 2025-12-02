@@ -160,7 +160,7 @@ export default async function AdminWalletsPage({ searchParams }: PageProps) {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
-                      <WalletAdjustAction token={session.apiToken} wallet={wallet} />
+                      <WalletAdjustAction token={session.apiToken ?? ""} wallet={wallet} />
                       <Link
                         href={`/admin/ledger${buildUrl({ userId: wallet.userId }, {})}`}
                         className="text-sm text-sky-600 hover:text-sky-500"

@@ -1,12 +1,14 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 import { planOptions } from "@/components/plan-selector";
+
+export const dynamic = "force-dynamic";
 
 type Mode = "signin" | "register" | "forgot";
 type RegisterStep = 1 | 2;
@@ -24,11 +26,20 @@ type RegisterPlan = (typeof freePlanOption)[number] | (typeof planOptions)[numbe
 type RegisterPlanId = RegisterPlan["id"];
 const registerPlanOptions: RegisterPlan[] = [...freePlanOption, ...planOptions];
 const DEFAULT_PLAN: RegisterPlanId = "free";
+const countryCodes = [
+  { value: "+966", label: "Saudi Arabia (+966)" },
+  { value: "+1", label: "United States (+1)" },
+  { value: "+44", label: "United Kingdom (+44)" },
+  { value: "+971", label: "United Arab Emirates (+971)" },
+  { value: "+91", label: "India (+91)" },
+  { value: "+55", label: "Brazil (+55)" },
+] as const;
+const defaultCountryCode = "+966" as const;
 
 const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4004";
 const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{10,}$/;
 
-export default function SignInPage() {
+function SignInPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [mode, setMode] = useState<Mode>("signin");
@@ -39,7 +50,12 @@ export default function SignInPage() {
   const [selectedPlan, setSelectedPlan] = useState<RegisterPlanId>(DEFAULT_PLAN);
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerName, setRegisterName] = useState("");
+  const [registerCountryCode, setRegisterCountryCode] =
+    useState<(typeof countryCodes)[number]["value"]>(defaultCountryCode);
+  const [registerPhone, setRegisterPhone] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
+  const [registerConfirmPassword, setRegisterConfirmPassword] = useState("");
+  const [showRegisterSuccess, setShowRegisterSuccess] = useState(false);
   const [registerLoading, setRegisterLoading] = useState(false);
   const [registerError, setRegisterError] = useState<string | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<"idle" | "processing" | "success">("idle");
@@ -58,9 +74,13 @@ export default function SignInPage() {
     setSelectedPlan(planOverride ?? DEFAULT_PLAN);
     setRegisterEmail("");
     setRegisterName("");
+    setRegisterCountryCode(defaultCountryCode);
+    setRegisterPhone("");
     setRegisterPassword("");
+    setRegisterConfirmPassword("");
     setRegisterError(null);
     setPaymentStatus("idle");
+    setShowRegisterSuccess(false);
     setForgotEmail("");
     setForgotError(null);
     setForgotSuccess(false);
@@ -119,6 +139,8 @@ export default function SignInPage() {
     setRegisterError(null);
     setPaymentStatus("idle");
     setRegisterLoading(false);
+    setRegisterConfirmPassword("");
+    setShowRegisterSuccess(false);
     setForgotEmail("");
     setForgotError(null);
     setForgotSuccess(false);
@@ -192,15 +214,28 @@ export default function SignInPage() {
   const handleRegisterSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const normalizedEmail = registerEmail.trim().toLowerCase();
+    const phone = registerPhone.trim();
+    const password = registerPassword.trim();
+    const confirmPassword = registerConfirmPassword.trim();
     if (!normalizedEmail) {
       setRegisterError("Enter a valid email address to continue.");
       return;
     }
 
-    if (!strongPasswordRegex.test(registerPassword.trim())) {
+    if (!phone) {
+      setRegisterError("Enter a contact number to continue.");
+      return;
+    }
+
+    if (!strongPasswordRegex.test(password)) {
       setRegisterError(
         "Choose a stronger password (10+ chars, upper & lower case, number, special symbol)."
       );
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setRegisterError("Password and confirmation must match.");
       return;
     }
 
@@ -219,7 +254,8 @@ export default function SignInPage() {
           email: normalizedEmail,
           plan: selectedPlan,
           name: registerName.trim() || undefined,
-          password: registerPassword.trim()
+          contactNumber: `${registerCountryCode} ${phone}`,
+          password
         })
       });
 
@@ -229,16 +265,12 @@ export default function SignInPage() {
       }
 
       setPaymentStatus("success");
-      const destination =
-        callbackUrl && callbackUrl !== "/dashboard"
-          ? `${callbackUrl}${callbackUrl.includes("?") ? "&" : "?"}plan=${selectedPlan}`
-          : `/dashboard?plan=${selectedPlan}`;
       const signInResult = await signIn("register", {
         email: normalizedEmail,
         plan: selectedPlan,
         name: registerName.trim(),
         redirect: false,
-        callbackUrl: destination
+        callbackUrl: "/"
       });
 
       if (signInResult?.error) {
@@ -248,7 +280,7 @@ export default function SignInPage() {
         return;
       }
 
-      router.push(signInResult?.url ?? destination);
+      setShowRegisterSuccess(true);
     } catch (err) {
       console.error("Registration failed", err);
       setPaymentStatus("idle");
@@ -263,6 +295,8 @@ export default function SignInPage() {
   const selectedPlanDetails =
     registerPlanOptions.find((option) => option.id === selectedPlan) ?? registerPlanOptions[0];
   const passwordIsStrong = strongPasswordRegex.test(registerPassword.trim());
+  const passwordsMatch =
+    !!registerPassword.trim() && registerPassword.trim() === registerConfirmPassword.trim();
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-x-hidden overflow-y-auto bg-gradient-to-br from-[#0F172A] via-[#0B1220] to-[#020617] px-4 py-6">
@@ -270,6 +304,28 @@ export default function SignInPage() {
         <div className="pointer-events-none absolute inset-0 animate-[pulse_14s_ease-in-out_infinite] bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.25),transparent_45%),radial-gradient(circle_at_80%_0%,rgba(236,72,153,0.2),transparent_50%),radial-gradient(circle_at_50%_80%,rgba(34,197,94,0.15),transparent_55%)]" />
       </div>
       <div className="absolute -z-10 h-96 w-96 rounded-full bg-gradient-to-br from-indigo-500/40 via-purple-500/30 to-pink-500/25 blur-3xl" />
+      {showRegisterSuccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="w-full max-w-md rounded-2xl border border-indigo-300/30 bg-slate-900/90 p-6 text-center shadow-2xl backdrop-blur">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-indigo-300">
+              Registration Complete
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold text-white">Welcome to Front Cloud Creative</h2>
+            <p className="mt-2 text-sm text-slate-300">
+              Your workspace is getting ready. You will notify you shortly.
+            </p>
+            <div className="mt-6 flex justify-center">
+              <Button
+                type="button"
+                className="rounded-full bg-sky-500 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+                onClick={() => router.push("/")}
+              >
+                Go to homepage
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {mode === "signin" && (
         <form
@@ -291,7 +347,7 @@ export default function SignInPage() {
           <div className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="email" className="block text-sm font-medium text-slate-300">
-                Work email
+                Email
               </label>
               <input
                 id="email"
@@ -301,7 +357,7 @@ export default function SignInPage() {
                 required
                 disabled={loading}
                 className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
-                placeholder="you@company.com"
+                placeholder="you@email.com"
               />
             </div>
             <div className="space-y-2">
@@ -360,7 +416,7 @@ export default function SignInPage() {
               {`Don't have an account? `}
               <button
                 type="button"
-                onClick={openRegister}
+                onClick={() => openRegister()}
                 className="font-semibold text-indigo-300 transition hover:text-indigo-200"
               >
                 Register
@@ -401,13 +457,6 @@ export default function SignInPage() {
                 Select a plan, confirm your email, and we will simulate your payment instantly.
               </p>
             </div>
-            <Button
-              type="button"
-              onClick={backToSignIn}
-              className="self-end rounded-full bg-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
-            >
-              Back to sign in
-            </Button>
           </div>
 
           {registerStep === 1 && (
@@ -474,7 +523,7 @@ export default function SignInPage() {
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="space-y-2 sm:col-span-2">
                   <label htmlFor="register-email" className="block text-sm font-medium text-slate-200">
-                    Work email
+                    Email
                   </label>
                   <input
                     id="register-email"
@@ -485,7 +534,7 @@ export default function SignInPage() {
                     onChange={(event) => setRegisterEmail(event.target.value)}
                     disabled={registerLoading}
                     className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
-                    placeholder="you@company.com"
+                    placeholder="you@email.com"
                   />
                 </div>
                 <div className="space-y-2 sm:col-span-2">
@@ -502,6 +551,40 @@ export default function SignInPage() {
                     className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
                     placeholder="Taylor Creative"
                   />
+                </div>
+                <div className="space-y-2 sm:col-span-2">
+                  <label className="block text-sm font-medium text-slate-200">
+                    Contact number
+                  </label>
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-[220px,1fr]">
+                    <select
+                      value={registerCountryCode}
+                      onChange={(event) =>
+                        setRegisterCountryCode(event.target.value as (typeof countryCodes)[number]["value"])
+                      }
+                      disabled={registerLoading}
+                      className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
+                    >
+                      {countryCodes.map((code) => (
+                        <option key={code.value} value={code.value}>
+                          {code.label}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      id="register-phone"
+                      name="register-phone"
+                      type="tel"
+                      value={registerPhone}
+                      onChange={(event) => setRegisterPhone(event.target.value)}
+                      disabled={registerLoading}
+                      className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
+                      placeholder="555 123 4567"
+                    />
+                  </div>
+                  <p className="text-xs text-slate-400">
+                    Include a reachable number with country code for onboarding updates.
+                  </p>
                 </div>
                 <div className="space-y-2 sm:col-span-2">
                   <label htmlFor="register-password" className="block text-sm font-medium text-slate-200">
@@ -527,33 +610,45 @@ export default function SignInPage() {
                     </p>
                   )}
                 </div>
+                <div className="space-y-2 sm:col-span-2">
+                  <label
+                    htmlFor="register-password-confirm"
+                    className="block text-sm font-medium text-slate-200"
+                  >
+                    Confirm password
+                  </label>
+                  <input
+                    id="register-password-confirm"
+                    name="register-password-confirm"
+                    type="password"
+                    value={registerConfirmPassword}
+                    onChange={(event) => setRegisterConfirmPassword(event.target.value)}
+                    disabled={registerLoading}
+                    className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
+                    autoComplete="new-password"
+                    placeholder="Re-enter password"
+                  />
+                  {registerConfirmPassword && !passwordsMatch && (
+                    <p className="text-xs text-rose-400">Passwords do not match yet.</p>
+                  )}
+                </div>
               </div>
 
               {registerError && <p className="text-sm text-rose-400">{registerError}</p>}
-              {paymentStatus === "processing" && (
-                <p className="text-sm text-indigo-200">
-                  Processing your secure payment... This only takes a moment.
-                </p>
-              )}
-              {paymentStatus === "success" && (
-                <p className="text-sm text-emerald-300">
-                  Payment confirmed! Finalizing your workspace experience.
-                </p>
-              )}
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <Button
-                  type="button"
-                  onClick={() => setRegisterStep(1)}
-                  className="rounded-full bg-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
-                  disabled={registerLoading}
-                >
-                  Change plan
-                </Button>
+              <Button
+                type="button"
+                onClick={() => setRegisterStep(1)}
+                className="rounded-full bg-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+                disabled={registerLoading}
+              >
+                Change plan
+              </Button>
                 <Button
                   type="submit"
                   className="rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-6 py-2 text-sm font-semibold text-white shadow-lg transition hover:opacity-95 focus-visible:ring-2 focus-visible:ring-indigo-300"
-                  disabled={registerLoading || !passwordIsStrong}
+                  disabled={registerLoading || !passwordIsStrong || !passwordsMatch}
                 >
                   {registerLoading ? "Creating your account..." : `Start ${selectedPlanDetails.label}`}
                 </Button>
@@ -562,16 +657,6 @@ export default function SignInPage() {
           )}
 
           <div className="space-y-3 text-center">
-            <p className="text-sm text-slate-400">
-              Already have an account?{" "}
-              <button
-                type="button"
-                onClick={backToSignIn}
-                className="font-semibold text-indigo-300 transition hover:text-indigo-200"
-              >
-                Sign in
-              </button>
-            </p>
             <p className="text-[11px] text-slate-500">
               By continuing you agree to our{" "}
               <Link
@@ -610,7 +695,7 @@ export default function SignInPage() {
 
           <div className="space-y-2">
             <label htmlFor="forgot-email" className="block text-sm font-medium text-slate-300">
-              Work email
+              Email
             </label>
             <input
               id="forgot-email"
@@ -622,7 +707,7 @@ export default function SignInPage() {
               onChange={(event) => setForgotEmail(event.target.value)}
               disabled={forgotLoading || forgotSuccess}
               className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
-              placeholder="you@company.com"
+              placeholder="you@email.com"
             />
           </div>
 
@@ -653,5 +738,13 @@ export default function SignInPage() {
         </form>
       )}
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignInPageInner />
+    </Suspense>
   );
 }

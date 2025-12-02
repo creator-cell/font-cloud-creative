@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { translations } from "../landing/translations";
+import type { FooterLinkGroup } from "../landing/types";
 
 type ContentFilter = "copy" | "product" | "social";
 
@@ -65,7 +66,7 @@ const FooterSection = ({ copy }: any) => {
 
         {/* Footer Links */}
         <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-8 md:gap-[5rem] text-start md:text-left md:mx-0">
-          {Object.values(copy.footerLinks).map((group) => {
+          {(Object.values(copy.footerLinks ?? {}) as FooterLinkGroup[]).map((group) => {
             return (
               <div key={group.heading} className="space-y-3">
                 <p className="text-base font-semibold text-slate-900">

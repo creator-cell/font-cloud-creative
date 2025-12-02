@@ -160,9 +160,15 @@ export const AnalyticsOverview = ({ summary, timeseries, distribution, initialFi
           </div>
         </div>
         <div className="flex gap-2">
-          <Button asChild variant="secondary" disabled={isPending}>
-            <a href={exportHref}>Download Timeseries CSV</a>
-          </Button>
+          <a
+            href={exportHref}
+            className={cn(
+              "inline-flex items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-1.5 text-sm font-medium text-slate-600 transition hover:border-sky-200 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+              isPending && "pointer-events-none opacity-50"
+            )}
+          >
+            Download Timeseries CSV
+          </a>
         </div>
       </div>
 
@@ -325,16 +331,16 @@ export const AnalyticsOverview = ({ summary, timeseries, distribution, initialFi
                   <Pie
                     data={distributionPlanData}
                     dataKey="totalTokens"
-                    nameKey="planKey"
+                    nameKey="plan"
                     innerRadius={60}
                     outerRadius={100}
                     paddingAngle={3}
                   >
                     {distributionPlanData.map((entry, index) => (
-                      <Cell key={entry.planKey} fill={COLORS[index % COLORS.length]} />
+                      <Cell key={entry.plan} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number, name, props) => [formatTokens(value), props.payload?.planKey ?? name]} />
+                  <Tooltip formatter={(value: number, name, props) => [formatTokens(value), props.payload?.plan ?? name]} />
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
@@ -345,4 +351,3 @@ export const AnalyticsOverview = ({ summary, timeseries, distribution, initialFi
     </div>
   );
 };
-

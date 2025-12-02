@@ -118,16 +118,10 @@ export const FAQAndCTASection = ({ copy }: FAQAndCTASectionProps) => {
             </p>
           </CardHeader>
           <CardContent className="flex flex-wrap justify-center gap-4 text-slate-900 dark:text-slate-900 mt-6">
-            <Button
-              size="lg"
-              className="rounded-full bg-white text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit dark:text-[#93a2b8] dark:bg-[#1c283d] dark:border-[#324154]"
-            >
+            <Button className="rounded-full bg-white text-black hover:bg-sky-200 border border-slate-300 w-full sm:w-fit dark:text-[#93a2b8] dark:bg-[#1c283d] dark:border-[#324154] px-4 py-2 text-sm font-semibold">
               {copy.enterpriseCta}
             </Button>
-            <Button
-              size="lg"
-              className="rounded-full bg-gradient-to-r from-[#09a0eb] to-[#0773f7] text-white hover:bg-slate-800 w-full sm:w-fit"
-            >
+            <Button className="rounded-full bg-gradient-to-r from-[#09a0eb] to-[#0773f7] text-white hover:bg-slate-800 w-full sm:w-fit px-4 py-2 text-sm font-semibold">
               {copy.enterpriseCta2}
             </Button>
           </CardContent>
@@ -166,11 +160,15 @@ export const FAQAndCTASection = ({ copy }: FAQAndCTASectionProps) => {
                 {copy.finalPrimaryCta}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
-              <Button className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit dark:bg-[#1c67d8] dark:text-[#f2f6fa] dark:border-[#324154]">
+              <Link
+                href="https://wa.me/966504576354"
+                target="_blank"
+                className="bg-white text-sky-400 font-semibold hover:bg-white/90 transition rounded-lg px-5 py-3 w-full sm:w-fit dark:bg-[#1c67d8] dark:text-[#f2f6fa] dark:border-[#324154] flex items-center justify-center"
+              >
                 <Zap className="w-4 h-auto mr-2" />
                 {copy.finalSecondaryCta}
                 <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
+              </Link>
             </div>
           </div>
 

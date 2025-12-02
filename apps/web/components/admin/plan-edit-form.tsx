@@ -58,11 +58,11 @@ export const PlanEditForm = ({ plan, token }: PlanEditFormProps) => {
           monthlyTokens: Number(formState.monthlyTokens) || 0,
           features: formState.features
             .split(",")
-            .map((item) => item.trim())
+            .map((item: string) => item.trim())
             .filter(Boolean),
           premiumModelAccess: formState.premiumModelAccess
             .split(",")
-            .map((item) => item.trim())
+            .map((item: string) => item.trim())
             .filter(Boolean),
           overagePer1K: Math.round((parseFloat(formState.overagePriceMajor) || 0) * 100),
           stripePriceId: formState.stripePriceId || undefined

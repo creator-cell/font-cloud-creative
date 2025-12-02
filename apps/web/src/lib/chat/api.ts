@@ -97,6 +97,7 @@ export type ProviderEndEvent = {
 
 export type ProviderErrorEvent = {
   message: string;
+  code?: number;
 };
 
 export type ProviderCompleteEvent = {
@@ -148,7 +149,7 @@ export const openChatStream = (url: string, handlers: ChatStreamHandlers): Event
   });
 
   source.addEventListener("error", (event) => {
-    const data = safeParse<ProviderErrorEvent>(event);
+    const data = safeParse<ProviderErrorEvent>(event as MessageEvent);
     if (data) {
       handlers.onError?.(data);
       return;

@@ -116,7 +116,7 @@ const DemoSection = ({ copy }: any) => {
                   {copy.data.leftPanel.toneStyle.title}
                 </h3>
                 <div className="flex gap-2 text-[.65rem]">
-                  {copy.data.leftPanel.toneStyle.styles.map((style) => (
+                  {copy.data.leftPanel.toneStyle.styles.map((style: string) => (
                     <span
                       key={style}
                       className="border items-center border-gray-200 rounded-full bg-[#f0f9ff] font-medium px-1.5 text-[#0c4a6e] text-xs"

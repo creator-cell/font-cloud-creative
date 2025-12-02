@@ -14,8 +14,10 @@ import { CardContent } from "../ui/card";
 import { CardTitle } from "../ui/card";
 import { CardHeader } from "../ui/card";
 import { Card } from "../ui/card";
+import type { LandingTranslation } from "../landing/types";
+import type { PricingPlan } from "../landing/types";
 
-const ChooseUrPlan = ({ copy }) => {
+const ChooseUrPlan = ({ copy }: { copy?: LandingTranslation }) => {
   const [language, setLanguage] = useState<"en" | "ar">("en");
   const fadeIn = (delay = 0, offset = 40) => ({
     initial: { opacity: 0, y: -offset },
@@ -23,21 +25,8 @@ const ChooseUrPlan = ({ copy }) => {
     transition: { duration: 0.6, ease: "easeOut", delay },
     viewport: { once: false, amount: 0.3 },
   });
-  // const copy = useMemo(() => translations[language], [language]);
-  const pricingPlans = (copy.pricingPlans || []).map(
-    (plan: {
-      id: string;
-      title: string;
-      price: string;
-      priceValid: string;
-      description: string;
-      features: string[];
-      cta: string;
-      popular: boolean;
-      tookens: string;
-      Limitations: string;
-    }) => plan
-  );
+  const localCopy = copy ?? translations[language];
+  const pricingPlans = (localCopy.pricingPlans || []) as PricingPlan[];
   return (
     <motion.section id="pricing" className="space-y-10" {...fadeIn(0.1)}>
       <motion.div className="space-y-3 text-center" {...fadeIn(0.1, 20)}>
@@ -46,13 +35,13 @@ const ChooseUrPlan = ({ copy }) => {
          px-2 mx-auto rounded-md border-slate-300 gap-1"
         >
           <Zap className="w-3 h-auto mr-1" />
-          <span className="text-xs font-medium">{copy.pricingHead}</span>
+          <span className="text-xs font-medium">{localCopy.pricingHead}</span>
         </div>
         <h2 className="text-3xl font-bold text-slate-900 md:text-5xl">
-          {copy.pricingTitle}
+          {localCopy.pricingTitle}
         </h2>
         <p className="text-base text-[#787F8F] md:text-xl">
-          {copy.pricingSubtitle}
+          {localCopy.pricingSubtitle}
         </p>
       </motion.div>
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -122,7 +111,7 @@ const ChooseUrPlan = ({ copy }) => {
                         {plan.boundary}
                       </span>
                       <div className="flex flex-col gap-1 ">
-                        {plan.Limitations.map((limit, i) => (
+                        {(plan.Limitations ?? []).map((limit, i) => (
                           <div
                             key={i}
                             className="flex items-center gap-2  text-gray-600 text-xs"

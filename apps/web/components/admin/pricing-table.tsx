@@ -128,16 +128,16 @@ export const PricingTable = ({ token, prices }: Props) => {
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
                       <Button
-                        variant="outline"
-                        size="sm"
+                        variant="secondary"
+                        className="px-3 py-1 text-sm border border-slate-200 bg-white text-slate-700 hover:border-sky-200 hover:text-slate-900"
                         onClick={() => handleEdit(price)}
                         disabled={pendingId === price._id}
                       >
                         Edit
                       </Button>
                       <Button
-                        variant="outline"
-                        size="sm"
+                        variant="secondary"
+                        className="px-3 py-1 text-sm border border-slate-200 bg-white text-slate-700 hover:border-sky-200 hover:text-slate-900"
                         onClick={() => handleDuplicate(price)}
                         disabled={pendingId === price._id}
                       >
@@ -145,7 +145,7 @@ export const PricingTable = ({ token, prices }: Props) => {
                       </Button>
                       <Button
                         variant="secondary"
-                        size="sm"
+                        className="px-3 py-1 text-sm"
                         onClick={() => handleRetire(price)}
                         disabled={pendingId === price._id || isRetired}
                       >

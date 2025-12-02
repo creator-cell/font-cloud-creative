@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ArrowRight, PlayCircle, Sparkles } from "lucide-react";
-import { type LandingTranslation } from "../translations.js";
+import { type LandingTranslation } from "../types";
 
 type HeroSectionProps = {
   copy: LandingTranslation;
@@ -29,12 +29,11 @@ export const HeroSection = ({ copy, language }: HeroSectionProps) => {
           <p className="text-base text-slate-600 md:text-lg">{copy.heroDescription}</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
-          <Button size="lg" className="rounded-full bg-sky-500 px-8 text-white transition hover:-translate-y-1 hover:bg-sky-400">
+          <Button className="rounded-full bg-sky-500 px-8 py-2.5 text-white transition hover:-translate-y-1 hover:bg-sky-400">
             {copy.heroPrimaryCta}
           </Button>
           <Button
-            size="lg"
-            className="rounded-full bg-sky-500 px-8 text-white transition hover:-translate-y-1 hover:bg-sky-400"
+            className="rounded-full bg-sky-500 px-8 py-2.5 text-white transition hover:-translate-y-1 hover:bg-sky-400"
           >
             <PlayCircle className="mr-2 h-5 w-5" /> {copy.heroSecondaryCta}
           </Button>
@@ -43,12 +42,12 @@ export const HeroSection = ({ copy, language }: HeroSectionProps) => {
           </Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
-          {copy.heroStats.map((stat: { value: string; label: string }) => (
+          {copy.heroStats.map((stat) => (
             <div
               key={stat.label}
               className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm"
             >
-              <p className="text-2xl font-semibold text-sky-600">{stat.value}</p>
+              <p className="text-2xl font-semibold text-sky-600">{stat.value ?? ""}</p>
               <p className="mt-1 text-xs uppercase tracking-wide text-slate-500">{stat.label}</p>
             </div>
           ))}
