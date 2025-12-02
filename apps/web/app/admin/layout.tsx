@@ -4,7 +4,10 @@ import { AdminSideNav } from "@/components/admin/admin-side-nav";
 import { AdminTopbar } from "@/components/admin/admin-topbar";
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const session = await requireServerRole(["owner", "admin", "analyst", "support", "billing"]);
+  const session = await requireServerRole(
+    ["owner", "admin", "analyst", "support", "billing"],
+    { redirectTo: "/admin-login" }
+  );
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 lg:flex-row">

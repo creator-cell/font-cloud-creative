@@ -35,7 +35,8 @@ import {
   updateProviderPricing,
   retireProviderPricing,
   acknowledgeAdminSystemAlert,
-  listAdminSystemAlerts
+  listAdminSystemAlerts,
+  listUsers
 } from "../controllers/admin";
 
 const adminRouter = Router();
@@ -129,6 +130,11 @@ adminRouter.post(
   requireRole("owner", "admin", "support"),
   adminRateLimit,
   grantTokens
+);
+adminRouter.get(
+  "/users",
+  requireRole("owner", "admin", "support", "billing"),
+  listUsers
 );
 
 adminRouter.post(

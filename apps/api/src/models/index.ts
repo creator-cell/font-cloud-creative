@@ -21,3 +21,4 @@ export * from "./Purchase";
 export * from "./ChatTurn";
 export * from "./GuardrailEvent";
 export * from "./SystemAlert";
+export * from "./OtpLogin";

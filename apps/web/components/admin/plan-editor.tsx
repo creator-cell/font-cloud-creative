@@ -14,7 +14,7 @@ interface PlanEditorProps {
     monthlyPriceINR: number;
     monthlyTokens: number;
     features: string[];
-    premiumModelAccess: string[];
+    premiumModelAccess?: string[];
     overagePer1K: number;
     stripePriceId?: string;
   }>;
@@ -25,17 +25,19 @@ export const PlanEditor = ({ token, plans }: PlanEditorProps) => {
 
   const handleSave = async (planKey: string, form: HTMLFormElement) => {
     const data = new FormData(form);
+    const featuresInput = (data.get("features") as string | null) ?? "";
+    const premiumModelAccessInput = (data.get("premiumModelAccess") as string | null) ?? "";
     const payload = {
       key: planKey,
       name: String(data.get("name")),
       monthlyPriceINR: Number(data.get("monthlyPriceINR")),
       monthlyTokens: Number(data.get("monthlyTokens")),
       overagePer1K: Number(data.get("overagePer1K")),
-      features: String(data.get("features"))
+      features: featuresInput
         .split("\n")
         .map((x) => x.trim())
         .filter(Boolean),
-      premiumModelAccess: String(data.get("premiumModelAccess"))
+      premiumModelAccess: premiumModelAccessInput
         .split("\n")
         .map((x) => x.trim())
         .filter(Boolean),
@@ -99,7 +101,7 @@ export const PlanEditor = ({ token, plans }: PlanEditorProps) => {
               <Textarea
                 name="premiumModelAccess"
                 rows={4}
-                defaultValue={plan.premiumModelAccess.join("\n")}
+                defaultValue={(plan.premiumModelAccess ?? []).join("\n")}
                 className="mt-1"
               />
             </label>

@@ -24,14 +24,35 @@ export const registerUserSchema = z.object({
     .regex(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{10,}$/,
       "Password must include upper & lower case letters, a number, and a special character."
-    )
+    ),
+  phone: z
+    .string()
+    .regex(/^\+?\d{10,15}$/, "Enter a valid phone number with country code")
+    .optional()
 });
 
 export const passwordLoginSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email().optional(),
+  identifier: z.string().min(3, "Email or mobile number is required").optional(),
   password: z.string().min(1, "Password is required")
+}).refine((data) => data.email || data.identifier, {
+  message: "Email or mobile number is required",
+  path: ["identifier"]
 });
 
 export const planSelectionSchema = z.object({
   plan: z.enum(["starter", "pro", "team"])
+});
+
+export const otpRequestSchema = z.object({
+  phone: z
+    .string()
+    .regex(/^\+?\d{10,15}$/, "Enter a valid phone number with country code")
+});
+
+export const otpVerifySchema = z.object({
+  phone: z
+    .string()
+    .regex(/^\+?\d{10,15}$/, "Enter a valid phone number with country code"),
+  code: z.string().regex(/^\d{6}$/, "Enter the 6-digit OTP code")
 });

@@ -55,13 +55,46 @@ export const authOptions: NextAuthOptions = {
       id: "credentials",
       name: "Email Login",
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        identifier: { label: "Email or phone", type: "text" },
+        password: { label: "Password", type: "password" },
+        otpCode: { label: "OTP Code", type: "text" },
+        mode: { label: "Mode", type: "text" }
       },
       async authorize(credentials) {
-        const email = credentials?.email?.toString().trim().toLowerCase();
+        const identifier = credentials?.identifier?.toString().trim();
         const password = credentials?.password?.toString() ?? "";
-        if (!email || !password) {
+        const mode = credentials?.mode?.toString() ?? "password";
+
+        if (mode === "otp") {
+          const otpCode = credentials?.otpCode?.toString() ?? "";
+          if (!identifier || !otpCode) {
+            return null;
+          }
+          try {
+            const response = await fetch(`${apiBase}/auth/login-otp/verify`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ phone: identifier, code: otpCode })
+            });
+            if (response.ok) {
+              const data = await response.json();
+              return {
+                id: data.user.id,
+                email: data.user.email,
+                plan: data.user.plan,
+                roles: data.user.roles,
+                apiToken: data.token
+              } as any;
+            }
+          } catch (err) {
+            console.error("OTP login failed", err);
+          }
+          return null;
+        }
+
+        if (!identifier || !password) {
           return null;
         }
 
@@ -71,7 +104,7 @@ export const authOptions: NextAuthOptions = {
             headers: {
               "Content-Type": "application/json"
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ identifier, password })
           });
 
           if (response.ok) {

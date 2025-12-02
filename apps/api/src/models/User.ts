@@ -16,6 +16,7 @@ export interface UserDocument extends Document {
     googleId?: string;
   };
   passwordHash?: string;
+  phone?: string;
   plan: PlanTier;
   preferredProvider?: ProviderId;
   preferredModel?: string;
@@ -34,6 +35,7 @@ const userSchema = new Schema<UserDocument>(
       googleId: { type: String }
     },
     passwordHash: { type: String },
+    phone: { type: String, unique: true, sparse: true },
     plan: { type: String, enum: ["free", "starter", "pro", "team"], default: "free" },
     preferredProvider: { type: String, enum: ["openai", "anthropic", "google", "ollama"] },
     preferredModel: { type: String },

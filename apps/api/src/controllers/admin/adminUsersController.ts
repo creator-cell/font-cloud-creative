@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 import type { AuthenticatedRequest } from "../../types/express";
 import { UserModel, SubscriptionModel, PlanModel, TokenPolicyOverrideModel } from "../../models";
 import { stripe } from "../../config/stripe";
-import { setPlanSchema, grantTokensSchema } from "../../schemas/adminSchemas";
+import { setPlanSchema, grantTokensSchema, listUsersQuerySchema } from "../../schemas/adminSchemas";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { auditService } from "../../services/auditService";
 import { env } from "../../config/env";
@@ -122,3 +122,42 @@ export const grantTokens = asyncHandler(async (req: AuthenticatedRequest, res: R
 });
 
 export const getUsageQuota = (plan: string): number => env.quotas[plan as keyof typeof env.quotas] ?? env.quotas.free;
+
+export const listUsers = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  const { q, page, limit } = listUsersQuerySchema.parse(req.query);
+  const filter = q
+    ? {
+        $or: [
+          { email: { $regex: q, $options: "i" } },
+          { name: { $regex: q, $options: "i" } }
+        ]
+      }
+    : {};
+
+  const [users, total] = await Promise.all([
+    UserModel.find(filter)
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean()
+      .exec(),
+    UserModel.countDocuments(filter)
+  ]);
+
+  res.json({
+    items: users.map((user) => ({
+      id: user._id.toString(),
+      email: user.email,
+      name: user.name ?? null,
+      plan: user.plan,
+      seats: user.seats ?? 1,
+      roles: user.roles ?? [],
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    })),
+    total,
+    page,
+    limit,
+    pages: Math.max(1, Math.ceil(total / limit))
+  });
+});

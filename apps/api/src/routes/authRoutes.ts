@@ -3,7 +3,9 @@ import {
   createToken,
   registerUser,
   loginWithPassword,
-  completePlanSelection
+  completePlanSelection,
+  requestOtpLogin,
+  verifyOtpLogin
 } from "../controllers/authController";
 import { checkout, portal } from "../controllers/subscriptionController";
 import { requireAuth } from "../middleware/requireAuth";
@@ -13,6 +15,8 @@ export const registerAuthRoutes = (router: Router): void => {
   router.post("/auth/token", createToken);
   router.post("/auth/register", registerUser);
   router.post("/auth/login", loginWithPassword);
+  router.post("/auth/login-otp/request", requestOtpLogin);
+  router.post("/auth/login-otp/verify", verifyOtpLogin);
   router.post("/auth/complete-plan", requireAuth, completePlanSelection);
 
   router.post("/subscriptions/checkout", requireAuth, checkout);

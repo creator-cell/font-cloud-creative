@@ -40,6 +40,30 @@ export interface TopUser {
 export const fetchTopUsers = (token: string, limit = 50) =>
   apiFetch<{ monthKey: string; users: TopUser[] }>(`/admin/usage/top-users?limit=${limit}`, { token });
 
+export type AdminUser = {
+  id: string;
+  email: string;
+  name?: string | null;
+  plan: string;
+  seats?: number;
+  roles: string[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AdminUserListResponse = {
+  items: AdminUser[];
+  total: number;
+  page: number;
+  pages: number;
+  limit: number;
+};
+
+export const fetchAdminUsers = (
+  token: string,
+  params: Partial<{ q: string; page: number; limit: number }> = {}
+) => apiFetch<AdminUserListResponse>(`/admin/users${buildQueryString(params)}`, { token });
+
 export const setUserPlan = (token: string, userId: string, payload: { plan: string; seats?: number }) =>
   apiFetch(`/admin/users/${userId}/set-plan`, {
     token,

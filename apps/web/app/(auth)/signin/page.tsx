@@ -34,11 +34,19 @@ export default function SignInPage() {
   const [mode, setMode] = useState<Mode>("signin");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [signInMethod, setSignInMethod] = useState<"password" | "otp">("otp");
+  const [otpPhone, setOtpPhone] = useState("");
+  const [otpCode, setOtpCode] = useState("");
+  const [otpError, setOtpError] = useState<string | null>(null);
+  const [otpMessage, setOtpMessage] = useState<string | null>(null);
+  const [otpSending, setOtpSending] = useState(false);
+  const [otpSubmitting, setOtpSubmitting] = useState(false);
 
   const [registerStep, setRegisterStep] = useState<RegisterStep>(2);
   const [selectedPlan, setSelectedPlan] = useState<RegisterPlanId>(DEFAULT_PLAN);
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerName, setRegisterName] = useState("");
+  const [registerPhone, setRegisterPhone] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerLoading, setRegisterLoading] = useState(false);
   const [registerError, setRegisterError] = useState<string | null>(null);
@@ -58,6 +66,7 @@ export default function SignInPage() {
     setSelectedPlan(planOverride ?? DEFAULT_PLAN);
     setRegisterEmail("");
     setRegisterName("");
+    setRegisterPhone("");
     setRegisterPassword("");
     setRegisterError(null);
     setPaymentStatus("idle");
@@ -120,25 +129,39 @@ export default function SignInPage() {
     setPaymentStatus("idle");
     setRegisterLoading(false);
     setForgotEmail("");
+    setRegisterPhone("");
     setForgotError(null);
     setForgotSuccess(false);
     setForgotLoading(false);
+    setSignInMethod("otp");
+    setOtpPhone("");
+    setOtpCode("");
+    setOtpError(null);
+    setOtpMessage(null);
+    setOtpSending(false);
+    setOtpSubmitting(false);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
+
+    if (signInMethod === "otp") {
+      await handleOtpSubmit();
+      return;
+    }
+
     const formData = new FormData(event.currentTarget);
-    const email = String(formData.get("email") ?? "").trim().toLowerCase();
+    const identifier = String(formData.get("identifier") ?? "").trim();
     const password = String(formData.get("user-password") ?? "").trim();
-    if (!email || !password) {
-      setError("Email and password are required.");
+    if (!identifier || !password) {
+      setError("Email or mobile number and password are required.");
       return;
     }
 
     setLoading(true);
     const response = await signIn("credentials", {
-      email,
+      identifier,
       password,
       redirect: false,
       callbackUrl
@@ -147,6 +170,65 @@ export default function SignInPage() {
 
     if (response?.error) {
       setError("Invalid email or password.");
+      return;
+    }
+
+    router.push(response?.url ?? callbackUrl);
+  };
+
+  const handleOtpRequest = async () => {
+    const normalizedPhone = otpPhone.trim();
+    setOtpError(null);
+    setOtpMessage(null);
+    if (!normalizedPhone) {
+      setOtpError("Enter your mobile number to receive an OTP.");
+      return;
+    }
+    setOtpSending(true);
+    try {
+      const response = await fetch(`${apiBase}/auth/login-otp/request`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone: normalizedPhone })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error((data as any)?.error ?? "Failed to send OTP.");
+      }
+      setOtpMessage(
+        data.code
+          ? `OTP sent. Use code ${data.code} (shown only in non-production environments).`
+          : "OTP sent. Please check your phone."
+      );
+    } catch (err) {
+      console.error("OTP request failed", err);
+      setOtpError(err instanceof Error ? err.message : "Failed to send OTP.");
+    } finally {
+      setOtpSending(false);
+    }
+  };
+
+  const handleOtpSubmit = async () => {
+    const normalizedPhone = otpPhone.trim();
+    const code = otpCode.trim();
+    if (!normalizedPhone || !code) {
+      setOtpError("Enter your mobile number and OTP code.");
+      return;
+    }
+    setOtpError(null);
+    setOtpMessage(null);
+    setOtpSubmitting(true);
+    const response = await signIn("credentials", {
+      identifier: normalizedPhone,
+      otpCode: code,
+      mode: "otp",
+      redirect: false,
+      callbackUrl
+    });
+    setOtpSubmitting(false);
+
+    if (response?.error) {
+      setOtpError("Invalid or expired OTP.");
       return;
     }
 
@@ -217,6 +299,7 @@ export default function SignInPage() {
         },
         body: JSON.stringify({
           email: normalizedEmail,
+          phone: registerPhone.trim() || undefined,
           plan: selectedPlan,
           name: registerName.trim() || undefined,
           password: registerPassword.trim()
@@ -289,54 +372,141 @@ export default function SignInPage() {
           </div>
 
           <div className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-slate-300">
-                Work email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                disabled={loading}
-                className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
-                placeholder="you@company.com"
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="user-password" className="block text-sm font-medium text-slate-300">
-                Password
-              </label>
-              <input
-                id="user-password"
-                name="user-password"
-                type="password"
-                autoComplete="current-password"
-                required
-                disabled={loading}
-                className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
-              />
-            </div>
-            <div className="text-right">
-              <button
+            <div className="flex items-center gap-2">
+              <Button
                 type="button"
-                onClick={openForgotPassword}
-                className="text-xs font-semibold text-indigo-300 transition hover:text-indigo-200"
+                size="sm"
+                variant="ghost"
+                className={`border px-4 transition ${
+                  signInMethod === "otp"
+                    ? "border-slate-200 bg-white text-sky-700 shadow-sm"
+                    : "border-sky-500 bg-sky-500 text-white hover:bg-sky-400"
+                }`}
+                onClick={() => {
+                  setSignInMethod("otp");
+                  setError(null);
+                }}
               >
-                Forgot password?
-              </button>
+                Mobile &amp; OTP
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                className={`border px-4 transition ${
+                  signInMethod === "password"
+                    ? "border-slate-200 bg-white text-sky-700 shadow-sm"
+                    : "border-sky-500 bg-sky-500 text-white hover:bg-sky-400"
+                }`}
+                onClick={() => {
+                  setSignInMethod("password");
+                  setOtpError(null);
+                  setOtpMessage(null);
+                }}
+              >
+                Email &amp; password
+              </Button>
             </div>
+
+            {signInMethod === "password" ? (
+              <>
+                <div className="space-y-2">
+                  <label htmlFor="identifier" className="block text-sm font-medium text-slate-300">
+                    Email or mobile number
+                  </label>
+                  <input
+                    id="identifier"
+                    name="identifier"
+                    type="text"
+                    autoComplete="username"
+                    required
+                    disabled={loading}
+                    className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
+                    placeholder="you@company.com or +15551234567"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="user-password" className="block text-sm font-medium text-slate-300">
+                    Password
+                  </label>
+                  <input
+                    id="user-password"
+                    name="user-password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    disabled={loading}
+                    className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
+                  />
+                </div>
+                <div className="text-right">
+                  <button
+                    type="button"
+                    onClick={openForgotPassword}
+                    className="text-xs font-semibold text-indigo-300 transition hover:text-indigo-200"
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="space-y-2">
+                  <label htmlFor="otp-phone" className="block text-sm font-medium text-slate-300">
+                    Mobile number
+                  </label>
+                  <input
+                    id="otp-phone"
+                    name="otp-phone"
+                    type="tel"
+                    value={otpPhone}
+                    onChange={(event) => setOtpPhone(event.target.value)}
+                    autoComplete="tel"
+                    disabled={otpSending || otpSubmitting}
+                    required
+                    className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
+                    placeholder="+15551234567"
+                  />
+                </div>
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                  <div className="flex-1 space-y-2">
+                    <label htmlFor="otp-code" className="block text-sm font-medium text-slate-300">
+                      OTP code
+                    </label>
+                    <input
+                      id="otp-code"
+                      name="otp-code"
+                      type="text"
+                      value={otpCode}
+                      onChange={(event) => setOtpCode(event.target.value)}
+                      disabled={otpSubmitting}
+                      className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
+                      placeholder="6-digit code"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    className="sm:self-end border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-100"
+                    onClick={handleOtpRequest}
+                    disabled={otpSending}
+                  >
+                    {otpSending ? "Sending..." : "Send OTP"}
+                  </Button>
+                </div>
+                {otpMessage && <p className="text-sm text-emerald-300">{otpMessage}</p>}
+                {otpError && <p className="text-sm text-rose-400">{otpError}</p>}
+              </>
+            )}
           </div>
 
-          {error && <p className="text-sm text-rose-400">{error}</p>}
+          {error && signInMethod === "password" && <p className="text-sm text-rose-400">{error}</p>}
 
           <Button
             type="submit"
             className="w-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:opacity-95 focus-visible:ring-2 focus-visible:ring-indigo-300"
-            disabled={loading}
+            disabled={signInMethod === "password" ? loading : otpSubmitting}
           >
-            {loading ? "Signing in..." : "Sign in"}
+            {signInMethod === "password" ? (loading ? "Signing in..." : "Sign in") : otpSubmitting ? "Verifying..." : "Verify & Sign in"}
           </Button>
 
           <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-slate-400/70">
@@ -486,6 +656,21 @@ export default function SignInPage() {
                     disabled={registerLoading}
                     className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
                     placeholder="you@company.com"
+                  />
+                </div>
+                <div className="space-y-2 sm:col-span-2 sm:max-w-sm">
+                  <label htmlFor="register-phone" className="block text-sm font-medium text-slate-200">
+                    Mobile number <span className="text-slate-400">(optional)</span>
+                  </label>
+                  <input
+                    id="register-phone"
+                    name="register-phone"
+                    type="tel"
+                    value={registerPhone}
+                    onChange={(event) => setRegisterPhone(event.target.value)}
+                    disabled={registerLoading}
+                    className="w-full rounded-lg border border-slate-800/60 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 shadow-inner placeholder:text-slate-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
+                    placeholder="+15551234567"
                   />
                 </div>
                 <div className="space-y-2 sm:col-span-2">

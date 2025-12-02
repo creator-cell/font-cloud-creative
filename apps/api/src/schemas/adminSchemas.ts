@@ -37,6 +37,12 @@ export const announcementSchema = z.object({
   published: z.boolean().optional()
 });
 
+export const listUsersQuerySchema = z.object({
+  q: z.string().trim().optional(),
+  page: z.coerce.number().int().positive().max(1000).default(1),
+  limit: z.coerce.number().int().positive().max(200).default(25)
+});
+
 export const auditQuerySchema = z.object({
   actorId: z.string().optional(),
   action: z.string().optional(),
