@@ -77,7 +77,7 @@ export const GenerateForm = ({ token, models, projects, brandVoices, defaults }:
   const selectedProjectVoices = brandVoices.filter((voice) => voice.projectId === watch("projectId"));
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
+    <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
       <Card>
         <CardHeader>
           <CardTitle>Generation setup</CardTitle>
@@ -144,7 +144,7 @@ export const GenerateForm = ({ token, models, projects, brandVoices, defaults }:
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Model</CardTitle>
+            <CardTitle>Model Pricing</CardTitle>
           </CardHeader>
           <CardContent>
             <ModelPicker models={models} selected={selection} onChange={setSelection} />
