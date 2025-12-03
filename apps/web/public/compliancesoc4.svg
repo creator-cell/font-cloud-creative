@@ -1,0 +1,33 @@
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+    fill="none"
+    viewBox="-18 -1 142 142"
+    width="48"
+    height="48"
+  >
+    <path
+      fill="#274DD8"
+      d="M.84 13.293c0-7.18 5.82-13 13-13h78.747c7.18 0 13 5.82 13 13v114.351c0 7.18-5.82 13-13 13H13.84c-7.18 0-13-5.82-13-13z"
+    ></path>
+    <path
+      fill="#191F2C"
+      d="M.84 87.496h104.747v40.148c0 7.179-5.82 13-13 13H13.84c-7.18 0-13-5.82-13-13z"
+    ></path>
+    <path fill="url(#gdpr_badge_svg__a)" d="M20.303 12.709h65.821V78.53H20.303z"></path>
+    <path
+      fill="#fff"
+      d="M60.795 45.62c0-1.046-.85-1.896-1.896-1.896h-.947v-2.842a4.743 4.743 0 0 0-4.738-4.738 4.743 4.743 0 0 0-4.738 4.738v2.842h-.948c-1.045 0-1.895.85-1.895 1.896v7.58c0 1.045.85 1.895 1.895 1.895H58.9c1.045 0 1.895-.85 1.895-1.895zM50.37 40.882a2.846 2.846 0 0 1 2.843-2.843 2.846 2.846 0 0 1 2.843 2.843v2.842H50.37zm-16.428 68.952q-1.584 0-2.826-.702-1.224-.702-1.908-2.07t-.684-3.33q0-1.908.72-3.276a5 5 0 0 1 2.052-2.124q1.35-.738 3.168-.738 2.034 0 3.258.738 1.242.72 1.93…"
+    ></path>
+
+    <defs>
+      <pattern id="gdpr_badge_svg__a" width="1" height="1" patternContentUnits="objectBoundingBox">
+        <use xlinkHref="#gdpr_badge_svg__b" transform="scale(.00167)"></use>
+      </pattern>
+
+      <image
+        id="gdpr_badge_svg__b"
+        xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYCAMAAACJuGjuAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAEaUExURUdwTP7NAvfJBf/UAvjMCPDQDd++E//NAf7NAv3MAta5GPXMB/zNAtm7FuDAEeDCEt6/E+LCEd+/FPPIBuLBEdq8FujCDuXAD/zNAvnPBP7SAe7IC+rIDPTLB…"
+      ></image>
+    </defs>
+  </svg>

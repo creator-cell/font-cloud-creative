@@ -117,7 +117,7 @@ export const ControlsContent = () => {
     );
   });
 
-  // 🔥 Only show categories having matching rows
+  
   const visibleCategories = categories.filter(
     (category) => filteredControlsData[category].length > 0
   );
