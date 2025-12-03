@@ -108,23 +108,21 @@ export const ControlsContent = () => {
     });
   };
 
-  // 🔥 Filter rows based on search term
   const filteredControlsData = {};
   categories.forEach((category) => {
-    filteredControlsData[category] = controlsData[category].filter((item) =>
-      item.control.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase())
+    filteredControlsData[category] = controlsData[category].filter(
+      (item) =>
+        item.control.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
-  // 🔥 Only show categories having matching rows
   const visibleCategories = categories.filter(
     (category) => filteredControlsData[category].length > 0
   );
 
   return (
     <div className="flex font-sans">
-
       {/* LEFT SIDEBAR */}
       <div className="p-4 flex flex-col w-60">
         <h2 className="text-lg font-semibold mb-4">Controls</h2>
@@ -148,7 +146,6 @@ export const ControlsContent = () => {
 
       {/* RIGHT CONTENT */}
       <div className="flex-1 px-10 pt-4">
-
         {/* SEARCH BAR */}
         <div className="w-full flex justify-end mb-6">
           <div className="w-96">
@@ -215,7 +212,6 @@ export const ControlsContent = () => {
             </div>
           ))}
 
-          {/* When no matching controls at all */}
           {visibleCategories.length === 0 && (
             <p className="text-gray-500 text-center mt-20 text-lg">
               No matching controls found.

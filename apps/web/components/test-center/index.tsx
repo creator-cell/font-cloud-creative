@@ -7,6 +7,7 @@ import { ResourcesContent } from "./section/ResourcesContent";
 import SecurityTabs from "./section/tab";
 import { ControlsContent } from "./section/ControlsContent";
 import { FAQContent } from "./section/FAQContent";
+import { FooterSection } from "./section/FooterSection";
 
 const TestCenter = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -24,6 +25,7 @@ const TestCenter = () => {
           {activeTab === 3 && <FAQContent />}
         </div>
       </div>
+      <FooterSection />
     </div>
   );
 };
