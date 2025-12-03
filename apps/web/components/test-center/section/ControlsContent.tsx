@@ -10,30 +10,65 @@ const controlsData = {
       control: "Unique production database authentication enforced",
       description:
         "The company requires authentication to production datastores to use authorized secure authentication mechanisms, such as unique SSH key.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
     {
       control: "Encryption key access restricted",
       description:
         "The company restricts privileged access to encryption keys to authorized users with a business need.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
     {
       control: "Unique account authentication enforced",
       description:
         "The company requires authentication to systems and applications to use unique username and password or authorized SSH keys.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
     {
       control: "Production application access restricted",
       description: "System access restricted to authorized access only.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
     {
       control: "Access control procedures established",
       description:
         "Policies and procedures define how access is granted and revoked in production systems.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
   ],
 
@@ -42,13 +77,27 @@ const controlsData = {
       control: "Employee security training completed",
       description:
         "All employees must complete mandatory security awareness training annually.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
     {
       control: "Security roles defined",
       description:
         "Clear roles and responsibilities for security within the organization.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
   ],
 
@@ -57,13 +106,27 @@ const controlsData = {
       control: "Code review process enforced",
       description:
         "All code changes must go through peer review before deployment.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
     {
       control: "Vulnerability scanning performed",
       description:
         "Regular vulnerability scans of applications and infrastructure.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
   ],
 
@@ -72,13 +135,27 @@ const controlsData = {
       control: "Incident response plan established",
       description:
         "Formal incident response plan exists and is tested regularly.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
     {
       control: "Internal audit performed",
       description:
         "Periodic internal audits are conducted to verify policy compliance.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
   ],
 
@@ -86,12 +163,26 @@ const controlsData = {
     {
       control: "Data encryption in transit",
       description: "All sensitive data is encrypted while being transmitted.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
     {
       control: "Data retention policy enforced",
       description: "Data is stored and retained according to defined policies.",
-      status: <CircleCheck className="w-4 h-4 text-green-600" />,
+      status: (
+        <CircleCheck
+          className="w-6 h-6"
+          fill="#16a34a"
+          stroke="white"
+          strokeWidth={2}
+        />
+      ),
     },
   ],
 };

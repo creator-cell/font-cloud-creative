@@ -333,7 +333,7 @@ export function ResourcesContent() {
                     </p>
                     <Button
                       onClick={() => copyLink(item.link)}
-                      className="flex items-center gap-1 bg-white text-gray-700 border text-xs py-1.5 px-3 hover:bg-gray-50"
+                      className="flex items-center gap-1 bg-white text-gray-700 border text-xs py-1.5 px-3 hover:bg-white"
                     >
                       <Copy className="w-3 h-3" /> Copy link
                     </Button>
@@ -343,14 +343,14 @@ export function ResourcesContent() {
                   <div className="flex justify-end">
                     {item.access ? (
                       <Button
-                        className="flex items-center text-sm bg-white text-black hover:bg-gray-50 border px-4 py-1"
+                        className="flex items-center text-sm bg-white text-black hover:bg-white border px-4 py-1"
                         onClick={() => setPdfUrl(item.pdfUrl)}
                       >
                         <Eye className="w-3 h-3 mr-1" /> View
                       </Button>
                     ) : (
                       <Button
-                        className="flex items-center gap-1 bg-white text-black border px-4 py-1 hover:bg-gray-50"
+                        className="flex items-center gap-1 bg-white text-black border px-4 py-1 hover:bg-white"
                         onClick={() => setModalOpen(true)}
                       >
                         <Lock className="w-4 h-4" /> Request access
