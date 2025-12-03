@@ -316,37 +316,41 @@ export function ResourcesContent() {
           <div
             key={section.title}
             ref={(el) => (sectionRefs.current[secIdx] = el)}
-            className="mb-14"
+            className="mb-8"
           >
             <h2 className="text-lg font-semibold mb-4">{section.title}</h2>
 
-            <div className="space-y-4">
-              {section.items.map((item) => (
+            <div className="border rounded-lg overflow-hidden bg-white">
+              {section.items.map((item, index) => (
                 <div
                   key={item.label}
-                  className="border rounded-lg p-5 bg-white shadow-sm flex justify-between items-center"
+                  className="grid grid-cols-[1fr_max-content] items-center px-5 py-6 border-b last:border-none"
                 >
+                  {/* Label + Copy */}
                   <div className="flex items-center gap-2">
-                    <p className="font-normal">{item.label}</p>
+                    <p className="font-medium text-base text-black">
+                      {item.label}
+                    </p>
                     <Button
                       onClick={() => copyLink(item.link)}
-                      className="flex items-center gap-1 bg-white text-gray-700 border text-xs py-0.5 px-3 hover:bg-white hover:text-gray-700"
+                      className="flex items-center gap-1 bg-white text-gray-700 border text-xs py-1.5 px-3 hover:bg-gray-50"
                     >
                       <Copy className="w-3 h-3" /> Copy link
                     </Button>
                   </div>
 
-                  <div className="flex items-center gap-4">
+                  {/* View / Request */}
+                  <div className="flex justify-end">
                     {item.access ? (
                       <Button
-                        className="flex items-center text-sm bg-white text-black hover:bg-white hover:text-black border"
+                        className="flex items-center text-sm bg-white text-black hover:bg-gray-50 border px-4 py-1"
                         onClick={() => setPdfUrl(item.pdfUrl)}
                       >
                         <Eye className="w-3 h-3 mr-1" /> View
                       </Button>
                     ) : (
                       <Button
-                        className="flex items-center gap-1 bg-white text-black border px-4 py-1 hover:bg-white hover:text-black"
+                        className="flex items-center gap-1 bg-white text-black border px-4 py-1 hover:bg-gray-50"
                         onClick={() => setModalOpen(true)}
                       >
                         <Lock className="w-4 h-4" /> Request access
