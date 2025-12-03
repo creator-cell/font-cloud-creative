@@ -17,7 +17,7 @@ export default function SecurityTabs({ onChange }: any) {
         <button
           key={tab}
           onClick={() => handleClick(index)}
-          className={`pb-2 text-base font-semibold  ${
+          className={`pb-2 text-sm font-semibold  ${
             activeIndex === index
               ? "border-b-2 border-blue-600 text-black"
               : "text-gray-500 hover:text-black"

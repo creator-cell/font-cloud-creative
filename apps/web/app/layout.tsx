@@ -1,6 +1,7 @@
 import "./globals.css";
 import { AppProviders } from "@/components/providers";
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Front Cloud Creative",
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className="">
         <AppProviders>
+          <Toaster theme="light" richColors position="top-center" />
           <main className="min-h-screen w-full">{children}</main>
         </AppProviders>
       </body>

@@ -14,7 +14,7 @@ const TestCenter = () => {
     <div>
       <Navigation />
       <Herosection />
-      <div className="px-5 md:px-12 max-w-7xl container mx-auto bg-white">
+      <div className="px-5 md:px-10 max-w-7xl container mx-auto bg-white">
         <SecurityTabs onChange={setActiveTab} />
 
         <div className="mt-10 text-black leading-relaxed text-[17px]">
