@@ -252,12 +252,15 @@ export function ResourcesContent() {
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
-  const filteredSections = sectionsData.map((sec) => ({
-    ...sec,
-    items: sec.items.filter((item) =>
-      item.label.toLowerCase().includes(search.toLowerCase())
-    ),
-  }));
+  // Filter sections based on search and remove empty sections
+  const filteredSections = sectionsData
+    .map((sec) => ({
+      ...sec,
+      items: sec.items.filter((item) =>
+        item.label.toLowerCase().includes(search.toLowerCase())
+      ),
+    }))
+    .filter((sec) => sec.items.length > 0);
 
   const scrollToSection = (i: number) =>
     sectionRefs.current[i]?.scrollIntoView({
@@ -304,6 +307,7 @@ export function ResourcesContent() {
 
   return (
     <div className="flex flex-col md:flex-row gap-6 w-full mt-6">
+      {/* Sidebar */}
       <div className="w-52 flex-shrink-0 space-y-2 hidden md:block">
         <h1 className="text-xl md:text-2xl font-semibold">Resources</h1>
         <div style={{ marginTop: "4rem" }}>
@@ -319,7 +323,9 @@ export function ResourcesContent() {
         </div>
       </div>
 
+      {/* Main content */}
       <div className="flex-1">
+        {/* Bulk download + Search */}
         <div className="md:flex flex-col md:flex-row justify-end items-center mb-7 gap-3 w-full hidden ">
           <Button
             className="w-full md:w-auto bg-white text-black border hover:bg-white hover:text-black"
@@ -339,23 +345,25 @@ export function ResourcesContent() {
             />
           </div>
         </div>
+
         <div className="font-medium text-2xl md:hidden mb-8">Resources</div>
 
-        {filteredSections.map((section, secIdx) => (
-          <div
-            key={section.title}
-            ref={(el) => (sectionRefs.current[secIdx] = el)}
-            className="mb-8"
-          >
-            <h2 className="text-lg font-semibold mb-4">{section.title}</h2>
+        {/* Render filtered sections or "No resources found" */}
+        {filteredSections.length === 0 ? (
+          <div className="px-5 py-6 text-sm text-gray-500">
+            No resources found.
+          </div>
+        ) : (
+          filteredSections.map((section, secIdx) => (
+            <div
+              key={section.title}
+              ref={(el) => (sectionRefs.current[secIdx] = el)}
+              className="mb-8"
+            >
+              <h2 className="text-lg font-semibold mb-4">{section.title}</h2>
 
-            <div className="border rounded-lg overflow-hidden bg-white">
-              {section.items.length === 0 ? (
-                <div className="px-5 py-6 text-sm text-gray-500">
-                  No resources found.
-                </div>
-              ) : (
-                section.items.map((item, index) => (
+              <div className="border rounded-lg overflow-hidden bg-white">
+                {section.items.map((item, index) => (
                   <div
                     key={item.label + index}
                     className="flex flex-col md:grid md:grid-cols-[1fr_max-content] gap-4 md:gap-0 items-start md:items-center px-5 py-4 border-b last:border-none border-gray-300"
@@ -392,13 +400,14 @@ export function ResourcesContent() {
                       )}
                     </div>
                   </div>
-                ))
-              )}
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
+      {/* Request access modal */}
       {modalOpen && (
         <Dialog open={modalOpen} onOpenChange={setModalOpen}>
           <DialogContent className="max-w-[650px] max-h-[90vh] overflow-y-auto">
@@ -492,6 +501,7 @@ export function ResourcesContent() {
         </Dialog>
       )}
 
+      {/* PDF viewer */}
       {pdfUrl && (
         <div className="fixed inset-0 z-[9999] bg-black/90 flex flex-col">
           <div className="flex justify-between items-center p-4 bg-white shadow-md">
