@@ -339,7 +339,7 @@ export function ResourcesContent() {
             />
           </div>
         </div>
-        <div className="font-medium text-xl md:hidden mb-8">Resources</div>
+        <div className="font-medium text-2xl md:hidden mb-8">Resources</div>
 
         {filteredSections.map((section, secIdx) => (
           <div
