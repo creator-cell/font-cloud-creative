@@ -6,6 +6,9 @@ import { Toaster } from "@/components/ui/sonner";
 export const metadata: Metadata = {
   title: "Front Cloud Creative",
   description: "Multi-model marketing content that respects your brand voice.",
+  // icons: {
+  //   icon: "/logo2.png",
+  // },
 };
 
 export default function RootLayout({

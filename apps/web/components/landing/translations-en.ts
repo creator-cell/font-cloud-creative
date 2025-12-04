@@ -18,486 +18,484 @@ import {
   Zap,
 } from "lucide-react";
 
-
 export const translationsEn = {
-    nav: [
-      { label: "Product", href: "#product" },
-      { label: "Solutions", href: "#solutions" },
-      { label: "Pricing", href: "#pricing" },
-      { label: "Resources", href: "#resources" },
-    ],
-    languageToggle: "العربية",
-    heroEyebrow: "New:GPT-4 Turbo & Claude 3.5 Sonnet Now Available",
-    heroTitlePrimary: "Create & Analyze with",
-    heroTitleHighlight: "Multi-AI Power",
-    heroDescription:
-      "One subscription gives you access to OpenAI, Anthropic, Google, and Ollama. Generate ads, blogs, and social media content that converts.",
-    heroPrimaryCta: "Start free trial",
-    heroSecondaryCta: "Watch demo",
-    heroToken: "15,000 free tokens monthly",
-    heroCard: "No credit card required",
-    heroCancel: "Cancel anytime",
+  nav: [
+    { label: "Product", href: "#product" },
+    { label: "Solutions", href: "#solutions" },
+    { label: "Pricing", href: "#pricing" },
+    { label: "Resources", href: "#resources" },
+    { label: "Security", href: "/test-center" },
+  ],
+  languageToggle: "العربية",
+  heroEyebrow: "New:GPT-4 Turbo & Claude 3.5 Sonnet Now Available",
+  heroTitlePrimary: "Create & Analyze with",
+  heroTitleHighlight: "Multi-AI Power",
+  heroDescription:
+    "One subscription gives you access to OpenAI, Anthropic, Google, and Ollama. Generate ads, blogs, and social media content that converts.",
+  heroPrimaryCta: "Start free trial",
+  heroSecondaryCta: "Watch demo",
+  heroToken: "15,000 free tokens monthly",
+  heroCard: "No credit card required",
+  heroCancel: "Cancel anytime",
 
-    heroTertiaryCta: "Contact sales",
-    heroStats: [
-      { value: "10K+", label: "Active Users" },
-      { value: "4.9", label: "Rating" },
-      { value: "98.8%", label: "Uptime" },
-    ],
-    providerHeading: "Powered by Leading AI Providers",
-    providerCreate: "Create Any Content Type",
-    providerAd: "Ad Copy",
-    providerSocial: "Social Posts",
-    providerBlog: "AI Analysis",
+  heroTertiaryCta: "Contact sales",
+  heroStats: [
+    { value: "10K+", label: "Active Users" },
+    { value: "4.9", label: "Rating" },
+    { value: "98.8%", label: "Uptime" },
+  ],
+  providerHeading: "Powered by Leading AI Providers",
+  providerCreate: "Create Any Content Type",
+  providerAd: "Ad Copy",
+  providerSocial: "Social Posts",
+  providerBlog: "AI Analysis",
 
-    providerDescription:
-      "Blend creativity and governance by routing briefs across OpenAI, Anthropic, Google, and private stacks.",
-    providerLabels: ["OpenAI", "Anthropic", "Google", "Ollama", "ALLam 34B"],
-    providerOpenAI: "OpenAI",
-    providerAnthropic: "Anthropic",
-    providerGoogle: "Google",
-    providerOllama: "Ollama",
-    providerAllam: "ALLam 34B",
-    providerAllamSubtitle: "SDAIA",
-    providerViewAll: "View all providers",
-    speedDemo: "Live Workflow Demo",
-    speedTitle: "From Idea to Content in",
-    speedTitleSecond: "30 Seconds",
-    speedSubtitle:
-      "Watch how Front Cloud Creative transforms your brief into professional content across multiple formats",
-    speedFeatures: [
-      {
-        title: "1. Describe Your Needs",
-        description:
-          "Tell us what content you want to create and your target audience",
-        iconColor: "text-sky-600",
-        borderColor: "border-sky-300",
-        bgColor: "bg-white",
-        style: {
-          border: "1px solid #c7d2fe",
-        },
-      },
-      {
-        title: "2. AI Magic Happens",
-        description:
-          "Multiple AI models work together to create optimized content",
-        iconColor: "text-emerald-600",
-        borderColor: "border-emerald-300",
-        bgColor: "bg-white",
-        style: {
-          border: "1px solid #a7f3d0",
-        },
-      },
-      {
-        title: "3. Get Perfect Content",
-        description:
-          "Receive ready-to-use content in multiple formats instantly",
-        iconColor: "text-indigo-600",
-        borderColor: "border-indigo-300",
-        bgColor: "bg-white",
-        style: {
-          border: "1px solid #c4b5fd",
-        },
-      },
-    ],
-    speedContent: "Content Generated",
-    speedReady: "Ready in 12.4s",
-    orchestrateTitle: "Orchestrate Every Launch",
-    orchestrateSubtitle:
-      "Build campaign war rooms, assign duties, and monitor progress across teams and regions.",
-    orchestrateCards: [
-      {
-        badge: "Campaign Control",
-        title: "Command center for every rollout",
-        description:
-          "Timeline, assets, and owners in one view. Localize messaging without losing alignment.",
-        bullets: [
-          "Smart briefs & timelines",
-          "Approval routing",
-          "Localization insights",
-        ],
-      },
-      {
-        badge: "AI Collaboration",
-        title: "Train every model on your voice",
-        description:
-          "Combine structured prompts and memory to keep tone consistent across providers.",
-        bullets: [
-          "Reusable style guides",
-          "Compliance guardrails",
-          "Live previews",
-        ],
-      },
-    ],
-    contentTitle: "Generate Any Content Type",
-    contentSubtitle:
-      "Pick a scenario. Front Cloud Creative orchestrates the ideal AI workflow instantly.",
-    contentFilters: [
-      { id: "copy", label: "Marketing Copy" },
-      { id: "product", label: "Product Updates" },
-      { id: "social", label: "Social Campaigns" },
-    ],
-    contentScenarios: {
-      copy: [
-        "Launch-ready landing pages",
-        "Lifecycle emails optimized for activation",
-        "Executive-ready press releases",
-      ],
-      product: [
-        "Release notes for multiple audiences",
-        "Knowledge base articles with modular sections",
-        "In-app announcements localized automatically",
-      ],
-      social: [
-        "Cross-network social calendars",
-        "Paid ad variants in every language",
-        "Video scripts aligned to brand story",
-      ],
-    },
-    creationTitle: "Everything You Need to Create Amazing Content",
-    creationFeature: "Features",
-    creationSubtitle:
-      "From idea to publication, our AI-powered platform handles every step of your content creation workflow.",
-    creationFeatures: [
-      {
-        title: "Multi-AI Access",
-        description:
-          "Choose from OpenAI GPT-4, Claude 3.5, Gemini Pro, and local Ollama models for the best results.",
-      },
-      {
-        title: "Brand Voice",
-        description:
-          "Define your unique brand personality and ensure consistent tone across all generated content.",
-      },
-      {
-        title: "Smart Generation",
-        description:
-          "Generate ads, blog posts, and social media carousels optimized for engagement and conversion.",
-      },
-      {
-        title: "Analytics & Insights",
-        description:
-          "Track performance, usage, and ROI with detailed analytics and reporting.",
-      },
-      {
-        title: "Tag-guided Threads",
-        description:
-          "Keep every exchange organized with conversations you can group, search, and pick up again by tag.",
-      },
-      {
-        title: "Upload & Inspect Files",
-        description:
-          "Drop chat logs into the file panel to get automatic summaries, highlights, and answers in seconds.",
-      },
-    ],
-    newsOverview: "Platform Overview",
-    newsroomTitle: "Everything you need in one platform",
-    newsroomSubtitle:
-      "From content creation to team collaboration, our platform provides all the tools you need to scale your content marketing efforts with AI.",
-    newsroomActions: [
-      { label: "Enterprise Security", Icon: Shield },
-      { label: "Multi-language Support", Icon: Globe },
-      { label: "Fast Generation", Icon: Zap },
-      { label: "Conversion Optimized", Icon: Target },
-      { label: "Automated Workflows", Icon: Workflow },
-      { label: "Real-time Processing", Icon: Zap },
-    ],
-    newsroomHighlightTitle: "Transform your daily content runtime",
-    newsroomHighlightBody:
-      "Centralize approvals, generate localized variants, and align your entire team on the same story.",
-
-    TypeTitle: "Generate Any Type of Content",
-    TypeDescription:
-      "Our AI models are trained to create high-converting content across all major formats",
-    statsTiles: [
-      {
-        title: "Ad Copy",
-        description: "Headlines, hooks, body text, and CTAs that convert",
-        Icon: Sparkles,
-        color: "blue",
-      },
-      {
-        title: "Social Carousels",
-        description: "Multi-slide content for Instagram, LinkedIn, and more",
-        Icon: BarChart2,
-        color: "green",
-      },
-      {
-        title: "Blog Posts",
-        description:
-          "SEO-optimized articles with proper structure and keywords",
-        Icon: MessageSquare,
-        color: "purple",
-      },
-    ],
-
-    pricingHead: "Pricing",
-    pricingTitle: "Choose Your Plan",
-    pricingSubtitle:
-      "Start free or scale with multi-model orchestration built for modern teams.",
-    pricingPlans: [
-      {
-        id: "free",
-        title: "Free",
-        price: "Free",
-        month: "tokens/month",
-        boundary: "Limitations",
-        description: "Perfect for getting started",
-        features: [
-          "Basic AI models",
-          "Watermarked outputs",
-          "Up to 5 projects",
-          "Community support",
-        ],
-        cta: "Get Started",
-        popular: false,
-        logo: Zap,
-        logoProps: {
-          className:
-            "w-11 h-11 text-gray-500 bg-[#f0f0f2] p-2.5 rounded-lg item-center mx-auto",
-        },
-        tookens: "15K",
-
-        Limitations: [
-          "Watermarked content",
-          " Basic models only",
-          " Limited projects",
-        ],
-      },
-      {
-        id: "starter",
-        title: "Starter",
-        price: "$29",
-        month: "tokens/month",
-        description: "For individual creators",
-        features: [
-          "All AI providers",
-          "No watermarks",
-          "Up to 25 projects",
-          "Priority support",
-          "Brand voice builder",
-          "Usage analytics",
-        ],
-        cta: "Upgrade",
-        popular: true,
-        priceValid: "/month",
-        logo: Rocket,
-        logoProps: {
-          className:
-            "w-11 h-11 text-[#2b80ff] bg-[#e8f2ff] p-2.5 rounded-lg item-center mx-auto",
-        },
-        tookens: "300K",
-      },
-      {
-        id: "pro",
-        title: "Pro",
-        price: "$79",
-        month: "tokens/month",
-        description: "For growing businesses",
-        features: [
-          "Premium models",
-          "Local models (Ollama)",
-          "Up to 100 projects",
-          "Custom brand voices",
-          "Advanced analytics",
-          "Priority support",
-        ],
-        cta: "Upgrade",
-        popular: false,
-        priceValid: "/month",
-        logo: Crown,
-        logoProps: {
-          className:
-            "w-11 h-11 text-[#ab45ff] bg-[#f7edff] p-2.5 rounded-lg item-center mx-auto",
-        },
-        tookens: "1,000K ",
-      },
-      {
-        id: "team",
-        title: "Team",
-        price: "$199",
-        month: "tokens/month",
-        description: "For teams and agencies",
-        features: [
-          "Everything in Pro",
-          "Team Collaboration",
-          "Custom AI models",
-          "Unlimited projects",
-          "White-label options",
-          "Dedicated support",
-          "Custom integrations",
-        ],
-        cta: "Upgrade",
-        popular: false,
-        priceValid: "/month",
-        logo: UsersRound,
-        logoProps: {
-          className:
-            "w-11 h-11 text-[#00bd7e] bg-[#e6faf3] p-2.5 rounded-lg item-center mx-auto",
-        },
-        tookens: "3,000K",
-      },
-    ],
-    enterpriseTitle: "Enterprise Solution",
-    enterpriseSubtitle:
-      "Need custom AI models, dedicated infrastructure, or special compliance requirements? We offer tailored enterprise solutions.",
-    enterpriseCta: "Schedule Demo",
-    enterpriseCta2: "Contact Sales",
-    FAQTitle: "Frequently Asked Questions",
-    FAQLeftOneTitle: "Can I switch plans anytime?",
-    FAQLeftTwoTitle: "Do you offer refunds?",
-    FAQLeftThreeTitle: "What happens to unused tokens?",
-    FAQLeftFourTitle: "Is there an API available?",
-    FAQLeftRightDesc:
-      "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.",
-    FAQLeftRightDesc2:
-      "Yes, we offer a 30-day money-back guarantee for all paid plans, no questions asked.",
-    FAQLeftRightDesc3:
-      "Tokens reset monthly and don't roll over. We recommend choosing a plan that fits your usage.",
-    FAQLeftRightDesc4:
-      "API access is available on Pro and Team plans with full documentation and support.",
-
-    finalCtaTitle: "Ready to Transform Your",
-    finalCtaTitle2: "Content Creation?",
-    finalCtaSubtitle:
-      "Join marketing teams orchestrating AI workflows with Front Cloud Creative.",
-    finalData: [
-      "Start with 15,000 free tokens",
-      "No credit card required",
-      "Access to all AI providers",
-      "Cancel anytime",
-    ],
-    finalPrimaryCta: "Start Creating Today",
-    finalSecondaryCta: "Schedule Demo",
-    finalSecondaryCtaPercentage: "95%",
-    finalSecondaryCtaSatisfaction: "Satisfaction",
-    finalMil: "1M+",
-    finalGen: "Generated",
-    footerTagline:
-      "The most powerful AI content platform with access to OpenAI, Anthropic, Google, and Ollama in one subscription.",
-
-    statsTiles2: [
-      {
-        title: "Active Users",
-        description: "10,000+",
-        Icon: UsersRound,
-      },
-      {
-        title: "Content Generated",
-        description: "1M+",
-        Icon: Sparkles,
-      },
-      {
-        title: "User Satisfaction",
-        description: "95%",
-        Icon: TrendingUp,
-      },
-    ],
-
-    data: {
-      header: {
-        platformName: "Front Cloud Creative",
-        platformDescription: "AI Content Generation Platform",
-        demoLabel: "Live Demo",
-        status: "Active",
-      },
-      leftPanel: {
-        contentBrief: {
-          title: "Content Brief",
-          example:
-            "Create an Instagram ad for a new fitness app targeting millennials. Focus on convenience and quick workouts. Include a strong CTA.",
-        },
-        conversionBadge: {
-          percentage: "94% Conversion",
-          note: "vs industry avg",
-        },
-        aiProvider: {
-          title: "AI Provider",
-          name: "GPT-4 Turbo",
-          provider: "OpenAI",
-        },
-        contentType: {
-          title: "Content Type",
-          type: "Social Media Ad",
-        },
-        toneStyle: {
-          title: "Tone & Style",
-          styles: ["Energetic", "Professional"],
-        },
-      },
-      rightPanel: {
-        generatedContent: {
-          title: "Generated Content",
-          generating: "Generating..",
-          headline: {
-            label: "Headline",
-            content: "Transform Your Body in Just 15 Minutes!",
-          },
-          bodyCopy: {
-            label: "Body Copy",
-            content:
-              "No time for the gym? No problem! FitQuick delivers personalized 15-minute workouts that fit your busy lifestyle. Perfect for busy millennials who want results without the time commitment. Join 50,000+ users getting stronger every day.",
-          },
-          callToAction: {
-            label: "Call to Action",
-            buttonText: "Start Your Free Trial – No Credit Card Required",
-          },
-          tokensUsed: "Tokens used: 124 / 15,000",
-          generatedIn: "Generated in 12.4s",
-        },
-        actions: {
-          tryYourself: "Try It Yourself",
-          watchDemo: "Watch Full Demo",
-        },
+  providerDescription:
+    "Blend creativity and governance by routing briefs across OpenAI, Anthropic, Google, and private stacks.",
+  providerLabels: ["OpenAI", "Anthropic", "Google", "Ollama", "ALLam 34B"],
+  providerOpenAI: "OpenAI",
+  providerAnthropic: "Anthropic",
+  providerGoogle: "Google",
+  providerOllama: "Ollama",
+  providerAllam: "ALLam 34B",
+  providerAllamSubtitle: "SDAIA",
+  providerViewAll: "View all providers",
+  speedDemo: "Live Workflow Demo",
+  speedTitle: "From Idea to Content in",
+  speedTitleSecond: "30 Seconds",
+  speedSubtitle:
+    "Watch how Front Cloud Creative transforms your brief into professional content across multiple formats",
+  speedFeatures: [
+    {
+      title: "1. Describe Your Needs",
+      description:
+        "Tell us what content you want to create and your target audience",
+      iconColor: "text-sky-600",
+      borderColor: "border-sky-300",
+      bgColor: "bg-white",
+      style: {
+        border: "1px solid #c7d2fe",
       },
     },
-
-    LimitedTime: "Limited Time: Free tokens doubled for new users",
-    LimitedDes:
-      "Join the AI content revolution today. Start creating professional content that converts with the power of multiple AI providers in one unified platform.",
-
-    footerLinks: {
-      product: {
-        heading: "Product",
-        links: [
-          { label: "Features", href: "#" },
-          { label: "Pricing", href: "#" },
-          { label: "Generators", href: "#" },
-          { label: "Integrations", href: "#" },
-          { label: "Templates", href: "#" },
-        ],
-      },
-      company: {
-        heading: "Company",
-        links: [
-          { label: "About Us", href: "#" },
-          { label: "Careers", href: "#" },
-          { label: "Blog", href: "#" },
-          { label: "Contact", href: "#" },
-        ],
-      },
-      Support: {
-        heading: "Support",
-        links: [
-          { label: "Help Center", href: "#" },
-          { label: "Documentation", href: "#" },
-          { label: "Status Page", href: "#" },
-        ],
-      },
-
-      Legal: {
-        heading: "Legal",
-        links: [
-          { label: "Privacy Policy", href: "#" },
-          { label: "Terms of Service", href: "#" },
-          { label: "Cookie Policy", href: "#" },
-        ],
+    {
+      title: "2. AI Magic Happens",
+      description:
+        "Multiple AI models work together to create optimized content",
+      iconColor: "text-emerald-600",
+      borderColor: "border-emerald-300",
+      bgColor: "bg-white",
+      style: {
+        border: "1px solid #a7f3d0",
       },
     },
-    footerLegal:
-      "© " +
-      new Date().getFullYear() +
-      " Front Cloud Creative. All rights reserved.",
-    footerBottomCta: "Subscribe",
-    footerInputPlaceholder: "Enter your email",
-  } as const;
+    {
+      title: "3. Get Perfect Content",
+      description: "Receive ready-to-use content in multiple formats instantly",
+      iconColor: "text-indigo-600",
+      borderColor: "border-indigo-300",
+      bgColor: "bg-white",
+      style: {
+        border: "1px solid #c4b5fd",
+      },
+    },
+  ],
+  speedContent: "Content Generated",
+  speedReady: "Ready in 12.4s",
+  orchestrateTitle: "Orchestrate Every Launch",
+  orchestrateSubtitle:
+    "Build campaign war rooms, assign duties, and monitor progress across teams and regions.",
+  orchestrateCards: [
+    {
+      badge: "Campaign Control",
+      title: "Command center for every rollout",
+      description:
+        "Timeline, assets, and owners in one view. Localize messaging without losing alignment.",
+      bullets: [
+        "Smart briefs & timelines",
+        "Approval routing",
+        "Localization insights",
+      ],
+    },
+    {
+      badge: "AI Collaboration",
+      title: "Train every model on your voice",
+      description:
+        "Combine structured prompts and memory to keep tone consistent across providers.",
+      bullets: [
+        "Reusable style guides",
+        "Compliance guardrails",
+        "Live previews",
+      ],
+    },
+  ],
+  contentTitle: "Generate Any Content Type",
+  contentSubtitle:
+    "Pick a scenario. Front Cloud Creative orchestrates the ideal AI workflow instantly.",
+  contentFilters: [
+    { id: "copy", label: "Marketing Copy" },
+    { id: "product", label: "Product Updates" },
+    { id: "social", label: "Social Campaigns" },
+  ],
+  contentScenarios: {
+    copy: [
+      "Launch-ready landing pages",
+      "Lifecycle emails optimized for activation",
+      "Executive-ready press releases",
+    ],
+    product: [
+      "Release notes for multiple audiences",
+      "Knowledge base articles with modular sections",
+      "In-app announcements localized automatically",
+    ],
+    social: [
+      "Cross-network social calendars",
+      "Paid ad variants in every language",
+      "Video scripts aligned to brand story",
+    ],
+  },
+  creationTitle: "Everything You Need to Create Amazing Content",
+  creationFeature: "Features",
+  creationSubtitle:
+    "From idea to publication, our AI-powered platform handles every step of your content creation workflow.",
+  creationFeatures: [
+    {
+      title: "Multi-AI Access",
+      description:
+        "Choose from OpenAI GPT-4, Claude 3.5, Gemini Pro, and local Ollama models for the best results.",
+    },
+    {
+      title: "Brand Voice",
+      description:
+        "Define your unique brand personality and ensure consistent tone across all generated content.",
+    },
+    {
+      title: "Smart Generation",
+      description:
+        "Generate ads, blog posts, and social media carousels optimized for engagement and conversion.",
+    },
+    {
+      title: "Analytics & Insights",
+      description:
+        "Track performance, usage, and ROI with detailed analytics and reporting.",
+    },
+    {
+      title: "Tag-guided Threads",
+      description:
+        "Keep every exchange organized with conversations you can group, search, and pick up again by tag.",
+    },
+    {
+      title: "Upload & Inspect Files",
+      description:
+        "Drop chat logs into the file panel to get automatic summaries, highlights, and answers in seconds.",
+    },
+  ],
+  newsOverview: "Platform Overview",
+  newsroomTitle: "Everything you need in one platform",
+  newsroomSubtitle:
+    "From content creation to team collaboration, our platform provides all the tools you need to scale your content marketing efforts with AI.",
+  newsroomActions: [
+    { label: "Enterprise Security", Icon: Shield },
+    { label: "Multi-language Support", Icon: Globe },
+    { label: "Fast Generation", Icon: Zap },
+    { label: "Conversion Optimized", Icon: Target },
+    { label: "Automated Workflows", Icon: Workflow },
+    { label: "Real-time Processing", Icon: Zap },
+  ],
+  newsroomHighlightTitle: "Transform your daily content runtime",
+  newsroomHighlightBody:
+    "Centralize approvals, generate localized variants, and align your entire team on the same story.",
+
+  TypeTitle: "Generate Any Type of Content",
+  TypeDescription:
+    "Our AI models are trained to create high-converting content across all major formats",
+  statsTiles: [
+    {
+      title: "Ad Copy",
+      description: "Headlines, hooks, body text, and CTAs that convert",
+      Icon: Sparkles,
+      color: "blue",
+    },
+    {
+      title: "Social Carousels",
+      description: "Multi-slide content for Instagram, LinkedIn, and more",
+      Icon: BarChart2,
+      color: "green",
+    },
+    {
+      title: "Blog Posts",
+      description: "SEO-optimized articles with proper structure and keywords",
+      Icon: MessageSquare,
+      color: "purple",
+    },
+  ],
+
+  pricingHead: "Pricing",
+  pricingTitle: "Choose Your Plan",
+  pricingSubtitle:
+    "Start free or scale with multi-model orchestration built for modern teams.",
+  pricingPlans: [
+    {
+      id: "free",
+      title: "Free",
+      price: "Free",
+      month: "tokens/month",
+      boundary: "Limitations",
+      description: "Perfect for getting started",
+      features: [
+        "Basic AI models",
+        "Watermarked outputs",
+        "Up to 5 projects",
+        "Community support",
+      ],
+      cta: "Get Started",
+      popular: false,
+      logo: Zap,
+      logoProps: {
+        className:
+          "w-11 h-11 text-gray-500 bg-[#f0f0f2] p-2.5 rounded-lg item-center mx-auto",
+      },
+      tookens: "15K",
+
+      Limitations: [
+        "Watermarked content",
+        " Basic models only",
+        " Limited projects",
+      ],
+    },
+    {
+      id: "starter",
+      title: "Starter",
+      price: "$29",
+      month: "tokens/month",
+      description: "For individual creators",
+      features: [
+        "All AI providers",
+        "No watermarks",
+        "Up to 25 projects",
+        "Priority support",
+        "Brand voice builder",
+        "Usage analytics",
+      ],
+      cta: "Upgrade",
+      popular: true,
+      priceValid: "/month",
+      logo: Rocket,
+      logoProps: {
+        className:
+          "w-11 h-11 text-[#2b80ff] bg-[#e8f2ff] p-2.5 rounded-lg item-center mx-auto",
+      },
+      tookens: "300K",
+    },
+    {
+      id: "pro",
+      title: "Pro",
+      price: "$79",
+      month: "tokens/month",
+      description: "For growing businesses",
+      features: [
+        "Premium models",
+        "Local models (Ollama)",
+        "Up to 100 projects",
+        "Custom brand voices",
+        "Advanced analytics",
+        "Priority support",
+      ],
+      cta: "Upgrade",
+      popular: false,
+      priceValid: "/month",
+      logo: Crown,
+      logoProps: {
+        className:
+          "w-11 h-11 text-[#ab45ff] bg-[#f7edff] p-2.5 rounded-lg item-center mx-auto",
+      },
+      tookens: "1,000K ",
+    },
+    {
+      id: "team",
+      title: "Team",
+      price: "$199",
+      month: "tokens/month",
+      description: "For teams and agencies",
+      features: [
+        "Everything in Pro",
+        "Team Collaboration",
+        "Custom AI models",
+        "Unlimited projects",
+        "White-label options",
+        "Dedicated support",
+        "Custom integrations",
+      ],
+      cta: "Upgrade",
+      popular: false,
+      priceValid: "/month",
+      logo: UsersRound,
+      logoProps: {
+        className:
+          "w-11 h-11 text-[#00bd7e] bg-[#e6faf3] p-2.5 rounded-lg item-center mx-auto",
+      },
+      tookens: "3,000K",
+    },
+  ],
+  enterpriseTitle: "Enterprise Solution",
+  enterpriseSubtitle:
+    "Need custom AI models, dedicated infrastructure, or special compliance requirements? We offer tailored enterprise solutions.",
+  enterpriseCta: "Schedule Demo",
+  enterpriseCta2: "Contact Sales",
+  FAQTitle: "Frequently Asked Questions",
+  FAQLeftOneTitle: "Can I switch plans anytime?",
+  FAQLeftTwoTitle: "Do you offer refunds?",
+  FAQLeftThreeTitle: "What happens to unused tokens?",
+  FAQLeftFourTitle: "Is there an API available?",
+  FAQLeftRightDesc:
+    "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.",
+  FAQLeftRightDesc2:
+    "Yes, we offer a 30-day money-back guarantee for all paid plans, no questions asked.",
+  FAQLeftRightDesc3:
+    "Tokens reset monthly and don't roll over. We recommend choosing a plan that fits your usage.",
+  FAQLeftRightDesc4:
+    "API access is available on Pro and Team plans with full documentation and support.",
+
+  finalCtaTitle: "Ready to Transform Your",
+  finalCtaTitle2: "Content Creation?",
+  finalCtaSubtitle:
+    "Join marketing teams orchestrating AI workflows with Front Cloud Creative.",
+  finalData: [
+    "Start with 15,000 free tokens",
+    "No credit card required",
+    "Access to all AI providers",
+    "Cancel anytime",
+  ],
+  finalPrimaryCta: "Start Creating Today",
+  finalSecondaryCta: "Schedule Demo",
+  finalSecondaryCtaPercentage: "95%",
+  finalSecondaryCtaSatisfaction: "Satisfaction",
+  finalMil: "1M+",
+  finalGen: "Generated",
+  footerTagline:
+    "The most powerful AI content platform with access to OpenAI, Anthropic, Google, and Ollama in one subscription.",
+
+  statsTiles2: [
+    {
+      title: "Active Users",
+      description: "10,000+",
+      Icon: UsersRound,
+    },
+    {
+      title: "Content Generated",
+      description: "1M+",
+      Icon: Sparkles,
+    },
+    {
+      title: "User Satisfaction",
+      description: "95%",
+      Icon: TrendingUp,
+    },
+  ],
+
+  data: {
+    header: {
+      platformName: "Front Cloud Creative",
+      platformDescription: "AI Content Generation Platform",
+      demoLabel: "Live Demo",
+      status: "Active",
+    },
+    leftPanel: {
+      contentBrief: {
+        title: "Content Brief",
+        example:
+          "Create an Instagram ad for a new fitness app targeting millennials. Focus on convenience and quick workouts. Include a strong CTA.",
+      },
+      conversionBadge: {
+        percentage: "94% Conversion",
+        note: "vs industry avg",
+      },
+      aiProvider: {
+        title: "AI Provider",
+        name: "GPT-4 Turbo",
+        provider: "OpenAI",
+      },
+      contentType: {
+        title: "Content Type",
+        type: "Social Media Ad",
+      },
+      toneStyle: {
+        title: "Tone & Style",
+        styles: ["Energetic", "Professional"],
+      },
+    },
+    rightPanel: {
+      generatedContent: {
+        title: "Generated Content",
+        generating: "Generating..",
+        headline: {
+          label: "Headline",
+          content: "Transform Your Body in Just 15 Minutes!",
+        },
+        bodyCopy: {
+          label: "Body Copy",
+          content:
+            "No time for the gym? No problem! FitQuick delivers personalized 15-minute workouts that fit your busy lifestyle. Perfect for busy millennials who want results without the time commitment. Join 50,000+ users getting stronger every day.",
+        },
+        callToAction: {
+          label: "Call to Action",
+          buttonText: "Start Your Free Trial – No Credit Card Required",
+        },
+        tokensUsed: "Tokens used: 124 / 15,000",
+        generatedIn: "Generated in 12.4s",
+      },
+      actions: {
+        tryYourself: "Try It Yourself",
+        watchDemo: "Watch Full Demo",
+      },
+    },
+  },
+
+  LimitedTime: "Limited Time: Free tokens doubled for new users",
+  LimitedDes:
+    "Join the AI content revolution today. Start creating professional content that converts with the power of multiple AI providers in one unified platform.",
+
+  footerLinks: {
+    product: {
+      heading: "Product",
+      links: [
+        { label: "Features", href: "#" },
+        { label: "Pricing", href: "#" },
+        { label: "Generators", href: "#" },
+        { label: "Integrations", href: "#" },
+        { label: "Templates", href: "#" },
+      ],
+    },
+    company: {
+      heading: "Company",
+      links: [
+        { label: "About Us", href: "#" },
+        { label: "Careers", href: "#" },
+        { label: "Blog", href: "#" },
+        { label: "Contact", href: "#" },
+      ],
+    },
+    Support: {
+      heading: "Support",
+      links: [
+        { label: "Help Center", href: "#" },
+        { label: "Documentation", href: "#" },
+        { label: "Status Page", href: "#" },
+      ],
+    },
+
+    Legal: {
+      heading: "Legal",
+      links: [
+        { label: "Privacy Policy", href: "#" },
+        { label: "Terms of Service", href: "#" },
+        { label: "Cookie Policy", href: "#" },
+      ],
+    },
+  },
+  footerLegal:
+    "© " +
+    new Date().getFullYear() +
+    " Front Cloud Creative. All rights reserved.",
+  footerBottomCta: "Subscribe",
+  footerInputPlaceholder: "Enter your email",
+} as const;
