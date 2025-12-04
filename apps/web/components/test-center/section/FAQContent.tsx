@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -37,10 +37,21 @@ export const FAQContent = () => {
     toast.success("Link copied!", { duration: 1000 });
   };
 
+  // FILTER FAQ DATA
+  const filteredFaqs = faqData.filter((q) =>
+    q.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // Collapse accordion when search changes
+  useEffect(() => {
+    setOpenItems([]);
+  }, [search]);
+
   return (
     <div className="w-full mt-10">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold">FAQ</h2>
+
         <div className="flex justify-end gap-3">
           <Button
             className="bg-white text-black hover:bg-white hover:text-black border"
@@ -48,12 +59,15 @@ export const FAQContent = () => {
           >
             Collapse all
           </Button>
+
           <Button
             className="bg-white text-black hover:bg-white hover:text-black border"
-            onClick={() => setOpenItems(faqData.map((_, i) => `${i}`))}
+            onClick={() => setOpenItems(filteredFaqs.map((_, i) => `${i}`))}
           >
             Expand all
           </Button>
+
+          {/* SEARCH */}
           <div className="relative">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
             <Input
@@ -66,56 +80,63 @@ export const FAQContent = () => {
         </div>
       </div>
 
+      {/* ACCORDION */}
       <Accordion
         type="multiple"
         value={openItems}
         onValueChange={(val) => setOpenItems(val)}
         className="space-y-4"
       >
-        {faqData.map((question, idx) => {
-          const isOpen = openItems.includes(`${idx}`);
-          return (
-            <AccordionItem
-              key={idx}
-              value={`${idx}`}
-              className="bg-white rounded-lg shadow-sm border border-gray-300 cursor-pointer"
-            >
-              <AccordionTrigger className="flex justify-between items-center w-full p-0">
-                <div className="flex justify-between items-center px-6 w-full">
-                  <div className="flex items-center gap-2 justify-center">
-                    <ChevronDown
-                      className={`h-4 w-4 text-gray-700 transition-transform duration-300 ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                    <AccordionTrigger className="text-left py-5 text-base font-medium flex-1">
-                      {question}
-                    </AccordionTrigger>
+        {filteredFaqs.length > 0 ? (
+          filteredFaqs.map((question, idx) => {
+            const isOpen = openItems.includes(`${idx}`);
+            return (
+              <AccordionItem
+                key={idx}
+                value={`${idx}`}
+                className="bg-white rounded-lg shadow-sm border border-gray-300 cursor-pointer"
+              >
+                <AccordionTrigger className="flex justify-between items-center w-full p-0">
+                  <div className="flex justify-between items-center px-6 w-full">
+                    <div className="flex items-center gap-2 justify-center">
+                      <ChevronDown
+                        className={`h-4 w-4 text-gray-700 transition-transform duration-300 ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                      <AccordionTrigger className="text-left py-5 text-base font-medium flex-1">
+                        {question}
+                      </AccordionTrigger>
+                    </div>
+
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="ml-4 bg-white text-black border hover:bg-white hover:text-black"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCopy(question);
+                      }}
+                    >
+                      <Copy className="w-4 h-4 mr-1" />
+                      Copy link
+                    </Button>
                   </div>
+                </AccordionTrigger>
 
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="ml-4 bg-white text-black border hover:bg-white hover:text-black"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCopy(question);
-                    }}
-                  >
-                    <Copy className="w-4 h-4 mr-1" />
-                    Copy link
-                  </Button>
-                </div>
-              </AccordionTrigger>
-
-              <AccordionContent>
-                <p className="text-gray-700 py-3 border-t border-gray-300 w-full px-6 mt-2">
-                  Answer for: {question}
-                </p>
-              </AccordionContent>
-            </AccordionItem>
-          );
-        })}
+                <AccordionContent>
+                  <p className="text-gray-700 py-3 border-t border-gray-300 w-full px-6 mt-2">
+                    Answer for: {question}
+                  </p>
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })
+        ) : (
+          <p className="rounded-lg mt-10 text-center border p-5 text-base font-medium">
+            No matching questions found
+          </p>
+        )}
       </Accordion>
     </div>
   );

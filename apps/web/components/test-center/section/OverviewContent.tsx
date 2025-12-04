@@ -234,7 +234,7 @@ export const OverviewContent = () => {
         <div className="col-span-12 lg:col-span-3 space-y-6">
           <div>
             <h2 className="font-semibold text-gray-800 mb-5">Compliance</h2>
-            <div className="border rounded-lg p-5 bg-white shadow-sm max-w-[17rem]">
+            <div className="border rounded-lg p-5 bg-white shadow-sm  ">
               <div className="space-y-4">
                 {complianceItems.map((c, i) => (
                   <div key={i} className="flex items-center gap-3">
@@ -368,7 +368,8 @@ export const OverviewContent = () => {
 
         {/* Controls */}
         <div className="col-span-12 lg:col-span-9">
-          <div className="flex justify-between items-center mb-5">
+          <div className="flex flex-wrap justify-between items-center mb-5">
+            {/* LEFT SIDE ALWAYS TOGETHER */}
             <div className="flex items-center gap-3">
               <h2 className="font-semibold text-gray-900 text-xl">Controls</h2>
               <span className="flex items-center gap-1 text-green-700 bg-green-100 px-3 py-1 rounded-full text-xs">
@@ -376,7 +377,9 @@ export const OverviewContent = () => {
                 Updated 25 minutes ago
               </span>
             </div>
-            <button className="text-blue-600 hover:underline text-sm font-medium">
+
+            {/* BUTTON — BREAKS ONLY ON SMALL SCREENS */}
+            <button className="text-blue-600 hover:underline text-sm font-medium mt-3 md:mt-0">
               View all controls
             </button>
           </div>
@@ -421,7 +424,7 @@ export const OverviewContent = () => {
                   key={i}
                   className="flex items-center gap-2 text-base font-normal"
                 >
-                  <Check className=" w-4 h-4" /> {d}
+                  <Check className="w-4 h-4 shrink-0" /> {d}
                 </p>
               ))}
             </div>
@@ -470,7 +473,7 @@ export const OverviewContent = () => {
                       }`}
                     >
                       <div className="min-h-0 border-t">
-                        <div className="px-5 py-3 text-base text-gray-700 leading-relaxed">
+                        <div className="px-7 py-3 text-sm text-gray-700 leading-relaxed">
                           <p>{faq.answer}</p>
                         </div>
                       </div>
