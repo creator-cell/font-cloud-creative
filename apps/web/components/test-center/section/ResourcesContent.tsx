@@ -116,7 +116,134 @@ const sectionsData = [
       },
     ],
   },
-  // ... you can keep the remaining section objects as-is
+  {
+    title: "Questionnaires",
+    items: [
+      {
+        label: "Data Protection Impact Assessment",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "AI Impact Assessment",
+        access: false,
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Pentest Executive Summary - 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Synthesia Penetration Test – Full report – March 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+    ],
+  },
+  {
+    title: "Diagrams",
+    items: [
+      {
+        label: "Data Protection Impact Assessment",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "AI Impact Assessment",
+        access: false,
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Pentest Executive Summary - 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Synthesia Penetration Test – Full report – March 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+    ],
+  },
+  {
+    title: "General",
+    items: [
+      {
+        label: "Data Protection Impact Assessment",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "AI Impact Assessment",
+        access: false,
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Pentest Executive Summary - 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Synthesia Penetration Test – Full report – March 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+    ],
+  },
+  {
+    title: "Policies",
+    items: [
+      {
+        label: "Data Protection Impact Assessment",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "AI Impact Assessment",
+        access: false,
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Pentest Executive Summary - 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Synthesia Penetration Test – Full report – March 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+    ],
+  },
 ];
 
 export function ResourcesContent() {
@@ -212,8 +339,8 @@ export function ResourcesContent() {
             />
           </div>
         </div>
+        <div className="font-medium text-xl md:hidden mb-8">Resources</div>
 
-        {/* Sections */}
         {filteredSections.map((section, secIdx) => (
           <div
             key={section.title}
