@@ -66,7 +66,7 @@ const controlsData = {
           className="w-6 h-6"
           fill="#16a34a"
           stroke="white"
-         strokeWidth={2}
+          strokeWidth={2}
         />
       ),
     },
@@ -82,7 +82,7 @@ const controlsData = {
           className="w-6 h-6"
           fill="#16a34a"
           stroke="white"
-         strokeWidth={2}
+          strokeWidth={2}
         />
       ),
     },
@@ -95,7 +95,7 @@ const controlsData = {
           className="w-6 h-6"
           fill="#16a34a"
           stroke="white"
-         strokeWidth={2}
+          strokeWidth={2}
         />
       ),
     },
@@ -213,10 +213,8 @@ export const ControlsContent = () => {
   );
 
   return (
-    <div className="flex font-sans">
-
-      {/* LEFT SIDEBAR — HIDE ON MOBILE */}
-      <div className="p-4  flex-col w-60 hidden md:flex">
+    <div className="flex">
+      <div className="flex-col w-60 hidden md:flex">
         <h2 className="text-lg font-semibold mb-4">Controls</h2>
 
         <ul className="flex-1 mt-10">
@@ -236,12 +234,7 @@ export const ControlsContent = () => {
         </ul>
       </div>
 
-      {/* RIGHT CONTENT */}
-      {/* <div className="flex-1 px-10 pt-4"> */}
-      <div className="flex-1  pt-4 px-3 sm:px-2 md:px-10 md:pt-4">
-
-
-        {/* SEARCH BAR — HIDE ON MOBILE */}
+      <div className="flex-1">
         <div className="w-full   justify-end mb-6 hidden md:flex">
           <div className="w-96">
             <div className="relative">
@@ -259,8 +252,8 @@ export const ControlsContent = () => {
             </div>
           </div>
         </div>
+        <div className="font-medium text-2xl md:hidden mb-8">Controls</div>
 
-        {/* MAIN CONTENT */}
         <div className="space-y-12">
           {visibleCategories.map((category) => (
             <div
