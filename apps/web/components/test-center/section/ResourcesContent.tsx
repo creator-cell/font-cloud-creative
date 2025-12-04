@@ -300,20 +300,30 @@ export function ResourcesContent() {
               </div>
               <div>
                 <Label className="text-sm font-semibold">Reason</Label>
-                <Select>
-                  <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="Select a reason" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="existing_customer">
-                      I'm an existing customer
-                    </SelectItem>
-                    <SelectItem value="prospective_customer">
-                      I'm a prospective customer
-                    </SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="w-full">
+                  <Select>
+                    <SelectTrigger className="mt-1 w-full">
+                      <SelectValue placeholder="Select a reason" />
+                    </SelectTrigger>
+                    <SelectContent className="w-[var(--radix-select-trigger-width)] cursor-pointer">
+                      <SelectItem
+                        value="existing_customer"
+                        className="cursor-pointer"
+                      >
+                        I'm an existing customer
+                      </SelectItem>
+                      <SelectItem
+                        value="prospective_customer"
+                        className="cursor-pointer"
+                      >
+                        I'm a prospective customer
+                      </SelectItem>
+                      <SelectItem value="other" className="cursor-pointer">
+                        Other
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <div>
                 <Label className="text-sm font-medium">Access level</Label>
