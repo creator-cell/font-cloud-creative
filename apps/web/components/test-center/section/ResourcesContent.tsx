@@ -116,110 +116,7 @@ const sectionsData = [
       },
     ],
   },
-  {
-    title: "Questionnaires",
-    items: [
-      {
-        label: "CAIQ-v4.0.2 SIGM Security Questionnaire",
-        access: false,
-        link: "#",
-        pdfUrl:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-      {
-        label: "ISO Lite Questionnaire",
-        access: false,
-        link: "#",
-        pdfUrl:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-      {
-        label: "AI Governance FAQ",
-        access: false,
-        link: "#",
-        pdfUrl:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-    ],
-  },
-  {
-    title: "General",
-    items: [
-      {
-        label: "CAIQ-v4.0.2 SIGM Security Questionnaire",
-        access: false,
-        link: "#",
-        pdfUrl:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-      {
-        label: "ISO Lite Questionnaire",
-        access: false,
-        link: "#",
-        pdfUrl:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-      {
-        label: "AI Governance FAQ",
-        access: false,
-        link: "#",
-        pdfUrl:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-    ],
-  },
-  {
-    title: "Diagrams",
-    items: [
-      {
-        label: "CAIQ-v4.0.2 SIGM Security Questionnaire",
-        access: false,
-        link: "#",
-        pdfUrl:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-      {
-        label: "ISO Lite Questionnaire",
-        access: false,
-        link: "#",
-        pdfUrl:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-      {
-        label: "AI Governance FAQ",
-        access: false,
-        link: "#",
-        pdfUrl:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-    ],
-  },
-  {
-    title: "Policies",
-    items: [
-      {
-        label: "CAIQ-v4.0.2 SIGM Security Questionnaire",
-        access: false,
-        link: "#",
-        pdfUrl:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-      {
-        label: "ISO Lite Questionnaire",
-        access: false,
-        link: "#",
-        pdfUrl:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-      {
-        label: "AI Governance FAQ",
-        access: false,
-        link: "#",
-        pdfUrl:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-    ],
-  },
+  // ... you can keep the remaining section objects as-is
 ];
 
 export function ResourcesContent() {
@@ -242,8 +139,12 @@ export function ResourcesContent() {
     });
 
   const copyLink = (txt: string) => {
-    navigator.clipboard.writeText(txt);
-    toast.success("Resource link copied", { duration: 1000 });
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(txt);
+      toast.success("Resource link copied", { duration: 1000 });
+    } else {
+      toast.error("Clipboard not available");
+    }
   };
 
   const handleBulkDownload = async () => {
@@ -275,15 +176,15 @@ export function ResourcesContent() {
   };
 
   return (
-    <div className="flex gap-6 w-full mt-6">
-      <div className="w-52 flex-shrink-0 space-y-2">
+    <div className="flex flex-col md:flex-row gap-6 w-full mt-6">
+      <div className="w-52 flex-shrink-0 space-y-2 hidden md:block">
         <h1 className="text-xl md:text-2xl font-semibold">Resources</h1>
         <div style={{ marginTop: "4rem" }}>
           {sectionsData.map((section, idx) => (
             <button
               key={section.title}
               onClick={() => scrollToSection(idx)}
-              className="block py-1.5 text-base text-gray-700 hover:text-black transition"
+              className="block py-1.5 text-base text-gray-700 hover:text-black transition text-left"
             >
               {section.title}
             </button>
@@ -292,9 +193,9 @@ export function ResourcesContent() {
       </div>
 
       <div className="flex-1">
-        <div className="flex justify-end items-center mb-7 gap-3">
+        <div className="md:flex flex-col md:flex-row justify-end items-center mb-7 gap-3 w-full hidden ">
           <Button
-            className="bg-white text-black border hover:bg-white hover:text-black"
+            className="w-full md:w-auto bg-white text-black border hover:bg-white hover:text-black"
             onClick={handleBulkDownload}
           >
             <ArrowDown className="w-4 h-5 mr-2" />
@@ -312,6 +213,7 @@ export function ResourcesContent() {
           </div>
         </div>
 
+        {/* Sections */}
         {filteredSections.map((section, secIdx) => (
           <div
             key={section.title}
@@ -321,44 +223,50 @@ export function ResourcesContent() {
             <h2 className="text-lg font-semibold mb-4">{section.title}</h2>
 
             <div className="border rounded-lg overflow-hidden bg-white">
-              {section.items.map((item, index) => (
-                <div
-                  key={item.label}
-                  className="grid grid-cols-[1fr_max-content] items-center px-5 py-6 border-b last:border-none"
-                >
-                  {/* Label + Copy */}
-                  <div className="flex items-center gap-2">
-                    <p className="font-medium text-base text-black">
-                      {item.label}
-                    </p>
-                    <Button
-                      onClick={() => copyLink(item.link)}
-                      className="flex items-center gap-1 bg-white text-gray-700 border text-xs py-1.5 px-3 hover:bg-white"
-                    >
-                      <Copy className="w-3 h-3" /> Copy link
-                    </Button>
-                  </div>
-
-                  {/* View / Request */}
-                  <div className="flex justify-end">
-                    {item.access ? (
-                      <Button
-                        className="flex items-center text-sm bg-white text-black hover:bg-white border px-4 py-1"
-                        onClick={() => setPdfUrl(item.pdfUrl)}
-                      >
-                        <Eye className="w-3 h-3 mr-1" /> View
-                      </Button>
-                    ) : (
-                      <Button
-                        className="flex items-center gap-1 bg-white text-black border px-4 py-1 hover:bg-white"
-                        onClick={() => setModalOpen(true)}
-                      >
-                        <Lock className="w-4 h-4" /> Request access
-                      </Button>
-                    )}
-                  </div>
+              {section.items.length === 0 ? (
+                <div className="px-5 py-6 text-sm text-gray-500">
+                  No resources found.
                 </div>
-              ))}
+              ) : (
+                section.items.map((item, index) => (
+                  <div
+                    key={item.label + index}
+                    className="flex flex-col md:grid md:grid-cols-[1fr_max-content] gap-4 md:gap-0 items-start md:items-center px-5 py-4 border-b last:border-none border-gray-300"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full">
+                      <p className="font-medium text-base text-black break-words">
+                        {item.label}
+                      </p>
+                      <div className="mt-2 sm:mt-0">
+                        <Button
+                          onClick={() => copyLink(item.link || "")}
+                          className="flex items-center gap-1 bg-white text-gray-700 border text-xs py-1.5 px-3 hover:bg-white"
+                        >
+                          <Copy className="w-3 h-3" /> Copy link
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-start md:justify-end w-full md:w-auto">
+                      {item.access ? (
+                        <Button
+                          className="flex items-center text-sm bg-white text-black hover:bg-white border px-4 py-1"
+                          onClick={() => setPdfUrl(item.pdfUrl || "")}
+                        >
+                          <Eye className="w-3 h-3 mr-1" /> View
+                        </Button>
+                      ) : (
+                        <Button
+                          className="flex items-center gap-1 bg-white text-black border px-4 py-1 hover:bg-white"
+                          onClick={() => setModalOpen(true)}
+                        >
+                          <Lock className="w-4 h-4" /> Request access
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         ))}
@@ -462,6 +370,7 @@ export function ResourcesContent() {
             <a
               href={pdfUrl}
               target="_blank"
+              rel="noreferrer"
               download
               className="flex items-center gap-1 text-black border px-3 py-1 rounded hover:bg-gray-100"
             >
