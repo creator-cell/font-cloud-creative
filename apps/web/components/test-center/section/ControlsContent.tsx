@@ -215,7 +215,7 @@ export const ControlsContent = () => {
   return (
     <div className="flex">
       <div className="flex-col w-60 hidden md:flex">
-        <h2 className="text-lg font-semibold mb-4">Controls</h2>
+        <h2 className="text-2xl font-semibold mb-4">Controls</h2>
 
         <ul className="flex-1 mt-10">
           {visibleCategories.length > 0 ? (
