@@ -31,6 +31,14 @@ const faqData = [
 export const FAQContent = () => {
   const [openItems, setOpenItems] = useState<string[]>([]);
   const [search, setSearch] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleCopy = (question: string) => {
     navigator.clipboard.writeText(question);
@@ -49,7 +57,7 @@ export const FAQContent = () => {
 
   return (
     <div className="w-full mt-10">
-      <div className="flex items-center justify-between mb-6">
+      <div className="md:flex items-center justify-between mb-6 hidden">
         <h2 className="text-2xl font-semibold">FAQ</h2>
 
         <div className="flex justify-end gap-3">
@@ -80,7 +88,7 @@ export const FAQContent = () => {
         </div>
       </div>
 
-      {/* ACCORDION */}
+      <div className="font-medium text-xl md:hidden mb-8">FAQ</div>
       <Accordion
         type="multiple"
         value={openItems}
@@ -97,14 +105,15 @@ export const FAQContent = () => {
                 className="bg-white rounded-lg shadow-sm border border-gray-300 cursor-pointer"
               >
                 <AccordionTrigger className="flex justify-between items-center w-full p-0">
-                  <div className="flex justify-between items-center px-6 w-full">
+                  <div className="flex justify-between items-center md:px-6 px-3 w-full">
                     <div className="flex items-center gap-2 justify-center">
                       <ChevronDown
-                        className={`h-4 w-4 text-gray-700 transition-transform duration-300 ${
+                        className={`h-5 w-5 flex-shrink-0 text-gray-700 transition-transform duration-300 origin-center ${
                           isOpen ? "rotate-180" : ""
                         }`}
                       />
-                      <AccordionTrigger className="text-left py-5 text-base font-medium flex-1">
+
+                      <AccordionTrigger className="text-left py-4 md:py-5 md:text-base text-sm font-medium flex-1">
                         {question}
                       </AccordionTrigger>
                     </div>
@@ -112,14 +121,14 @@ export const FAQContent = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="ml-4 bg-white text-black border hover:bg-white hover:text-black"
+                      className="ml-4 text-black border hover:bg-white hover:text-black py-1 px-3"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleCopy(question);
                       }}
                     >
                       <Copy className="w-4 h-4 mr-1" />
-                      Copy link
+                      {isMobile ? "Copy" : "Copy link"}
                     </Button>
                   </div>
                 </AccordionTrigger>

@@ -116,7 +116,134 @@ const sectionsData = [
       },
     ],
   },
-  // ... you can keep the remaining section objects as-is
+  {
+    title: "Questionnaires",
+    items: [
+      {
+        label: "Data Protection Impact Assessment",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "AI Impact Assessment",
+        access: false,
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Pentest Executive Summary - 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Synthesia Penetration Test – Full report – March 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+    ],
+  },
+  {
+    title: "Diagrams",
+    items: [
+      {
+        label: "Data Protection Impact Assessment",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "AI Impact Assessment",
+        access: false,
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Pentest Executive Summary - 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Synthesia Penetration Test – Full report – March 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+    ],
+  },
+  {
+    title: "General",
+    items: [
+      {
+        label: "Data Protection Impact Assessment",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "AI Impact Assessment",
+        access: false,
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Pentest Executive Summary - 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Synthesia Penetration Test – Full report – March 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+    ],
+  },
+  {
+    title: "Policies",
+    items: [
+      {
+        label: "Data Protection Impact Assessment",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "AI Impact Assessment",
+        access: false,
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Pentest Executive Summary - 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        label: "Synthesia Penetration Test – Full report – March 2025",
+        access: false,
+        link: "#",
+        pdfUrl:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+    ],
+  },
 ];
 
 export function ResourcesContent() {
@@ -212,8 +339,8 @@ export function ResourcesContent() {
             />
           </div>
         </div>
+        <div className="font-medium text-xl md:hidden mb-8">Resources</div>
 
-        {/* Sections */}
         {filteredSections.map((section, secIdx) => (
           <div
             key={section.title}
@@ -300,20 +427,30 @@ export function ResourcesContent() {
               </div>
               <div>
                 <Label className="text-sm font-semibold">Reason</Label>
-                <Select>
-                  <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="Select a reason" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="existing_customer">
-                      I'm an existing customer
-                    </SelectItem>
-                    <SelectItem value="prospective_customer">
-                      I'm a prospective customer
-                    </SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="w-full">
+                  <Select>
+                    <SelectTrigger className="mt-1 w-full">
+                      <SelectValue placeholder="Select a reason" />
+                    </SelectTrigger>
+                    <SelectContent className="w-[var(--radix-select-trigger-width)] cursor-pointer">
+                      <SelectItem
+                        value="existing_customer"
+                        className="cursor-pointer"
+                      >
+                        I'm an existing customer
+                      </SelectItem>
+                      <SelectItem
+                        value="prospective_customer"
+                        className="cursor-pointer"
+                      >
+                        I'm a prospective customer
+                      </SelectItem>
+                      <SelectItem value="other" className="cursor-pointer">
+                        Other
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <div>
                 <Label className="text-sm font-medium">Access level</Label>
