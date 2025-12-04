@@ -27,7 +27,13 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-export const OverviewContent = () => {
+// export const OverviewContent = () => {
+export const OverviewContent = ({
+  switchToControls,
+}: {
+  switchToControls: () => void;
+}) => {
+  // existing code ...
   const [openReportModal, setOpenReportModal] = useState(false);
   const [openIds, setOpenIds] = useState([0]);
 
@@ -379,7 +385,10 @@ export const OverviewContent = () => {
             </div>
 
             {/* BUTTON — BREAKS ONLY ON SMALL SCREENS */}
-            <button className="text-blue-600 hover:underline text-sm font-medium mt-3 md:mt-0">
+            <button
+              onClick={switchToControls}
+              className="text-blue-600 hover:underline text-sm font-medium mt-3 md:mt-0"
+            >
               View all controls
             </button>
           </div>

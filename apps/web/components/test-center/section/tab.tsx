@@ -12,10 +12,11 @@ const tabs = ["Overview", "Resources", "Controls", "FAQ"];
 
 export default function SecurityTabs({
   onChange,
+  activeIndex,
 }: {
   onChange: (index: number) => void;
+  activeIndex: number;
 }) {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -26,7 +27,6 @@ export default function SecurityTabs({
   }, []);
 
   const handleSelect = (index: number) => {
-    setActiveIndex(index);
     onChange(index);
   };
 
