@@ -27,20 +27,34 @@ export const Navigation = () => {
 
   return (
     <>
-      <header className="flex items-center justify-between bg-white border-b shadow-sm py-3 px-5 md:px-8">
+      <header className="flex items-center justify-between dark:bg-[#0f1729] dark:text-[#f2f6fa] border-b shadow-sm py-3 px-5 md:px-8">
         <Link href="/">
-          <div className="flex items-center justify-start gap-4">
+          {/* <div className="flex items-center justify-start gap-4">
             <Image src="/logo1.png" alt="Logo" width={50} height={50} />
             <div className="text-black font-semibold h-6 w-0.5 bg-black"></div>
             <p className="text-lg md:text-xl text-black font-normal">
               Front Cloud Creative
             </p>
-          </div>
+          </div> */}
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 text-base font-semibold"
+          >
+            <Image src="/logo2.png" alt="Logo" height={40} width={40} />
+            <div className="flex flex-col leading-tight">
+              <span className="text-[#0A0A0A] text-medium font-semibold dark:text-[#f2f6fa]">
+                Front Cloud
+              </span>
+              <span className="text-[0.70rem] text-[#64748B] text-medium font-normal dark:text-white">
+                Creative
+              </span>
+            </div>
+          </Link>
         </Link>
 
         <div className="md:flex items-center gap-2 hidden">
           <Button
-            className="bg-white text-black border hover:bg-white"
+            className="bg-white text-black border hover:bg-white dark:bg-[#162033] dark:text-white"
             onClick={() => seQuestion(!question)}
           >
             <Sparkle className="w-4 h-5 mr-2" />
@@ -48,7 +62,7 @@ export const Navigation = () => {
           </Button>
 
           <Button
-            className="bg-blue-600 text-white"
+            className="bg-blue-600 text-white dark:bg-[#0ea3e8] dark:text-white"
             onClick={() => setModalOpen(true)}
           >
             Request Access

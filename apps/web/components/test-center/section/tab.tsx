@@ -54,15 +54,15 @@ export default function SecurityTabs({
       )}
 
       {!isMobile && (
-        <div className="border-b flex gap-8 mt-4">
+        <div className="border-b dark:border-[#324154] flex gap-8 mt-4">
           {tabs.map((tab, index) => (
             <button
               key={tab}
               onClick={() => handleSelect(index)}
               className={`pb-2 text-sm font-semibold ${
                 activeIndex === index
-                  ? "border-b-2 border-blue-600 text-black"
-                  : "text-gray-500 hover:text-black"
+                  ? "border-b-2 border-blue-600 text-black dark:text-white"
+                  : "text-gray-500 hover:text-black dark:hover:text-gray-300 dark:text-gray-400"
               }`}
             >
               {tab}
