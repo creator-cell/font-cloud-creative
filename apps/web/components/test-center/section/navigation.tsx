@@ -19,6 +19,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import Link from "next/link";
 
 export const Navigation = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -27,13 +28,15 @@ export const Navigation = () => {
   return (
     <>
       <header className="flex items-center justify-between bg-white border-b shadow-sm py-3 px-5 md:px-8">
-        <div className="flex items-center justify-start gap-4">
-          <Image src="/logo1.png" alt="Logo" width={50} height={50} />
-          <div className="text-black font-semibold h-6 w-0.5 bg-black"></div>
-          <p className="text-lg md:text-xl text-black font-normal">
-            Front Cloud Creative
-          </p>
-        </div>
+        <Link href="/">
+          <div className="flex items-center justify-start gap-4">
+            <Image src="/logo1.png" alt="Logo" width={50} height={50} />
+            <div className="text-black font-semibold h-6 w-0.5 bg-black"></div>
+            <p className="text-lg md:text-xl text-black font-normal">
+              Front Cloud Creative
+            </p>
+          </div>
+        </Link>
 
         <div className="md:flex items-center gap-2 hidden">
           <Button
