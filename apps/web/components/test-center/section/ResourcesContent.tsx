@@ -347,7 +347,7 @@ export function ResourcesContent() {
           </div>
         </div>
 
-        <div className="font-medium text-2xl md:hidden mb-8 ">Resources</div>
+        <div className="font-medium text-2xl md:hidden mb-8 dark:text-[#f2f6f9]">Resources</div>
 
         {/* Render filtered sections or "No resources found" */}
         {filteredSections.length === 0 ? (

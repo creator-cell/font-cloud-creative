@@ -12,8 +12,7 @@ const controlsData = {
         "The company requires authentication to production datastores to use authorized secure authentication mechanisms, such as unique SSH key.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -25,8 +24,7 @@ const controlsData = {
         "The company restricts privileged access to encryption keys to authorized users with a business need.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -38,8 +36,7 @@ const controlsData = {
         "The company requires authentication to systems and applications to use unique username and password or authorized SSH keys.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -50,8 +47,7 @@ const controlsData = {
       description: "System access restricted to authorized access only.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -63,8 +59,7 @@ const controlsData = {
         "Policies and procedures define how access is granted and revoked in production systems.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -79,8 +74,7 @@ const controlsData = {
         "All employees must complete mandatory security awareness training annually.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -92,8 +86,7 @@ const controlsData = {
         "Clear roles and responsibilities for security within the organization.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -108,8 +101,7 @@ const controlsData = {
         "All code changes must go through peer review before deployment.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -121,8 +113,7 @@ const controlsData = {
         "Regular vulnerability scans of applications and infrastructure.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -137,8 +128,7 @@ const controlsData = {
         "Formal incident response plan exists and is tested regularly.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -150,8 +140,7 @@ const controlsData = {
         "Periodic internal audits are conducted to verify policy compliance.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -165,8 +154,7 @@ const controlsData = {
       description: "All sensitive data is encrypted while being transmitted.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -177,8 +165,7 @@ const controlsData = {
       description: "Data is stored and retained according to defined policies.",
       status: (
         <CircleCheck
-          className="w-6 h-6"
-          fill="#16a34a"
+          className="w-6 h-6 fill-[#16a34a] dark:fill-transparent"
           stroke="white"
           strokeWidth={2}
         />
@@ -215,7 +202,9 @@ export const ControlsContent = () => {
   return (
     <div className="flex">
       <div className="flex-col w-60 hidden md:flex">
-        <h2 className="text-2xl font-semibold mb-4">Controls</h2>
+        <h2 className="text-2xl font-semibold mb-4 dark:text-[#f2f6fa]">
+          Controls
+        </h2>
 
         <ul className="flex-1 mt-10">
           {visibleCategories.length > 0 ? (
@@ -223,13 +212,15 @@ export const ControlsContent = () => {
               <li
                 key={category}
                 onClick={() => handleScroll(category)}
-                className="cursor-pointer py-2 text-base text-gray-700"
+                className="cursor-pointer py-2 text-base text-gray-700 dark:text-[#f2f6f9] dark:hover:text-gray-500 "
               >
                 {category}
               </li>
             ))
           ) : (
-            <li className="py-2 px-3 text-gray-400">No controls found</li>
+            <li className="py-2 px-3 text-gray-400 dark:text-[#f2f6f9]">
+              No controls found
+            </li>
           )}
         </ul>
       </div>
@@ -247,12 +238,14 @@ export const ControlsContent = () => {
                 placeholder="Search controls"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-8 py-1.5 rounded-md border text-gray-600 border-gray-300 text-sm focus:outline-none"
+                className="w-full px-8 py-1.5 rounded-md border text-gray-600 border-gray-300 text-sm focus:outline-none "
               />
             </div>
           </div>
         </div>
-        <div className="font-medium text-2xl md:hidden mb-8">Controls</div>
+        <div className="font-medium text-2xl md:hidden mb-8 dark:text-[#f2f6fa]">
+          Controls
+        </div>
 
         <div className="space-y-12">
           {visibleCategories.map((category) => (
@@ -260,16 +253,18 @@ export const ControlsContent = () => {
               key={category}
               ref={(el) => (sectionRefs.current[category] = el)}
             >
-              <h3 className="text-xl font-semibold mb-6 pl-1">{category}</h3>
+              <h3 className="text-xl font-semibold mb-6 pl-1 dark:text-[#f2f6fa]">
+                {category}
+              </h3>
 
-              <div className="border border-gray-200 rounded-md">
+              <div className="border border-gray-200 rounded-md dark:border-[#324154] ">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b">
-                      <th className="py-2 px-4 text-xs font-medium text-gray-600 text-left">
+                    <tr className="border-b dark:border-[#324154] ">
+                      <th className="py-2 px-4 text-xs font-medium text-gray-600 text-left dark:text-[#f2f6fa]">
                         CONTROL
                       </th>
-                      <th className="py-2 px-4 text-xs font-medium text-gray-600 text-center w-20">
+                      <th className="py-2 px-4 text-xs font-medium text-gray-600 text-center w-20 dark:text-[#f2f6fa]">
                         STATUS
                       </th>
                     </tr>
@@ -279,10 +274,10 @@ export const ControlsContent = () => {
                     {filteredControlsData[category].map((item, index) => (
                       <tr key={index}>
                         <td className="py-4 px-4 border-b">
-                          <div className="text-sm font-semibold text-gray-900">
+                          <div className="text-sm font-semibold text-gray-900 dark:text-[#f2f6fa]">
                             {item.control}
                           </div>
-                          <div className="text-gray-600 text-sm mt-1 leading-relaxed">
+                          <div className="text-gray-600 text-sm mt-1 leading-relaxed dark:text-[#f2f6fa]">
                             {item.description}
                           </div>
                         </td>
