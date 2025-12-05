@@ -168,7 +168,7 @@ export const OverviewContent = ({
 
   return (
     <div className="w-full">
-      <div className="border rounded-lg px-6 py-5 leading-relaxed text-base text-gray-800 shadow-sm bg-white mb-10 dark:bg-[#192438] dark:text-[#f2f6fa]">
+      <div className="border rounded-lg px-6 py-5 leading-relaxed text-base text-gray-800 shadow-sm bg-white mb-10 dark:bg-[#192438] dark:text-[#f2f6fa] dark:border-[#324154]">
         <div className="max-w-5xl">
           <p className="mb-4 font-medium">
             As a company pioneering this new kind of media, we’re aware of the
@@ -238,7 +238,7 @@ export const OverviewContent = ({
             <h2 className="font-semibold text-gray-800 mb-5 dark:text-[#f2f6fa]">
               Compliance
             </h2>
-            <div className="border rounded-lg p-5 bg-white shadow-sm dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b]">
+            <div className="border rounded-lg p-5 bg-white shadow-sm dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b] dark:border-[#324154]">
               <div className="space-y-4">
                 {complianceItems.map((c, i) => (
                   <div key={i} className="flex items-center gap-3">
@@ -401,7 +401,7 @@ export const OverviewContent = ({
             {controlsList.map((control, i) => (
               <div
                 key={i}
-                className="border p-5 rounded-lg bg-white shadow-sm cursor-pointer group dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b] dark:text-[#f2f6fa]"
+                className="border  p-5 rounded-lg bg-white shadow-sm cursor-pointer group dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b] dark:text-[#f2f6fa] dark:border-[#324154]"
               >
                 <div className="flex justify-between items-start">
                   <h3 className="font-semibold mb-3 text-gray-900 dark:text-[#f2f6fa]">
@@ -436,7 +436,7 @@ export const OverviewContent = ({
             <h2 className="font-semibold text-gray-800 mb-4 dark:text-[#f2f6fa]">
               Data collected
             </h2>
-            <div className="border p-5 rounded-lg bg-white shadow-sm text-sm text-gray-700 space-y-2 dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b]">
+            <div className="border  p-5 rounded-lg bg-white shadow-sm text-sm text-gray-700 space-y-2 dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b] dark:border-[#324154]">
               {dataCollected.map((d, i) => (
                 <p
                   key={i}
@@ -465,7 +465,7 @@ export const OverviewContent = ({
                 return (
                   <div
                     key={faq.id}
-                    className={`bg-white text-sm text-gray-800 dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b] ${i < initialFaqs.length - 1 ? "border-b dark:[#324154]" : ""}`}
+                    className={`bg-white text-sm text-gray-800 dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b] ${i < initialFaqs.length - 1 ? "border-b dark:border-b-[#324154]" : ""}`}
                   >
                     <div
                       onClick={() => handleToggle(faq.id)}

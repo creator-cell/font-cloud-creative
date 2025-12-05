@@ -309,13 +309,13 @@ export function ResourcesContent() {
     <div className="flex flex-col md:flex-row gap-6 w-full mt-6">
       {/* Sidebar */}
       <div className="w-52 flex-shrink-0 space-y-2 hidden md:block">
-        <h1 className="text-xl md:text-2xl font-semibold">Resources</h1>
+        <h1 className="text-xl md:text-2xl font-semibold dark:text-[#f2f6fa]">Resources</h1>
         <div style={{ marginTop: "4rem" }}>
           {sectionsData.map((section, idx) => (
             <button
               key={section.title}
               onClick={() => scrollToSection(idx)}
-              className="block py-1.5 text-base text-gray-700 hover:text-black transition text-left"
+              className="block py-1.5 text-base text-gray-700 hover:text-black transition text-left dark:text-[#f2f6fa] dark:hover:text-gray-600"
             >
               {section.title}
             </button>
@@ -328,17 +328,18 @@ export function ResourcesContent() {
         {/* Bulk download + Search */}
         <div className="md:flex flex-col md:flex-row justify-end items-center mb-7 gap-3 w-full hidden ">
           <Button
-            className="w-full md:w-auto bg-white text-black border hover:bg-white hover:text-black"
+            className="w-full md:w-auto bg-white text-black border hover:bg-white hover:text-black dark:border-[#324154] 
+            dark:bg-[#162033] dark:text-[#fef6fa]"
             onClick={handleBulkDownload}
           >
             <ArrowDown className="w-4 h-5 mr-2" />
             Bulk download
           </Button>
 
-          <div className="relative w-full max-w-sm">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <div className="relative w-full max-w-sm ">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500  " />
             <Input
-              className="pl-10"
+              className="pl-10 dark:border-[#324154] "
               placeholder="Search resources"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -346,11 +347,11 @@ export function ResourcesContent() {
           </div>
         </div>
 
-        <div className="font-medium text-2xl md:hidden mb-8">Resources</div>
+        <div className="font-medium text-2xl md:hidden mb-8 ">Resources</div>
 
         {/* Render filtered sections or "No resources found" */}
         {filteredSections.length === 0 ? (
-          <div className="px-5 py-6 text-sm text-gray-500">
+          <div className="px-5 py-6 text-sm text-gray-500 dark:text-[#f2f6fa]">
             No resources found.
           </div>
         ) : (
@@ -360,22 +361,25 @@ export function ResourcesContent() {
               ref={(el) => (sectionRefs.current[secIdx] = el)}
               className="mb-8"
             >
-              <h2 className="text-lg font-semibold mb-4">{section.title}</h2>
+              <h2 className="text-lg font-semibold mb-4 dark:text-[#f2f6fa]">
+                {section.title}
+              </h2>
 
-              <div className="border rounded-lg overflow-hidden bg-white">
+              <div className="border rounded-lg overflow-hidden bg-white dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b] dark:border-[#324154] ">
                 {section.items.map((item, index) => (
                   <div
                     key={item.label + index}
-                    className="flex flex-col md:grid md:grid-cols-[1fr_max-content] gap-4 md:gap-0 items-start md:items-center px-5 py-4 border-b last:border-none border-gray-300"
+                    className="flex flex-col md:grid md:grid-cols-[1fr_max-content] gap-4 md:gap-0 items-start md:items-center px-5 py-4 border-b last:border-none border-gray-300 dark:border-[#324154] "
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full">
-                      <p className="font-medium text-base text-black break-words">
+                      <p className="font-medium text-base text-black break-words dark:text-[#fef6fa]">
                         {item.label}
                       </p>
                       <div className="mt-2 sm:mt-0">
                         <Button
                           onClick={() => copyLink(item.link || "")}
-                          className="flex items-center gap-1 bg-white text-gray-700 border text-xs py-1.5 px-3 hover:bg-white"
+                          className="flex items-center gap-1 bg-white text-gray-700 border text-xs py-1.5 px-3 hover:bg-white dark:bg-[#162033]
+                          dark:border-[#324154] dark:text-[#f2f6fa]"
                         >
                           <Copy className="w-3 h-3" /> Copy link
                         </Button>
@@ -385,14 +389,14 @@ export function ResourcesContent() {
                     <div className="flex justify-start md:justify-end w-full md:w-auto">
                       {item.access ? (
                         <Button
-                          className="flex items-center text-sm bg-white text-black hover:bg-white border px-4 py-1"
+                          className="flex items-center text-sm bg-white text-black hover:bg-white border px-4 py-1 dark:bg-[#162033] dark:border-[#324154] dark:text-[#f2f6fa] "
                           onClick={() => setPdfUrl(item.pdfUrl || "")}
                         >
                           <Eye className="w-3 h-3 mr-1" /> View
                         </Button>
                       ) : (
                         <Button
-                          className="flex items-center gap-1 bg-white text-black border px-4 py-1 hover:bg-white"
+                          className="flex items-center gap-1 bg-white text-black border px-4 py-1 hover:bg-white dark:bg-[#162033] dark:border-[#324154] dark:text-[#f2f6fa]"
                           onClick={() => setModalOpen(true)}
                         >
                           <Lock className="w-4 h-4" /> Request access
