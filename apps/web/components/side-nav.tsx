@@ -17,6 +17,7 @@ import {
   ChevronDown,
   Wallet as WalletIcon,
   type LucideIcon,
+  Menu,
 } from "lucide-react";
 
 type NavLink = {
@@ -66,7 +67,9 @@ export const SideNav = () => {
   const { data: session } = useSession();
   const [usage, setUsage] = useState<UsageSummary | null>(null);
   const [loadingUsage, setLoadingUsage] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(
+    {}
+  );
   const roles = session?.user?.roles?.map((role) => role.toLowerCase()) ?? [];
 
   const visibleLinks = navLinks.filter(({ allowedRoles }) => {
@@ -122,7 +125,9 @@ export const SideNav = () => {
     }
     const quota = usage.totalAllocatedTokens ?? usage.quota ?? 0;
     const available =
-      usage.tokenBalance ?? usage.availableTokens ?? Math.max(quota - (usage.tokensIn + usage.tokensOut), 0);
+      usage.tokenBalance ??
+      usage.availableTokens ??
+      Math.max(quota - (usage.tokensIn + usage.tokensOut), 0);
     const used = Math.max(quota - available, 0);
     const percent = quota > 0 ? Math.min(Math.max(used / quota, 0), 1) : 0;
     return { used, quota, available: Math.max(available, 0), percent };
@@ -130,30 +135,60 @@ export const SideNav = () => {
 
   const planLabel = (session?.user?.plan ?? "starter").toUpperCase();
 
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
   return (
     <aside className="flex h-full w-full flex-col bg-white lg:sticky lg:top-0 lg:h-screen">
       <div className="flex flex-1 flex-col">
-        <div className="flex items-center gap-2 px-4 pb-4 pt-4">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50">
-            <Image src="/logo.svg" alt="Front Cloud Creative" width={22} height={22} />
+        <div className="flex items-center justify-between px-4 pb-4 pt-4">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50">
+              <Image
+                src="/logo.svg"
+                alt="Front Cloud Creative"
+                width={22}
+                height={22}
+              />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-900">
+                Front Cloud
+              </p>
+              <p className="text-[11px] text-slate-500">Creative AI Platform</p>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-semibold text-slate-900">Front Cloud</p>
-            <p className="text-[11px] text-slate-500">Creative AI Platform</p>
-          </div>
+
+          <button
+            onClick={() => setIsMobileOpen(!isMobileOpen)}
+            className="lg:hidden p-2 rounded-md hover:bg-slate-100"
+          >
+            <Menu className="text-black cursor-pointer h-5 w-5" />
+          </button>
         </div>
-        <nav className="flex flex-col gap-0.5 px-2">
+
+        {/*  */}
+        {/* <nav className="flex flex-col gap-0.5 px-2"> */}
+        <nav
+          className={clsx(
+            "flex flex-col gap-0.5 px-2 transition-all duration-300 lg:block",
+            isMobileOpen ? "block" : "hidden"
+          )}
+        >
           {visibleLinks.map(({ href, label, Icon, children }) => {
             if (children && children.length > 0) {
-              const visibleChildren = children.filter(({ allowedRoles: childRoles }) => {
-                if (!childRoles?.length) return true;
-                if (!roles.length) return false;
-                return childRoles.some((role) => roles.includes(role));
-              });
+              const visibleChildren = children.filter(
+                ({ allowedRoles: childRoles }) => {
+                  if (!childRoles?.length) return true;
+                  if (!roles.length) return false;
+                  return childRoles.some((role) => roles.includes(role));
+                }
+              );
 
               if (visibleChildren.length === 0) return null;
 
-              const isGroupActive = visibleChildren.some((child) => pathname === child.href);
+              const isGroupActive = visibleChildren.some(
+                (child) => pathname === child.href
+              );
               const isExpanded = expandedGroups[label] ?? isGroupActive;
               const toggleGroup = () =>
                 setExpandedGroups((previous) => ({
@@ -193,33 +228,43 @@ export const SideNav = () => {
                   <div
                     className={clsx(
                       "ml-9 flex flex-col gap-1 overflow-hidden transition-all duration-500 ease-in-out",
-                      isExpanded ? "mt-1 max-h-72 opacity-100" : "max-h-0 opacity-0 pointer-events-none"
+                      isExpanded
+                        ? "mt-1 max-h-72 opacity-100"
+                        : "max-h-0 opacity-0 pointer-events-none"
                     )}
                     aria-hidden={!isExpanded}
                   >
-                    {visibleChildren.map(({ href: childHref, label: childLabel, Icon: ChildIcon }) => {
-                      const isActive = pathname === childHref;
-                      return (
-                        <Link
-                          key={childHref}
-                          href={childHref}
-                          className={clsx(
-                            "group flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition",
-                            isActive
-                              ? "bg-sky-50 text-sky-600 ring-1 ring-inset ring-sky-100"
-                              : "text-slate-500 hover:bg-slate-100 hover:text-slate-700"
-                          )}
-                        >
-                          <ChildIcon
+                    {visibleChildren.map(
+                      ({
+                        href: childHref,
+                        label: childLabel,
+                        Icon: ChildIcon,
+                      }) => {
+                        const isActive = pathname === childHref;
+                        return (
+                          <Link
+                            key={childHref}
+                            href={childHref}
                             className={clsx(
-                              "h-4 w-4 transition-colors duration-300",
-                              isActive ? "text-sky-500" : "text-slate-400 group-hover:text-slate-600"
+                              "group flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition",
+                              isActive
+                                ? "bg-sky-50 text-sky-600 ring-1 ring-inset ring-sky-100"
+                                : "text-slate-500 hover:bg-slate-100 hover:text-slate-700"
                             )}
-                          />
-                          {childLabel}
-                        </Link>
-                      );
-                    })}
+                          >
+                            <ChildIcon
+                              className={clsx(
+                                "h-4 w-4 transition-colors duration-300",
+                                isActive
+                                  ? "text-sky-500"
+                                  : "text-slate-400 group-hover:text-slate-600"
+                              )}
+                            />
+                            {childLabel}
+                          </Link>
+                        );
+                      }
+                    )}
                   </div>
                 </div>
               );
@@ -240,7 +285,9 @@ export const SideNav = () => {
                 <Icon
                   className={clsx(
                     "h-4 w-4 transition-colors",
-                    isActive ? "text-sky-500" : "text-slate-400 group-hover:text-slate-600"
+                    isActive
+                      ? "text-sky-500"
+                      : "text-slate-400 group-hover:text-slate-600"
                   )}
                 />
                 {label}
@@ -250,7 +297,9 @@ export const SideNav = () => {
         </nav>
       </div>
       <div className="mt-auto border-t border-slate-200 bg-slate-50 px-6 py-6">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Token Usage</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          Token Usage
+        </p>
         <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/70">
           <div
             className="h-full rounded-full bg-sky-500 transition-all"
