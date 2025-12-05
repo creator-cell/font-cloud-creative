@@ -27,13 +27,11 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-// export const OverviewContent = () => {
 export const OverviewContent = ({
   switchToControls,
 }: {
   switchToControls: () => void;
 }) => {
-  // existing code ...
   const [openReportModal, setOpenReportModal] = useState(false);
   const [openIds, setOpenIds] = useState([0]);
 
@@ -66,7 +64,7 @@ export const OverviewContent = ({
     },
   ];
 
-  const handleToggle = (id) => {
+  const handleToggle = (id: any) => {
     setOpenIds((prevOpenIds) => {
       if (prevOpenIds.includes(id)) {
         return prevOpenIds.filter((openId) => openId !== id);
@@ -76,7 +74,6 @@ export const OverviewContent = ({
     });
   };
 
-  // Mappings
   const complianceItems = [
     { img: "/compliancesoc1.png", label: "ISO/IEC 27001:2022" },
     { img: "/compliancesoc2.png", label: "ISO/IEC 42001:2023" },
@@ -171,8 +168,7 @@ export const OverviewContent = ({
 
   return (
     <div className="w-full">
-      {/* Top paragraph box */}
-      <div className="border rounded-lg px-6 py-5 leading-relaxed text-base text-gray-800 shadow-sm bg-white mb-10">
+      <div className="border rounded-lg px-6 py-5 leading-relaxed text-base text-gray-800 shadow-sm bg-white mb-10 dark:bg-[#192438] dark:text-[#f2f6fa]">
         <div className="max-w-5xl">
           <p className="mb-4 font-medium">
             As a company pioneering this new kind of media, we’re aware of the
@@ -239,8 +235,10 @@ export const OverviewContent = ({
         {/* Sidebar */}
         <div className="col-span-12 lg:col-span-3 space-y-6">
           <div>
-            <h2 className="font-semibold text-gray-800 mb-5">Compliance</h2>
-            <div className="border rounded-lg p-5 bg-white shadow-sm  ">
+            <h2 className="font-semibold text-gray-800 mb-5 dark:text-[#f2f6fa]">
+              Compliance
+            </h2>
+            <div className="border rounded-lg p-5 bg-white shadow-sm dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b]">
               <div className="space-y-4">
                 {complianceItems.map((c, i) => (
                   <div key={i} className="flex items-center gap-3">
@@ -249,7 +247,9 @@ export const OverviewContent = ({
                       alt={c.label}
                       className="w-12 h-12 object-contain"
                     />
-                    <p className="text-sm text-gray-800">{c.label}</p>
+                    <p className="text-sm text-gray-800 dark:text-[#f2f6fa]">
+                      {c.label}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -258,13 +258,15 @@ export const OverviewContent = ({
 
           <div className="w-full">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-gray-900">Resources</h2>
+              <h2 className="text-sm font-semibold text-gray-900 dark:text-[#f2f6fa]">
+                Resources
+              </h2>
               <button className="text-xs text-blue-600 hover:underline font-medium">
                 View all 27 resources
               </button>
             </div>
 
-            <div className="border border-gray-300 rounded-lg p-5 bg-white text-sm text-gray-800">
+            <div className="border border-gray-300 dark:border-[#324154] rounded-lg p-5 bg-white text-sm text-gray-800 dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b]">
               {Object.entries(resourcesData).map(([section, items], i) => (
                 <div key={i} className="mb-6">
                   <p className="font-semibold text-gray-800 mb-2">{section}</p>
@@ -275,9 +277,9 @@ export const OverviewContent = ({
                         onClick={() => setOpenReportModal(true)}
                         className="flex items-center justify-between text-blue-600 hover:underline cursor-pointer"
                       >
-                        <span>{item}</span>
+                        <span className="dark:text-[#f2f6fa]">{item}</span>
                         <span className="text-gray-600">
-                          <Lock className=" w-4 h-4" />
+                          <Lock className=" w-4 h-4 dark:text-[#f2f6fa]" />
                         </span>
                       </div>
                     ))}
@@ -377,9 +379,11 @@ export const OverviewContent = ({
           <div className="flex flex-wrap justify-between items-center mb-5">
             {/* LEFT SIDE ALWAYS TOGETHER */}
             <div className="flex items-center gap-3">
-              <h2 className="font-semibold text-gray-900 text-xl">Controls</h2>
+              <h2 className="font-semibold text-gray-900 text-xl dark:text-[#f2f6fa]">
+                Controls
+              </h2>
               <span className="flex items-center gap-1 text-green-700 bg-green-100 px-3 py-1 rounded-full text-xs">
-                <span className="h-2 w-2 bg-green-600 rounded-full"></span>
+                <span className="h-2 w-2 bg-green-600 rounded-full dark:bg-[#002b21] dark:text-[#009966]"></span>
                 Updated 25 minutes ago
               </span>
             </div>
@@ -397,19 +401,22 @@ export const OverviewContent = ({
             {controlsList.map((control, i) => (
               <div
                 key={i}
-                className="border p-5 rounded-lg bg-white shadow-sm cursor-pointer group"
+                className="border p-5 rounded-lg bg-white shadow-sm cursor-pointer group dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b] dark:text-[#f2f6fa]"
               >
                 <div className="flex justify-between items-start">
-                  <h3 className="font-semibold mb-3 text-gray-900">
+                  <h3 className="font-semibold mb-3 text-gray-900 dark:text-[#f2f6fa]">
                     {control.title}
                   </h3>
                   <span>
-                    <ChevronRight className="w-4 h-4" />
+                    <ChevronRight className="w-4 h-4 dark:text-[#f2f6fa]" />
                   </span>
                 </div>
                 <ul className="text-sm text-gray-700 space-y-2">
                   {control.items.map((item, j) => (
-                    <li key={j} className="flex items-center gap-2">
+                    <li
+                      key={j}
+                      className="flex items-center gap-2 dark:text-[#f2f6fa]"
+                    >
                       <span className="text-green-600 text-lg">
                         <CircleCheck className=" w-4 h-4" />
                       </span>
@@ -426,14 +433,16 @@ export const OverviewContent = ({
 
           {/* Data collected */}
           <div className="mb-4">
-            <h2 className="font-semibold text-gray-800 mb-4">Data collected</h2>
-            <div className="border p-5 rounded-lg bg-white shadow-sm text-sm text-gray-700 space-y-2">
+            <h2 className="font-semibold text-gray-800 mb-4 dark:text-[#f2f6fa]">
+              Data collected
+            </h2>
+            <div className="border p-5 rounded-lg bg-white shadow-sm text-sm text-gray-700 space-y-2 dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b]">
               {dataCollected.map((d, i) => (
                 <p
                   key={i}
-                  className="flex items-center gap-2 text-base font-normal"
+                  className="flex items-center gap-2 text-base font-normal dark:text-[#f2f6fa]"
                 >
-                  <Check className="w-4 h-4 shrink-0" /> {d}
+                  <Check className="w-4 h-4 shrink-0 dark:text-[#f2f6fa]" /> {d}
                 </p>
               ))}
             </div>
@@ -442,19 +451,21 @@ export const OverviewContent = ({
           {/* FAQ */}
           <div className="mb-4">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="font-extrabold text-2xl text-gray-800">FAQ</h2>
+              <h2 className="font-extrabold text-2xl text-gray-800 dark:text-[#f2f6fa]">
+                FAQ
+              </h2>
               <button className="text-blue-600 hover:underline text-sm font-medium">
                 View all 13 FAQs
               </button>
             </div>
 
-            <div className="border rounded-lg shadow-sm">
+            <div className="border rounded-lg shadow-sm dark:border-[#324154]">
               {initialFaqs.map((faq, i) => {
                 const isOpen = openIds.includes(faq.id);
                 return (
                   <div
                     key={faq.id}
-                    className={`bg-white text-sm text-gray-800 ${i < initialFaqs.length - 1 ? "border-b" : ""}`}
+                    className={`bg-white text-sm text-gray-800 dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b] ${i < initialFaqs.length - 1 ? "border-b dark:[#324154]" : ""}`}
                   >
                     <div
                       onClick={() => handleToggle(faq.id)}
@@ -465,12 +476,14 @@ export const OverviewContent = ({
                           className={`mt-0.5 transform transition-transform duration-300 ${isOpen ? "" : ""}`}
                         >
                           {isOpen ? (
-                            <ChevronUp className="w-5 h-5 text-gray-700" />
+                            <ChevronUp className="w-5 h-5 text-gray-700 dark:text-[#f2f6fa]" />
                           ) : (
-                            <ChevronDown className="w-5 h-5 text-gray-700" />
+                            <ChevronDown className="w-5 h-5 text-gray-700 dark:text-[#f2f6fa]" />
                           )}
                         </div>
-                        <span className="font-medium">{faq.question}</span>
+                        <span className="font-medium dark:text-[#f2f6fa]">
+                          {faq.question}
+                        </span>
                       </div>
                     </div>
 
@@ -481,8 +494,8 @@ export const OverviewContent = ({
                           : "grid-rows-[0fr] opacity-0"
                       }`}
                     >
-                      <div className="min-h-0 border-t">
-                        <div className="px-7 py-3 text-sm text-gray-700 leading-relaxed">
+                      <div className="min-h-0 border-t dark:border-[#324154]">
+                        <div className="px-7 py-3 text-sm text-gray-700 leading-relaxed dark:text-[#f2f6fa]">
                           <p>{faq.answer}</p>
                         </div>
                       </div>
