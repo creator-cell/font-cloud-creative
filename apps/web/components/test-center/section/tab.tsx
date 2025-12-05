@@ -33,16 +33,16 @@ export default function SecurityTabs({
   return (
     <>
       {isMobile && (
-        <div className="w-full mt-4">
+        <div className="w-full pt-4">
           <Select
             value={tabs[activeIndex]}
             onValueChange={(v) => handleSelect(tabs.indexOf(v))}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full dark:bg-[#192438] dark:border-[#324154]">
               <SelectValue placeholder="Select section" />
             </SelectTrigger>
 
-            <SelectContent className="w-[var(--radix-select-trigger-width)]">
+            <SelectContent className="w-[var(--radix-select-trigger-width)] dark:bg-[#192438] dark:text-white">
               {tabs.map((tab) => (
                 <SelectItem key={tab} value={tab}>
                   {tab}
@@ -54,7 +54,7 @@ export default function SecurityTabs({
       )}
 
       {!isMobile && (
-        <div className="border-b dark:border-[#324154] flex gap-8 mt-4">
+        <div className="border-b dark:border-[#324154] flex gap-8 pt-4">
           {tabs.map((tab, index) => (
             <button
               key={tab}

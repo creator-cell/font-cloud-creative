@@ -233,7 +233,7 @@ export const ControlsContent = () => {
                 <Search className="w-4 h-4" />
               </span>
 
-              <input
+              <Input
                 type="text"
                 placeholder="Search controls"
                 value={searchTerm}

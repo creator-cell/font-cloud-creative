@@ -45,12 +45,10 @@ export const FAQContent = () => {
     toast.success("Link copied!", { duration: 1000 });
   };
 
-  // FILTER FAQ DATA
   const filteredFaqs = faqData.filter((q) =>
     q.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Collapse accordion when search changes
   useEffect(() => {
     setOpenItems([]);
   }, [search]);
@@ -58,18 +56,18 @@ export const FAQContent = () => {
   return (
     <div className="w-full mt-10">
       <div className="md:flex items-center justify-between mb-6 hidden">
-        <h2 className="text-2xl font-semibold">FAQ</h2>
+        <h2 className="text-2xl font-semibold dark:text-[#f2f6fa]">FAQ</h2>
 
         <div className="flex justify-end gap-3">
           <Button
-            className="bg-white text-black hover:bg-white hover:text-black border"
+            className="bg-white text-black hover:bg-white hover:text-black border dark:bg-[#162033] dark:border-[#324154] dark:text-[#f2f6fa]"
             onClick={() => setOpenItems([])}
           >
             Collapse all
           </Button>
 
           <Button
-            className="bg-white text-black hover:bg-white hover:text-black border"
+            className="bg-white text-black hover:bg-white hover:text-black border dark:bg-[#162033] dark:border-[#324154] dark:text-[#f2f6fa]"
             onClick={() => setOpenItems(filteredFaqs.map((_, i) => `${i}`))}
           >
             Expand all
@@ -102,13 +100,13 @@ export const FAQContent = () => {
               <AccordionItem
                 key={idx}
                 value={`${idx}`}
-                className="bg-white rounded-lg shadow-sm border border-gray-300 cursor-pointer"
+                className="bg-white rounded-lg shadow-sm border border-gray-300 cursor-pointer dark:bg-gradient-to-tl from-[#121f33] to-[#1c263b] dark:text-[#f2f6fa] dark:border-[#324154]"
               >
                 <AccordionTrigger className="flex justify-between items-center w-full p-0">
                   <div className="flex justify-between items-center md:px-6 px-3 w-full">
                     <div className="flex items-center gap-2 justify-center">
                       <ChevronDown
-                        className={`h-5 w-5 flex-shrink-0 text-gray-700 transition-transform duration-300 origin-center ${
+                        className={`h-5 w-5 flex-shrink-0 text-gray-700 transition-transform duration-300 origin-center dark:text-[#f2f6fa] ${
                           isOpen ? "rotate-180" : ""
                         }`}
                       />
@@ -121,7 +119,7 @@ export const FAQContent = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="ml-4 text-black border hover:bg-white hover:text-black py-1 px-3"
+                      className="ml-4 text-black border hover:bg-white hover:text-black py-1 px-3 dark:bg-[#162033] dark:border-[#324154] dark:text-[#f2f6fa]"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleCopy(question);

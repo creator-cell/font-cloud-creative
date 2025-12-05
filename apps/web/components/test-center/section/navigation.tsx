@@ -29,13 +29,6 @@ export const Navigation = () => {
     <>
       <header className="flex items-center justify-between dark:bg-[#0f1729] dark:text-[#f2f6fa] border-b shadow-sm py-3 px-5 md:px-8">
         <Link href="/">
-          {/* <div className="flex items-center justify-start gap-4">
-            <Image src="/logo1.png" alt="Logo" width={50} height={50} />
-            <div className="text-black font-semibold h-6 w-0.5 bg-black"></div>
-            <p className="text-lg md:text-xl text-black font-normal">
-              Front Cloud Creative
-            </p>
-          </div> */}
           <Link
             href="/"
             className="flex items-center gap-1.5 text-base font-semibold"
