@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/session";
 import { SideNav } from "@/components/side-nav";
 import { DashboardTopbar } from "@/components/dashboard-topbar";
+import { DashboardLocaleProvider } from "@/components/dashboard-locale-context";
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const session = await auth();
@@ -15,14 +16,16 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 lg:flex-row">
-      <aside className="flex flex-none border-b border-slate-200 bg-white lg:h-screen lg:w-52 lg:border-b-0 lg:border-r">
-        <SideNav />
-      </aside>
-      <div className="flex flex-1 flex-col lg:h-screen lg:overflow-hidden">
-        <DashboardTopbar plan={session.user.plan ?? "starter"} userName={session.user.name} />
-        <main className="flex-1 overflow-y-auto px-4 py-3 lg:px-6">{children}</main>
+    <DashboardLocaleProvider>
+      <div className="flex min-h-screen flex-col bg-slate-50 lg:flex-row">
+        <aside className="flex flex-none border-b border-slate-200 bg-white lg:h-screen lg:w-52 lg:border-b-0 lg:border-r">
+          <SideNav />
+        </aside>
+        <div className="flex flex-1 flex-col lg:h-screen lg:overflow-hidden">
+          <DashboardTopbar plan={session.user.plan ?? "starter"} userName={session.user.name} />
+          <main className="flex-1 overflow-y-auto px-4 py-3 lg:px-6">{children}</main>
+        </div>
       </div>
-    </div>
+    </DashboardLocaleProvider>
   );
 }

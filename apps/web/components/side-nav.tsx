@@ -18,10 +18,11 @@ import {
   Wallet as WalletIcon,
   type LucideIcon,
 } from "lucide-react";
+import { useDashboardLocale } from "@/components/dashboard-locale-context";
 
 type NavLink = {
   href: string;
-  label: string;
+  labelKey: keyof typeof linkTranslations;
   Icon: LucideIcon;
   allowedRoles?: string[];
   children?: NavLink[];
@@ -38,36 +39,51 @@ type UsageSummary = {
   totalAllocatedTokens: number;
 };
 
+const linkTranslations = {
+  dashboard: { en: "Dashboard", ar: "لوحة التحكم" },
+  projects: { en: "Projects", ar: "المشاريع" },
+  frontCloudAi: { en: "Front Cloud AI", ar: "فرونت كلاود للذكاء الاصطناعي" },
+  brandVoice: { en: "Brand Voice", ar: "هوية العلامة" },
+  aiAnalysis: { en: "AI Analysis", ar: "تحليل بالذكاء الاصطناعي" },
+  generate: { en: "Generate", ar: "إنشاء" },
+  wallet: { en: "Wallet", ar: "المحفظة" },
+  billing: { en: "Billing", ar: "الفوترة" },
+  settings: { en: "Settings", ar: "الإعدادات" },
+};
+
 const navLinks: NavLink[] = [
-  { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
-  { href: "/projects", label: "Projects", Icon: FolderKanban },
+  { href: "/dashboard", labelKey: "dashboard", Icon: LayoutDashboard },
+  { href: "/projects", labelKey: "projects", Icon: FolderKanban },
   {
     href: "#front-cloud-ai",
-    label: "Front Cloud AI",
+    labelKey: "frontCloudAi",
     Icon: Sparkles,
     children: [
-      { href: "/brand-voice", label: "Brand Voice", Icon: MicVocal },
+      { href: "/brand-voice", labelKey: "brandVoice", Icon: MicVocal },
       {
         href: "/chat/single",
-        label: "AI Analysis",
+        labelKey: "aiAnalysis",
         Icon: Bot,
         allowedRoles: ["owner", "admin", "developer", "user"],
       },
     ],
   },
-  { href: "/generate", label: "Generate", Icon: Sparkles },
-  { href: "/wallet", label: "Wallet", Icon: WalletIcon },
-  { href: "/billing", label: "Billing", Icon: CreditCard },
-  { href: "/settings", label: "Settings", Icon: Settings },
+  { href: "/generate", labelKey: "generate", Icon: Sparkles },
+  { href: "/wallet", labelKey: "wallet", Icon: WalletIcon },
+  { href: "/billing", labelKey: "billing", Icon: CreditCard },
+  { href: "/settings", labelKey: "settings", Icon: Settings },
 ];
 
 export const SideNav = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const { lang } = useDashboardLocale();
   const [usage, setUsage] = useState<UsageSummary | null>(null);
   const [loadingUsage, setLoadingUsage] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
   const roles = session?.user?.roles?.map((role) => role.toLowerCase()) ?? [];
+  const tLink = (key: keyof typeof linkTranslations) =>
+    linkTranslations[key]?.[lang] ?? linkTranslations[key]?.en ?? key;
 
   const visibleLinks = navLinks.filter(({ allowedRoles }) => {
     if (!allowedRoles?.length) return true;
@@ -129,6 +145,7 @@ export const SideNav = () => {
   }, [usage]);
 
   const planLabel = (session?.user?.plan ?? "starter").toUpperCase();
+  const tokenUsageLabel = lang === "ar" ? "استخدام الرصيد" : "Token Usage";
 
   return (
     <aside className="flex h-full w-full flex-col bg-white lg:sticky lg:top-0 lg:h-screen">
@@ -143,7 +160,7 @@ export const SideNav = () => {
           </div>
         </div>
         <nav className="flex flex-col gap-0.5 px-2">
-          {visibleLinks.map(({ href, label, Icon, children }) => {
+          {visibleLinks.map(({ href, labelKey, Icon, children }) => {
             if (children && children.length > 0) {
               const visibleChildren = children.filter(({ allowedRoles: childRoles }) => {
                 if (!childRoles?.length) return true;
@@ -154,15 +171,15 @@ export const SideNav = () => {
               if (visibleChildren.length === 0) return null;
 
               const isGroupActive = visibleChildren.some((child) => pathname === child.href);
-              const isExpanded = expandedGroups[label] ?? isGroupActive;
+              const isExpanded = expandedGroups[labelKey] ?? isGroupActive;
               const toggleGroup = () =>
                 setExpandedGroups((previous) => ({
                   ...previous,
-                  [label]: !(previous[label] ?? isGroupActive),
+                  [labelKey]: !(previous[labelKey] ?? isGroupActive),
                 }));
 
               return (
-                <div key={label} className="flex flex-col">
+                <div key={labelKey} className="flex flex-col">
                   <div
                     className={clsx(
                       "flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-600",
@@ -181,7 +198,7 @@ export const SideNav = () => {
                   >
                     <div className="flex items-center gap-3">
                       <Icon className="h-4 w-4 text-slate-400" />
-                      {label}
+                      {tLink(labelKey)}
                     </div>
                     <ChevronDown
                       className={clsx(
@@ -197,7 +214,7 @@ export const SideNav = () => {
                     )}
                     aria-hidden={!isExpanded}
                   >
-                    {visibleChildren.map(({ href: childHref, label: childLabel, Icon: ChildIcon }) => {
+                    {visibleChildren.map(({ href: childHref, labelKey: childLabel, Icon: ChildIcon }) => {
                       const isActive = pathname === childHref;
                       return (
                         <Link
@@ -216,7 +233,7 @@ export const SideNav = () => {
                               isActive ? "text-sky-500" : "text-slate-400 group-hover:text-slate-600"
                             )}
                           />
-                          {childLabel}
+                          {tLink(childLabel)}
                         </Link>
                       );
                     })}
@@ -243,14 +260,14 @@ export const SideNav = () => {
                     isActive ? "text-sky-500" : "text-slate-400 group-hover:text-slate-600"
                   )}
                 />
-                {label}
+                {tLink(labelKey)}
               </Link>
             );
           })}
         </nav>
       </div>
       <div className="mt-auto border-t border-slate-200 bg-slate-50 px-6 py-6">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Token Usage</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{tokenUsageLabel}</p>
         <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/70">
           <div
             className="h-full rounded-full bg-sky-500 transition-all"

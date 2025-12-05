@@ -94,6 +94,10 @@ main {
   }
 }
 
+body.rtl {
+  direction: rtl;
+}
+
 .dark [role="combobox"] svg {
   color: #f2f6fa !important;
 }
